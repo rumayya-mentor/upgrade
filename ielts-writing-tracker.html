@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Writing Tracker — Rumayya</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-mute: #8a8a8a;
+    --paper: #f7f4ef;
+    --paper-warm: #ede9e1;
+    --paper-card: #ffffff;
+    --accent: #c0392b;
+    --accent-soft: #e8d5d3;
+    --accent-pale: #fdf5f4;
+    --gold: #b8860b;
+    --gold-soft: #f5edd8;
+    --green: #2d6a4f;
+    --green-soft: #d8ede3;
+    --blue: #1a4a7a;
+    --blue-soft: #dce8f5;
+    --border: rgba(26,26,26,0.1);
+    --border-strong: rgba(26,26,26,0.22);
+    --shadow: 0 2px 16px rgba(0,0,0,0.07);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+    --radius: 4px;
+    --radius-lg: 8px;
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Lato', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ── */
+  .shell { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--ink);
+    color: #e8e4de;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+  }
+
+  .sidebar-brand {
+    padding: 0 1.5rem 2rem;
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+    margin-bottom: 1.5rem;
+  }
+
+  .sidebar-brand .logo {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .sidebar-brand .sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 1.5rem;
+    cursor: pointer;
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-item:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.05); }
+  .nav-item.active {
+    color: #fff;
+    border-left-color: var(--accent);
+    background: rgba(192,57,43,0.12);
+  }
+
+  .nav-icon { font-size: 15px; width: 18px; text-align: center; }
+
+  .sidebar-bottom {
+    margin-top: auto;
+    padding: 1.5rem;
+    border-top: 0.5px solid rgba(255,255,255,0.1);
+  }
+
+  .exam-date-card {
+    background: rgba(255,255,255,0.06);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .exam-date-card .label { margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
+  .exam-date-card .days { font-family: var(--font-mono); font-size: 22px; color: var(--accent); font-weight: 500; }
+  .exam-date-card .days-label { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    padding: 2rem 2.5rem;
+    max-width: calc(100vw - 220px);
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── PAGE HEADER ── */
+  .page-header { margin-bottom: 2rem; }
+  .page-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .page-subtitle { font-size: 13px; color: var(--ink-mute); margin-top: 4px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--paper-card);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+  /* ── METRIC CARDS ── */
+  .metric {
+    background: var(--paper-card);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .metric-label { font-size: 11px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .metric-value { font-family: var(--font-mono); font-size: 26px; font-weight: 500; color: var(--ink); }
+  .metric-sub { font-size: 12px; color: var(--ink-mute); margin-top: 4px; }
+  .metric-delta { font-size: 12px; margin-top: 4px; font-family: var(--font-mono); }
+  .metric-delta.up { color: var(--green); }
+  .metric-delta.down { color: var(--accent); }
+  .metric-delta.neutral { color: var(--ink-mute); }
+
+  /* ── BAND PROGRESS BAR ── */
+  .criteria-row { margin-bottom: 1rem; }
+  .criteria-row:last-child { margin-bottom: 0; }
+  .criteria-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .criteria-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .criteria-scores { display: flex; gap: 10px; font-family: var(--font-mono); font-size: 12px; }
+  .score-baseline { color: var(--ink-mute); }
+  .score-current { color: var(--blue); font-weight: 500; }
+  .score-target { color: var(--green); }
+  .progress-track {
+    height: 8px;
+    background: var(--paper-warm);
+    border-radius: 99px;
+    position: relative;
+    overflow: visible;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    position: relative;
+  }
+  .progress-target-marker {
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: 16px;
+    background: var(--green);
+    border-radius: 2px;
+    opacity: 0.5;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border-strong);
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+  .btn:hover { background: var(--paper-warm); }
+  .btn-primary {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .btn-primary:hover { background: #333; }
+  .btn-danger { color: var(--accent); border-color: var(--accent-soft); }
+  .btn-danger:hover { background: var(--accent-pale); }
+  .btn-sm { padding: 5px 11px; font-size: 12px; }
+
+  /* ── FORMS ── */
+  .form-group { margin-bottom: 1rem; }
+  .form-label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    transition: border-color 0.15s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,26,0.55);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--paper-card);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    width: 560px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+  }
+  .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+  .modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+  .modal-close { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--ink-mute); padding: 0; }
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1rem; border-top: 0.5px solid var(--border); }
+
+  /* ── TAGS / BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .badge-done { background: var(--green-soft); color: var(--green); }
+  .badge-active { background: var(--gold-soft); color: var(--gold); }
+  .badge-next { background: var(--blue-soft); color: var(--blue); }
+  .badge-locked { background: var(--paper-warm); color: var(--ink-mute); }
+  .badge-high { background: var(--accent-soft); color: var(--accent); }
+  .badge-medium { background: var(--gold-soft); color: var(--gold); }
+  .badge-low { background: var(--green-soft); color: var(--green); }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 11px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 12px; border-bottom: 0.5px solid var(--border-strong); font-weight: 700; }
+  td { padding: 10px 12px; border-bottom: 0.5px solid var(--border); color: var(--ink-soft); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--paper); }
+  .mono { font-family: var(--font-mono); }
+
+  /* ── ERROR TRACKER ── */
+  .error-row { display: grid; grid-template-columns: 140px 1fr 90px 110px; align-items: center; gap: 1rem; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .error-row:last-child { border-bottom: none; }
+  .error-type { font-weight: 700; font-size: 13px; }
+  .error-dots { display: flex; gap: 3px; flex-wrap: wrap; }
+  .error-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
+  .error-count { font-family: var(--font-mono); font-size: 13px; text-align: center; }
+  .error-status { text-align: right; }
+
+  /* ── ROADMAP ── */
+  .roadmap-item {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1rem 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: flex-start;
+  }
+  .roadmap-item:last-child { border-bottom: none; }
+  .roadmap-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .roadmap-num.done { background: var(--green-soft); color: var(--green); }
+  .roadmap-num.active { background: var(--gold-soft); color: var(--gold); border: 1.5px solid var(--gold); }
+  .roadmap-num.next { background: var(--blue-soft); color: var(--blue); }
+  .roadmap-num.locked { background: var(--paper-warm); color: var(--ink-mute); }
+  .roadmap-content { flex: 1; }
+  .roadmap-phase { font-size: 11px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
+  .roadmap-title { font-weight: 700; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+  .roadmap-desc { font-size: 12px; color: var(--ink-mute); }
+
+  /* ── SPACED REP ── */
+  .review-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .review-item:last-child { border-bottom: none; }
+  .review-topic { font-size: 13px; font-weight: 700; }
+  .review-when { font-size: 12px; color: var(--ink-mute); margin-top: 2px; }
+  .review-due { font-family: var(--font-mono); font-size: 12px; }
+  .due-today { color: var(--accent); font-weight: 500; }
+  .due-soon { color: var(--gold); }
+  .due-later { color: var(--ink-mute); }
+
+  /* ── ROADMAP EXPAND ── */
+  .roadmap-item { border-bottom: 0.5px solid var(--border); cursor:pointer; }
+  .roadmap-item:last-child { border-bottom: none; }
+  .roadmap-header { display:flex; gap:1.25rem; padding:1rem 0; align-items:flex-start; }
+  .roadmap-header:hover .roadmap-title { color: var(--accent); }
+  .roadmap-expand-icon { font-size:11px; color:var(--ink-mute); transition:transform 0.2s; margin-top:2px; flex-shrink:0; }
+  .roadmap-item.open .roadmap-expand-icon { transform:rotate(90deg); }
+  .roadmap-detail { display:none; padding:0 0 1.25rem 3.25rem; }
+  .roadmap-item.open .roadmap-detail { display:block; }
+  .score-input-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1rem; }
+  .score-input-box { background:var(--paper); border:0.5px solid var(--border-strong); border-radius:var(--radius); padding:10px 12px; }
+  .score-input-box label { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-mute); margin-bottom:6px; }
+  .score-input-row { display:flex; gap:8px; align-items:center; font-size:12px; color:var(--ink-mute); margin-top:6px; }
+  .score-input-row input[type=range] { flex:1; accent-color:var(--accent); }
+  .score-input-row .lbl { min-width:28px; font-family:var(--font-mono); font-size:12px; }
+  .timeline-strip { display:flex; align-items:center; overflow-x:auto; padding:1rem 0 0.5rem; }
+  .tl-node { display:flex; flex-direction:column; align-items:center; flex:1; min-width:68px; position:relative; }
+  .tl-dot { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; font-weight:500; flex-shrink:0; z-index:2; }
+  .tl-dot.done { background:var(--green-soft); color:var(--green); border:1.5px solid var(--green); }
+  .tl-dot.active { background:var(--gold-soft); color:var(--gold); border:2px solid var(--gold); }
+  .tl-dot.next { background:var(--blue-soft); color:var(--blue); border:1.5px dashed var(--blue); }
+  .tl-dot.locked { background:var(--paper-warm); color:var(--ink-mute); border:1px solid var(--border-strong); }
+  .tl-label { font-size:10px; color:var(--ink-mute); margin-top:5px; text-align:center; line-height:1.3; max-width:64px; }
+  .tl-label.done { color:var(--green); font-weight:700; }
+  .tl-label.active { color:var(--gold); font-weight:700; }
+  .tl-date { font-size:9px; font-family:var(--font-mono); color:var(--ink-mute); margin-top:2px; }
+  .tl-connector { height:2px; flex:0 0 16px; margin-bottom:22px; }
+  .tl-connector.done { background:var(--green); }
+  .tl-connector.active { background:var(--gold); }
+  .tl-connector.pending { background:var(--border-strong); }
+  .ba-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .ba-table th { padding:5px 8px; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-mute); border-bottom:0.5px solid var(--border-strong); font-weight:700; }
+  .ba-table td { padding:6px 8px; border-bottom:0.5px solid var(--border); }
+  .ba-table tr:last-child td { border-bottom:none; }
+  .delta-pos { color:var(--green); font-weight:700; font-family:var(--font-mono); }
+  .delta-neg { color:var(--accent); font-family:var(--font-mono); }
+  .delta-zero { color:var(--ink-mute); font-family:var(--font-mono); }
+
+  /* ── COLLOCATION ── */
+  .colloc-chip {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 10px 14px;
+    background: var(--paper);
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    font-size: 13px;
+    margin: 4px;
+  }
+  .colloc-phrase { font-weight: 700; color: var(--ink); }
+  .colloc-example { font-size: 11px; color: var(--ink-mute); margin-top: 2px; font-style: italic; }
+
+  /* ── SECTION SPACING ── */
+  .section { margin-bottom: 1.75rem; }
+
+  /* ── SCORE SLIDER ── */
+  .score-slider-group { display: flex; align-items: center; gap: 12px; }
+  .score-slider-group input[type=range] { flex: 1; accent-color: var(--accent); }
+  .score-val { font-family: var(--font-mono); font-size: 14px; font-weight: 500; min-width: 28px; text-align: center; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: var(--radius-lg);
+    font-size: 13px;
+    z-index: 9999;
+    transform: translateY(60px);
+    opacity: 0;
+    transition: all 0.25s cubic-bezier(.4,0,.2,1);
+    max-width: 300px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--ink-mute);
+    font-size: 14px;
+  }
+  .empty-icon { font-size: 32px; margin-bottom: 10px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar { width: 180px; }
+    .main { margin-left: 180px; padding: 1.5rem; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .error-row { grid-template-columns: 120px 1fr 70px; }
+    .error-row .error-status { display: none; }
+  }
+
+  /* ── ANIM ── */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  .page.active { animation: fadeIn 0.2s ease; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 0.5px; background: var(--border); margin: 1.25rem 0; }
+
+  /* ── CHART WRAPPER ── */
+  .chart-wrap { position: relative; width: 100%; height: 240px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">Writing<br>Tracker</div>
+      <div class="sub">IELTS · Rumayya</div>
+    </div>
+
+    <nav id="nav">
+      <div class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">◈</span> Dashboard
+      </div>
+      <div class="nav-item" data-page="sessions">
+        <span class="nav-icon">◷</span> Sesi Latihan
+      </div>
+      <div class="nav-item" data-page="errors">
+        <span class="nav-icon">◎</span> Error Tracker
+      </div>
+      <div class="nav-item" data-page="roadmap">
+        <span class="nav-icon">◁</span> Roadmap
+      </div>
+      <div class="nav-item" data-page="spaced">
+        <span class="nav-icon">⊙</span> Spaced Review
+      </div>
+      <div class="nav-item" data-page="vocab">
+        <span class="nav-icon">◇</span> Collocations
+      </div>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="exam-date-card">
+        <div class="label">Ujian berikutnya</div>
+        <div class="days" id="days-counter">—</div>
+        <div class="days-label">hari lagi</div>
+        <div style="margin-top:8px; display:flex; gap:6px; align-items:center;">
+          <input type="date" id="exam-date-input" style="background:transparent;border:none;color:rgba(255,255,255,0.5);font-family:var(--font-mono);font-size:11px;padding:0;width:100%;">
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div class="page-title">Dashboard</div>
+        <div class="page-subtitle">Writing 6.5 → 8.5 · Progress terkini</div>
+      </div>
+
+      <!-- Metric Cards -->
+      <div class="grid-4 section">
+        <div class="metric">
+          <div class="metric-label">Baseline</div>
+          <div class="metric-value" style="color:var(--ink-mute)">6.5</div>
+          <div class="metric-sub">Skor resmi 27 Mei 2025</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Estimasi Terkini</div>
+          <div class="metric-value" id="m-current">7.3</div>
+          <div class="metric-delta up" id="m-delta">▲ +0.8 dari baseline</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Target</div>
+          <div class="metric-value" style="color:var(--green)">8.5</div>
+          <div class="metric-sub">Overall Writing Band</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Sesi Selesai</div>
+          <div class="metric-value" id="m-sessions">0</div>
+          <div class="metric-sub">Total sesi latihan</div>
+        </div>
+      </div>
+
+      <!-- Criteria Progress -->
+      <div class="grid-2 section">
+        <div class="card">
+          <div class="card-title">Progress per Kriteria</div>
+          <div id="criteria-bars"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Tren Skor Writing</div>
+          <div class="chart-wrap">
+            <canvas id="trend-chart" role="img" aria-label="Grafik tren skor writing per sesi latihan">Belum ada data sesi.</canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Errors + Roadmap snap -->
+      <div class="grid-2 section">
+        <div class="card">
+          <div class="card-title">Error Paling Sering</div>
+          <div class="chart-wrap" style="height:200px;">
+            <canvas id="error-chart" role="img" aria-label="Chart frekuensi error per kategori">Belum ada data error.</canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Review Hari Ini</div>
+          <div id="today-reviews"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SESSIONS ══ -->
+    <div class="page" id="page-sessions">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div class="page-title">Sesi Latihan</div>
+          <div class="page-subtitle">Catat hasil setiap sesi latihan Writing</div>
+        </div>
+        <button class="btn btn-primary" onclick="openSessionModal()">+ Tambah Sesi</button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Tipe</th>
+                <th>TA</th>
+                <th>CC</th>
+                <th>LR</th>
+                <th>GRA</th>
+                <th>Overall</th>
+                <th>Catatan</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="sessions-table"></tbody>
+          </table>
+          <div id="sessions-empty" class="empty" style="display:none;">
+            <div class="empty-icon">✎</div>
+            <div>Belum ada sesi. Tambahkan sesi pertamamu!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ERRORS ══ -->
+    <div class="page" id="page-errors">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div class="page-title">Error Tracker</div>
+          <div class="page-subtitle">Pola kesalahan berulang — lacak dan eliminasi</div>
+        </div>
+        <button class="btn btn-primary" onclick="openErrorModal()">+ Catat Error</button>
+      </div>
+
+      <div class="grid-2 section">
+        <div class="card">
+          <div class="card-title">Frekuensi Error</div>
+          <div id="error-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Distribusi Error</div>
+          <div class="chart-wrap">
+            <canvas id="error-pie" role="img" aria-label="Pie chart distribusi jenis error">Belum ada data.</canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ROADMAP ══ -->
+    <div class="page" id="page-roadmap">
+      <div class="page-header">
+        <div class="page-title">Roadmap Writing</div>
+        <div class="page-subtitle">Phase 1–10 menuju Band 8.5 · Klik phase untuk input skor sebelum/sesudah</div>
+      </div>
+      <div class="card section">
+        <div class="card-title">Timeline Progress</div>
+        <div class="timeline-strip" id="timeline-strip"></div>
+        <div id="comparison-wrap" style="display:none;">
+          <div style="height:0.5px;background:var(--border);margin:1.25rem 0;"></div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-mute);margin-bottom:10px;">Skor Before vs After per Phase</div>
+          <div class="table-wrap">
+            <table class="ba-table">
+              <thead><tr><th>Phase</th><th>Fokus</th><th>B-TA</th><th>B-CC</th><th>B-LR</th><th>B-GRA</th><th>A-TA</th><th>A-CC</th><th>A-LR</th><th>A-GRA</th><th>Delta</th><th>Selesai</th></tr></thead>
+              <tbody id="comparison-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div id="roadmap-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ SPACED REP ══ -->
+    <div class="page" id="page-spaced">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div class="page-title">Spaced Review</div>
+          <div class="page-subtitle">Jadwal ulang materi: besok → 3 hari → 1 minggu → 2 minggu → 1 bulan</div>
+        </div>
+        <button class="btn btn-primary" onclick="openSpacedModal()">+ Tambah Materi</button>
+      </div>
+      <div class="card">
+        <div id="spaced-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ VOCAB ══ -->
+    <div class="page" id="page-vocab">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <div class="page-title">Collocations & Vocab</div>
+          <div class="page-subtitle">Bank kolokasi akademik yang sudah dikuasai</div>
+        </div>
+        <button class="btn btn-primary" onclick="openVocabModal()">+ Tambah</button>
+      </div>
+      <div class="card section">
+        <div class="card-title">Collocations (10 dikuasai)</div>
+        <div id="colloc-grid" style="display:flex;flex-wrap:wrap;margin:-4px;"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Upgrade Vocabulary</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Band 7</th><th>Band 8.5</th><th>Konteks</th></tr></thead>
+            <tbody id="vocab-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══ MODALS ══ -->
+
+<!-- Session Modal -->
+<div class="modal-overlay" id="session-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Tambah Sesi Latihan</div>
+      <button class="modal-close" onclick="closeModal('session-modal')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tanggal</label>
+        <input type="date" class="form-input" id="s-date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipe Task</label>
+        <select class="form-select" id="s-type">
+          <option value="Task 2">Task 2 — Essay</option>
+          <option value="Task 1">Task 1 — Letter</option>
+          <option value="Mixed">Mixed (T1 + T2)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Task Achievement (TA)</label>
+      <div class="score-slider-group">
+        <input type="range" min="4" max="9" step="0.5" value="7" id="s-ta" oninput="document.getElementById('v-ta').textContent=this.value">
+        <span class="score-val" id="v-ta">7.0</span>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Coherence & Cohesion (CC)</label>
+      <div class="score-slider-group">
+        <input type="range" min="4" max="9" step="0.5" value="7" id="s-cc" oninput="document.getElementById('v-cc').textContent=this.value">
+        <span class="score-val" id="v-cc">7.0</span>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Lexical Resource (LR)</label>
+      <div class="score-slider-group">
+        <input type="range" min="4" max="9" step="0.5" value="7" id="s-lr" oninput="document.getElementById('v-lr').textContent=this.value">
+        <span class="score-val" id="v-lr">7.0</span>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Grammatical Range & Accuracy (GRA)</label>
+      <div class="score-slider-group">
+        <input type="range" min="4" max="9" step="0.5" value="7" id="s-gra" oninput="document.getElementById('v-gra').textContent=this.value">
+        <span class="score-val" id="v-gra">7.0</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Catatan / Refleksi</label>
+      <textarea class="form-textarea" id="s-notes" placeholder="Apa yang dipelajari? Apa yang masih perlu diperbaiki?"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Self-score (1–10)</label>
+      <div class="score-slider-group">
+        <input type="range" min="1" max="10" step="1" value="7" id="s-self" oninput="document.getElementById('v-self').textContent=this.value">
+        <span class="score-val" id="v-self">7</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('session-modal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveSession()">Simpan Sesi</button>
+    </div>
+  </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal-overlay" id="error-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Catat Error</div>
+      <button class="modal-close" onclick="closeModal('error-modal')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kategori Error</label>
+      <select class="form-select" id="e-type">
+        <option value="SVA">SVA — Subject-Verb Agreement</option>
+        <option value="Article">Article (a/an/the)</option>
+        <option value="Verb Form">Verb Form</option>
+        <option value="Spelling">Spelling</option>
+        <option value="Possessive">Possessive</option>
+        <option value="Word Form">Word Form</option>
+        <option value="Register">Register</option>
+        <option value="Other">Lainnya</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Jumlah kali error di sesi ini</label>
+      <input type="number" class="form-input" id="e-count" min="1" max="20" value="1">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="e-status">
+        <option value="Aktif">Aktif — masih sering terjadi</option>
+        <option value="Membaik">Membaik — mulai berkurang</option>
+        <option value="Selesai">Selesai — sudah dikuasai</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contoh kalimat salah (opsional)</label>
+      <textarea class="form-textarea" id="e-example" placeholder="Contoh: 'The informations are...' → seharusnya 'The information is...'"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('error-modal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveError()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Spaced Modal -->
+<div class="modal-overlay" id="spaced-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Tambah Materi Review</div>
+      <button class="modal-close" onclick="closeModal('spaced-modal')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Topik / Materi</label>
+      <input type="text" class="form-input" id="sp-topic" placeholder="cth: SVA — A number of / PEEL Structure">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tanggal dipelajari</label>
+      <input type="date" class="form-input" id="sp-date">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Interval review berikutnya</label>
+      <select class="form-select" id="sp-interval">
+        <option value="1">Besok (1 hari)</option>
+        <option value="3">3 hari</option>
+        <option value="7">1 minggu</option>
+        <option value="14">2 minggu</option>
+        <option value="30">1 bulan</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('spaced-modal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveSpaced()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Vocab Modal -->
+<div class="modal-overlay" id="vocab-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Tambah Collocation / Vocab</div>
+      <button class="modal-close" onclick="closeModal('vocab-modal')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tipe</label>
+      <select class="form-select" id="v-vtype">
+        <option value="colloc">Collocation</option>
+        <option value="upgrade">Vocab Upgrade (Band 7 → 8.5)</option>
+      </select>
+    </div>
+    <div id="v-colloc-fields">
+      <div class="form-group">
+        <label class="form-label">Phrase / Kolokasi</label>
+        <input type="text" class="form-input" id="v-phrase" placeholder="cth: account for + %">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contoh penggunaan</label>
+        <input type="text" class="form-input" id="v-example" placeholder="cth: Smartphones account for 70% of usage">
+      </div>
+    </div>
+    <div id="v-upgrade-fields" style="display:none;">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Kata Band 7</label>
+          <input type="text" class="form-input" id="v-b7" placeholder="cth: important">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kata Band 8.5</label>
+          <input type="text" class="form-input" id="v-b85" placeholder="cth: indispensable">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Konteks penggunaan</label>
+        <input type="text" class="form-input" id="v-context" placeholder="cth: formal academic">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('vocab-modal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveVocab()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+// DATA STORE
+// ══════════════════════════════════════
+const KEYS = {
+  sessions: 'ielts_sessions',
+  errors: 'ielts_errors',
+  roadmap: 'ielts_roadmap',
+  spaced: 'ielts_spaced',
+  colloc: 'ielts_colloc',
+  vocab: 'ielts_vocab',
+  examDate: 'ielts_exam_date'
+};
+
+function load(key) {
+  try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; }
+}
+function save(key, val) {
+  localStorage.setItem(key, JSON.stringify(val));
+}
+
+// ── Default Data ──
+const DEFAULT_ERRORS = [
+  { type: 'SVA', count: 7, status: 'Aktif', example: 'e.g. The informations are... → The information is...' },
+  { type: 'Article', count: 6, status: 'Membaik', example: '' },
+  { type: 'Verb Form', count: 5, status: 'Membaik', example: '' },
+  { type: 'Spelling', count: 3, status: 'Aktif', example: '' },
+  { type: 'Possessive', count: 2, status: 'Aktif', example: '' },
+  { type: 'Word Form', count: 2, status: 'Aktif', example: '' },
+  { type: 'Register', count: 1, status: 'Membaik', example: '' }
+];
+
+const DEFAULT_ROADMAP = [
+  { phase: 1, title: 'Article + Uncountable Nouns', desc: 'a/an/the rules, uncountable nouns wajib hafal, quantifiers', status: 'done' },
+  { phase: 2, title: 'Subject-Verb Agreement (SVA)', desc: 'Gerund, A number of, The number of, Each of, Neither...nor, stative verbs', status: 'done' },
+  { phase: 3, title: 'Task Response + PEEL', desc: '5 jenis soal Task 2, master template Discussion, PEEL structure, phrase bank opini', status: 'done' },
+  { phase: 4, title: 'Coherence & Cohesion — Topic Sentence', desc: 'Formula topic sentence Band 8.5, academic verbs, vocabulary upgrade Band 7→8.5', status: 'done' },
+  { phase: 5, title: 'Complex Sentences — GRA Variety', desc: 'Subordinate clauses, relative clauses, conditionals, passive voice', status: 'active' },
+  { phase: 6, title: 'Lexical Resource — Collocation + Paraphrase', desc: 'Academic collocations, paraphrase techniques, topic-specific vocab (W2)', status: 'next' },
+  { phase: 7, title: 'Task 1 — Letter Writing Mastery', desc: 'Formal/semi-formal/informal letter, tone, opening & closing formulas (W2)', status: 'locked' },
+  { phase: 8, title: 'Full Essay Timed Practice', desc: '40 menit Task 2, 20 menit Task 1, under exam conditions (W3)', status: 'locked' },
+  { phase: 9, title: 'Error Elimination — Zero Error Goal', desc: 'Targeted drill SVA, article, verb form berdasarkan error log (W3)', status: 'locked' },
+  { phase: 10, title: 'Post-test + Fine Tuning', desc: 'Mock test full, evaluasi, penyesuaian akhir sebelum ujian (W4)', status: 'locked' }
+];
+
+const DEFAULT_COLLOC = [
+  { phrase: 'account for + %', example: 'Smartphones account for 70% of usage.' },
+  { phrase: 'engage in + activity', example: 'Young people engage in sedentary activities.' },
+  { phrase: 'play a significant role in', example: 'Education plays a significant role in development.' },
+  { phrase: 'raise awareness of', example: 'Campaigns raise awareness of mental health issues.' },
+  { phrase: 'have a detrimental effect on', example: 'Pollution has a detrimental effect on health.' },
+  { phrase: 'take measures to', example: 'Governments should take measures to reduce crime.' },
+  { phrase: 'pose a threat to', example: 'Climate change poses a threat to biodiversity.' },
+  { phrase: 'be attributed to', example: 'The decline can be attributed to urbanisation.' },
+  { phrase: 'have access to', example: 'Not all children have access to quality education.' },
+  { phrase: 'address the issue of', example: 'Policymakers must address the issue of inequality.' }
+];
+
+const DEFAULT_VOCAB = [
+  { b7: 'important', b85: 'indispensable / paramount', context: 'formal academic' },
+  { b7: 'serious', b85: 'severe / profound / marked', context: 'describing problems' },
+  { b7: 'get worse', b85: 'deteriorate / regress / decline', context: 'negative trends' },
+  { b7: 'support', b85: 'underpin / bolster / reinforce', context: 'arguments' },
+  { b7: 'show', b85: 'demonstrate / reveal / indicate', context: 'data/evidence' },
+  { b7: 'think', b85: 'argue / contend / assert', context: 'opinion phrases' },
+  { b7: 'cause', b85: 'precipitate / trigger / induce', context: 'causation' },
+  { b7: 'many', b85: 'a wealth of / a multitude of', context: 'quantifiers' }
+];
+
+const DEFAULT_SPACED = [
+  { topic: 'Article Rules (a/an/the)', learnedDate: '2025-06-01', nextReview: '2025-06-08', interval: 7 },
+  { topic: 'SVA — A number of vs The number of', learnedDate: '2025-06-01', nextReview: '2025-06-04', interval: 3 },
+  { topic: 'PEEL Structure + Phrase Bank Opini', learnedDate: '2025-06-02', nextReview: '2025-06-09', interval: 7 },
+  { topic: 'Topic Sentence Formula Band 8.5', learnedDate: '2025-06-02', nextReview: '2025-06-05', interval: 3 },
+  { topic: '10 Collocations Akademik', learnedDate: '2025-06-01', nextReview: '2025-06-15', interval: 14 }
+];
+
+// ── Init data if not exists ──
+const DATA_VERSION = 'v2';
+function initData() {
+  if (!load(KEYS.errors)) save(KEYS.errors, DEFAULT_ERRORS);
+  const storedRoadmap = load(KEYS.roadmap);
+  if (!storedRoadmap || storedRoadmap.length !== 10 || localStorage.getItem('ielts_data_version') !== DATA_VERSION) {
+    save(KEYS.roadmap, DEFAULT_ROADMAP);
+    localStorage.setItem('ielts_data_version', DATA_VERSION);
+  }
+  if (!load(KEYS.colloc)) save(KEYS.colloc, DEFAULT_COLLOC);
+  if (!load(KEYS.vocab)) save(KEYS.vocab, DEFAULT_VOCAB);
+  if (!load(KEYS.spaced)) save(KEYS.spaced, DEFAULT_SPACED);
+  if (!load(KEYS.sessions)) save(KEYS.sessions, []);
+}
+
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+document.getElementById('nav').addEventListener('click', e => {
+  const item = e.target.closest('.nav-item');
+  if (!item) return;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  item.classList.add('active');
+  document.getElementById('page-' + item.dataset.page).classList.add('active');
+  renderPage(item.dataset.page);
+});
+
+function renderPage(page) {
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'sessions') renderSessions();
+  if (page === 'errors') renderErrors();
+  if (page === 'roadmap') renderRoadmap();
+  if (page === 'spaced') renderSpaced();
+  if (page === 'vocab') renderVocab();
+}
+
+// ══════════════════════════════════════
+// EXAM DATE COUNTER
+// ══════════════════════════════════════
+const examInput = document.getElementById('exam-date-input');
+examInput.value = load(KEYS.examDate) || '';
+updateDayCounter();
+
+examInput.addEventListener('change', () => {
+  save(KEYS.examDate, examInput.value);
+  updateDayCounter();
+});
+
+function updateDayCounter() {
+  const el = document.getElementById('days-counter');
+  if (!examInput.value) { el.textContent = '?'; return; }
+  const diff = Math.ceil((new Date(examInput.value) - new Date()) / 86400000);
+  el.textContent = diff > 0 ? diff : '0';
+}
+
+// ══════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════
+let trendChartInst = null;
+let errorChartInst = null;
+
+function renderDashboard() {
+  const sessions = load(KEYS.sessions) || [];
+  const errors = load(KEYS.errors) || [];
+
+  // Metric: session count
+  document.getElementById('m-sessions').textContent = sessions.length;
+
+  // Current estimated score (avg of last 3 sessions or baseline)
+  let currentOverall = 7.3;
+  if (sessions.length > 0) {
+    const last = sessions.slice(-3);
+    const avgs = last.map(s => (parseFloat(s.ta)+parseFloat(s.cc)+parseFloat(s.lr)+parseFloat(s.gra))/4);
+    currentOverall = avgs.reduce((a,b)=>a+b,0)/avgs.length;
+    currentOverall = Math.round(currentOverall*2)/2;
+  }
+  document.getElementById('m-current').textContent = currentOverall.toFixed(1);
+  const delta = currentOverall - 6.5;
+  const deltaEl = document.getElementById('m-delta');
+  deltaEl.textContent = (delta >= 0 ? '▲ +' : '▼ ') + delta.toFixed(1) + ' dari baseline';
+  deltaEl.className = 'metric-delta ' + (delta > 0 ? 'up' : delta < 0 ? 'down' : 'neutral');
+
+  // Criteria bars
+  const BASELINE = { TA: 6.5, CC: 6.5, LR: 7.0, GRA: 6.5 };
+  const CURRENT = { TA: 7.5, CC: 7.0, LR: 7.5, GRA: 7.0 };
+  if (sessions.length > 0) {
+    const last3 = sessions.slice(-3);
+    ['ta','cc','lr','gra'].forEach((k,i) => {
+      const key = ['TA','CC','LR','GRA'][i];
+      CURRENT[key] = Math.round((last3.reduce((a,s)=>a+parseFloat(s[k]),0)/last3.length)*2)/2;
+    });
+  }
+  const colors = { TA: '#c0392b', CC: '#1a4a7a', LR: '#b8860b', GRA: '#2d6a4f' };
+  const fullNames = { TA: 'Task Achievement', CC: 'Coherence & Cohesion', LR: 'Lexical Resource', GRA: 'Grammatical Range & Accuracy' };
+  const barsHTML = Object.keys(BASELINE).map(k => {
+    const base = BASELINE[k], cur = CURRENT[k], target = 8.5;
+    const pct = ((cur - 4) / (9 - 4)) * 100;
+    const tpct = ((target - 4) / (9 - 4)) * 100;
+    return `<div class="criteria-row">
+      <div class="criteria-header">
+        <span class="criteria-name">${k} — ${fullNames[k]}</span>
+        <span class="criteria-scores">
+          <span class="score-baseline">${base.toFixed(1)}</span>
+          <span style="color:var(--ink-mute)">→</span>
+          <span class="score-current">${cur.toFixed(1)}</span>
+          <span style="color:var(--ink-mute)">→</span>
+          <span class="score-target">${target.toFixed(1)}</span>
+        </span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:${pct.toFixed(1)}%;background:${colors[k]};"></div>
+        <div class="progress-target-marker" style="left:${tpct.toFixed(1)}%;"></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('criteria-bars').innerHTML = barsHTML;
+
+  // Trend chart
+  if (trendChartInst) { trendChartInst.destroy(); trendChartInst = null; }
+  const canvas = document.getElementById('trend-chart');
+  if (sessions.length > 0) {
+    const labels = sessions.map(s => s.date);
+    const overalls = sessions.map(s => ((parseFloat(s.ta)+parseFloat(s.cc)+parseFloat(s.lr)+parseFloat(s.gra))/4).toFixed(2));
+    trendChartInst = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Overall Writing',
+          data: overalls,
+          borderColor: '#c0392b',
+          backgroundColor: 'rgba(192,57,43,0.08)',
+          tension: 0.35,
+          pointRadius: 4,
+          pointBackgroundColor: '#c0392b',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { min: 5, max: 9, ticks: { stepSize: 0.5, font: { family: 'IBM Plex Mono', size: 11 } } },
+          x: { ticks: { font: { family: 'Lato', size: 11 } } }
+        }
+      }
+    });
+  } else {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    canvas.parentElement.innerHTML = '<div class="empty"><div class="empty-icon">◈</div><div>Belum ada sesi latihan</div></div>';
+  }
+
+  // Error bar chart
+  if (errorChartInst) { errorChartInst.destroy(); errorChartInst = null; }
+  const ecCanvas = document.getElementById('error-chart');
+  if (ecCanvas && errors.length > 0) {
+    const sorted = [...errors].sort((a,b)=>b.count-a.count).slice(0,6);
+    errorChartInst = new Chart(ecCanvas, {
+      type: 'bar',
+      data: {
+        labels: sorted.map(e=>e.type),
+        datasets: [{
+          data: sorted.map(e=>e.count),
+          backgroundColor: sorted.map(e => e.status==='Aktif'?'rgba(192,57,43,0.8)':e.status==='Membaik'?'rgba(184,134,11,0.7)':'rgba(45,106,79,0.7)'),
+          borderRadius: 3
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'IBM Plex Mono', size: 11 } } },
+          x: { ticks: { font: { family: 'Lato', size: 11 } } }
+        }
+      }
+    });
+  }
+
+  // Today's reviews
+  renderTodayReviews();
+}
+
+function renderTodayReviews() {
+  const spaced = load(KEYS.spaced) || [];
+  const today = new Date(); today.setHours(0,0,0,0);
+  const el = document.getElementById('today-reviews');
+  if (!spaced.length) { el.innerHTML = '<div class="empty"><div>Belum ada materi terjadwal</div></div>'; return; }
+  const sorted = spaced.map(s => {
+    const rev = new Date(s.nextReview); rev.setHours(0,0,0,0);
+    const diffDays = Math.ceil((rev - today) / 86400000);
+    return { ...s, diffDays };
+  }).sort((a,b)=>a.diffDays-b.diffDays).slice(0,5);
+
+  el.innerHTML = sorted.map(s => {
+    let cls, label;
+    if (s.diffDays <= 0) { cls = 'due-today'; label = 'HARI INI'; }
+    else if (s.diffDays <= 2) { cls = 'due-soon'; label = `${s.diffDays}h lagi`; }
+    else { cls = 'due-later'; label = `${s.diffDays}h lagi`; }
+    return `<div class="review-item">
+      <div>
+        <div class="review-topic">${s.topic}</div>
+        <div class="review-when">Interval: ${s.interval} hari</div>
+      </div>
+      <div class="review-due ${cls}">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+// SESSIONS
+// ══════════════════════════════════════
+function renderSessions() {
+  const sessions = load(KEYS.sessions) || [];
+  const tbody = document.getElementById('sessions-table');
+  const empty = document.getElementById('sessions-empty');
+  if (!sessions.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+  const sorted = [...sessions].reverse();
+  tbody.innerHTML = sorted.map((s,i) => {
+    const overall = ((parseFloat(s.ta)+parseFloat(s.cc)+parseFloat(s.lr)+parseFloat(s.gra))/4).toFixed(1);
+    const realIdx = sessions.length - 1 - i;
+    return `<tr>
+      <td class="mono">${s.date}</td>
+      <td><span class="badge ${s.type==='Task 2'?'badge-active':'badge-next'}">${s.type}</span></td>
+      <td class="mono">${parseFloat(s.ta).toFixed(1)}</td>
+      <td class="mono">${parseFloat(s.cc).toFixed(1)}</td>
+      <td class="mono">${parseFloat(s.lr).toFixed(1)}</td>
+      <td class="mono">${parseFloat(s.gra).toFixed(1)}</td>
+      <td class="mono" style="font-weight:700;color:var(--accent)">${overall}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--ink-mute)">${s.notes||'—'}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteSession(${realIdx})">hapus</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function openSessionModal() {
+  document.getElementById('s-date').value = new Date().toISOString().split('T')[0];
+  ['ta','cc','lr','gra'].forEach(k => {
+    document.getElementById('s-'+k).value = 7;
+    document.getElementById('v-'+k).textContent = '7.0';
+  });
+  document.getElementById('s-self').value = 7;
+  document.getElementById('v-self').textContent = '7';
+  document.getElementById('s-notes').value = '';
+  document.getElementById('session-modal').classList.add('open');
+}
+
+function saveSession() {
+  const sessions = load(KEYS.sessions) || [];
+  const getV = id => document.getElementById(id).value;
+  sessions.push({
+    date: getV('s-date'),
+    type: getV('s-type'),
+    ta: getV('s-ta'),
+    cc: getV('s-cc'),
+    lr: getV('s-lr'),
+    gra: getV('s-gra'),
+    selfScore: getV('s-self'),
+    notes: getV('s-notes')
+  });
+  save(KEYS.sessions, sessions);
+  closeModal('session-modal');
+  renderSessions();
+  showToast('Sesi berhasil disimpan!');
+}
+
+function deleteSession(idx) {
+  if (!confirm('Hapus sesi ini?')) return;
+  const sessions = load(KEYS.sessions) || [];
+  sessions.splice(idx, 1);
+  save(KEYS.sessions, sessions);
+  renderSessions();
+  showToast('Sesi dihapus.');
+}
+
+// ══════════════════════════════════════
+// ERRORS
+// ══════════════════════════════════════
+let errorPieInst = null;
+
+function renderErrors() {
+  const errors = load(KEYS.errors) || [];
+  const sorted = [...errors].sort((a,b)=>b.count-a.count);
+  const statusBadge = s => s==='Aktif'?'badge-high':s==='Membaik'?'badge-medium':'badge-low';
+  document.getElementById('error-list').innerHTML = sorted.map((e,i) => {
+    const dots = Array(Math.min(e.count,15)).fill('<div class="error-dot"></div>').join('');
+    return `<div class="error-row">
+      <div class="error-type">${e.type}</div>
+      <div class="error-dots">${dots}</div>
+      <div class="error-count">${e.count}×</div>
+      <div class="error-status">
+        <span class="badge ${statusBadge(e.status)}">${e.status}</span>
+        <button onclick="cycleStatus(${i})" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--ink-mute);margin-left:4px;" title="Ubah status">↻</button>
+        <button onclick="deleteError(${i})" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--accent);" title="Hapus">×</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  if (errorPieInst) { errorPieInst.destroy(); errorPieInst = null; }
+  const pieCanvas = document.getElementById('error-pie');
+  if (errors.length) {
+    const pieColors = errors.map(e => e.status==='Aktif'?'rgba(192,57,43,0.8)':e.status==='Membaik'?'rgba(184,134,11,0.7)':'rgba(45,106,79,0.7)');
+    errorPieInst = new Chart(pieCanvas, {
+      type: 'doughnut',
+      data: {
+        labels: errors.map(e=>e.type),
+        datasets: [{ data: errors.map(e=>e.count), backgroundColor: pieColors, borderWidth: 1, borderColor: '#fff' }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  }
+}
+
+function openErrorModal() {
+  document.getElementById('e-count').value = 1;
+  document.getElementById('e-example').value = '';
+  document.getElementById('error-modal').classList.add('open');
+}
+
+function saveError() {
+  const errors = load(KEYS.errors) || [];
+  const type = document.getElementById('e-type').value;
+  const count = parseInt(document.getElementById('e-count').value) || 1;
+  const status = document.getElementById('e-status').value;
+  const example = document.getElementById('e-example').value;
+  const idx = errors.findIndex(e=>e.type===type);
+  if (idx >= 0) { errors[idx].count += count; errors[idx].status = status; }
+  else errors.push({ type, count, status, example });
+  save(KEYS.errors, errors);
+  closeModal('error-modal');
+  renderErrors();
+  showToast('Error dicatat!');
+}
+
+function cycleStatus(idx) {
+  const errors = load(KEYS.errors) || [];
+  const states = ['Aktif','Membaik','Selesai'];
+  const cur = states.indexOf(errors[idx].status);
+  errors[idx].status = states[(cur+1)%3];
+  save(KEYS.errors, errors);
+  renderErrors();
+}
+
+function deleteError(idx) {
+  if (!confirm('Hapus entry ini?')) return;
+  const errors = load(KEYS.errors) || [];
+  errors.splice(idx, 1);
+  save(KEYS.errors, errors);
+  renderErrors();
+}
+
+// ══════════════════════════════════════
+// ROADMAP — expand + before/after scores
+// ══════════════════════════════════════
+function renderRoadmap() {
+  const roadmap = load(KEYS.roadmap) || [];
+
+  // Timeline strip
+  const strip = document.getElementById('timeline-strip');
+  if (strip) {
+    strip.innerHTML = roadmap.map((r, i) => {
+      const prevDone = i > 0 && roadmap[i-1].status === 'done';
+      const connCls = i === 0 ? '' : (prevDone && r.status === 'done' ? 'done' : prevDone ? 'active' : 'pending');
+      const conn = i > 0 ? `<div class="tl-connector ${connCls}"></div>` : '';
+      return `${conn}<div class="tl-node">
+        <div class="tl-dot ${r.status}">${r.status==='done'?'✓':r.phase}</div>
+        <div class="tl-label ${r.status}">P${r.phase}</div>
+        ${r.completedDate?`<div class="tl-date">${r.completedDate}</div>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  // Comparison table
+  const phasesWithScores = roadmap.filter(r => r.scoreBefore);
+  const wrap = document.getElementById('comparison-wrap');
+  if (wrap) {
+    if (phasesWithScores.length > 0) {
+      wrap.style.display = 'block';
+      document.getElementById('comparison-tbody').innerHTML = phasesWithScores.map(r => {
+        const bf = r.scoreBefore || {}, af = r.scoreAfter || {};
+        const avgB = (parseFloat(bf.ta||0)+parseFloat(bf.cc||0)+parseFloat(bf.lr||0)+parseFloat(bf.gra||0))/4;
+        const avgA = af.ta ? (parseFloat(af.ta)+parseFloat(af.cc)+parseFloat(af.lr)+parseFloat(af.gra))/4 : null;
+        const delta = avgA !== null ? avgA - avgB : null;
+        const dHtml = delta===null ? '<span class="delta-zero">—</span>' :
+          delta>0 ? `<span class="delta-pos">▲+${delta.toFixed(2)}</span>` :
+          delta<0 ? `<span class="delta-neg">▼${delta.toFixed(2)}</span>` : '<span class="delta-zero">±0</span>';
+        const sc = (o,k) => o&&o[k] ? `${parseFloat(o[k]).toFixed(1)}` : '—';
+        return `<tr>
+          <td><strong>P${r.phase}</strong></td>
+          <td style="font-size:11px">${r.title}</td>
+          ${['ta','cc','lr','gra'].map(k=>`<td class="mono">${sc(bf,k)}</td>`).join('')}
+          ${['ta','cc','lr','gra'].map(k=>`<td class="mono" style="color:var(--green)">${sc(af,k)}</td>`).join('')}
+          <td>${dHtml}</td>
+          <td style="font-family:var(--font-mono);font-size:11px;color:var(--ink-mute)">${r.completedDate||'—'}</td>
+        </tr>`;
+      }).join('');
+    } else {
+      wrap.style.display = 'none';
+    }
+  }
+
+  // Expandable list
+  document.getElementById('roadmap-list').innerHTML = roadmap.map((r, i) => {
+    const badgeCls = r.status==='done'?'badge-done':r.status==='active'?'badge-active':r.status==='next'?'badge-next':'badge-locked';
+    const badgeTxt = r.status==='done'?'Selesai':r.status==='active'?'Aktif':r.status==='next'?'Berikutnya':'Terkunci';
+    const bf = r.scoreBefore||{}, af = r.scoreAfter||{};
+    const hasScores = !!r.scoreBefore;
+
+    const miniTable = hasScores ? `
+      <div style="margin-bottom:12px;">
+        <table class="ba-table">
+          <thead><tr><th></th><th>TA</th><th>CC</th><th>LR</th><th>GRA</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--ink-mute);font-size:11px">Sebelum</td>${['ta','cc','lr','gra'].map(k=>`<td class="mono">${parseFloat(bf[k]||0).toFixed(1)}</td>`).join('')}</tr>
+            <tr><td style="color:var(--green);font-size:11px">Sesudah</td>${['ta','cc','lr','gra'].map(k=>`<td class="mono">${af[k]?parseFloat(af[k]).toFixed(1):'—'}</td>`).join('')}</tr>
+          </tbody>
+        </table>
+      </div>` : '';
+
+    const canInput = r.status !== 'locked';
+    const inputForm = canInput ? `
+      <div style="background:var(--paper);border:0.5px solid var(--border-strong);border-radius:var(--radius-lg);padding:14px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-mute);margin-bottom:10px;">Input Skor Before / After</div>
+        <div class="score-input-grid">
+          <div class="score-input-box">
+            <label>Skor SEBELUM Phase</label>
+            ${['TA','CC','LR','GRA'].map(k=>`
+              <div class="score-input-row">
+                <span style="min-width:32px;font-size:11px">${k}</span>
+                <input type="range" min="4" max="9" step="0.5" value="${parseFloat(bf[k.toLowerCase()]||6.5).toFixed(1)}" id="bf-${i}-${k.toLowerCase()}" oninput="document.getElementById('bfv-${i}-${k.toLowerCase()}').textContent=parseFloat(this.value).toFixed(1)">
+                <span class="lbl" id="bfv-${i}-${k.toLowerCase()}">${parseFloat(bf[k.toLowerCase()]||6.5).toFixed(1)}</span>
+              </div>`).join('')}
+          </div>
+          <div class="score-input-box">
+            <label>Skor SESUDAH Phase</label>
+            ${['TA','CC','LR','GRA'].map(k=>`
+              <div class="score-input-row">
+                <span style="min-width:32px;font-size:11px">${k}</span>
+                <input type="range" min="4" max="9" step="0.5" value="${parseFloat(af[k.toLowerCase()]||6.5).toFixed(1)}" id="af-${i}-${k.toLowerCase()}" oninput="document.getElementById('afv-${i}-${k.toLowerCase()}').textContent=parseFloat(this.value).toFixed(1)">
+                <span class="lbl" id="afv-${i}-${k.toLowerCase()}">${parseFloat(af[k.toLowerCase()]||6.5).toFixed(1)}</span>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+          <button class="btn btn-primary btn-sm" onclick="savePhaseScores(${i},event)">Simpan Skor</button>
+          ${r.status!=='done'?`<button class="btn btn-sm" onclick="markDone(${i},event)" style="border-color:var(--green);color:var(--green)">Tandai Selesai ✓</button>`:''}
+        </div>
+      </div>` :
+      `<div style="font-size:12px;color:var(--ink-mute);padding:6px 0;font-style:italic">Phase ini belum terbuka.</div>`;
+
+    return `<div class="roadmap-item" id="rm-item-${i}" onclick="togglePhase(${i})">
+      <div class="roadmap-header">
+        <div class="roadmap-num ${r.status}">${r.status==='done'?'✓':r.phase}</div>
+        <div class="roadmap-content">
+          <div class="roadmap-phase">Phase ${r.phase}${r.completedDate?' <span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-mute)">· '+r.completedDate+'</span>':''}</div>
+          <div class="roadmap-title">${r.title}</div>
+          <div class="roadmap-desc">${r.desc}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
+          <span class="badge ${badgeCls}">${badgeTxt}</span>
+          ${hasScores?'<span style="font-size:10px;color:var(--green);font-family:var(--font-mono)">skor ✓</span>':''}
+        </div>
+        <div class="roadmap-expand-icon">▶</div>
+      </div>
+      <div class="roadmap-detail">
+        ${miniTable}
+        ${inputForm}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togglePhase(i) {
+  const item = document.getElementById('rm-item-'+i);
+  if (item) item.classList.toggle('open');
+}
+
+function savePhaseScores(i, e) {
+  e.stopPropagation();
+  const roadmap = load(KEYS.roadmap) || [];
+  const gv = (prefix, k) => document.getElementById(`${prefix}-${i}-${k}`)?.value || '6.5';
+  roadmap[i].scoreBefore = { ta:gv('bf','ta'), cc:gv('bf','cc'), lr:gv('bf','lr'), gra:gv('bf','gra') };
+  roadmap[i].scoreAfter  = { ta:gv('af','ta'), cc:gv('af','cc'), lr:gv('af','lr'), gra:gv('af','gra') };
+  save(KEYS.roadmap, roadmap);
+  renderRoadmap();
+  const item = document.getElementById('rm-item-'+i);
+  if (item) item.classList.add('open');
+  showToast('Skor phase tersimpan!');
+}
+
+function markDone(idx, e) {
+  if (e) e.stopPropagation();
+  const roadmap = load(KEYS.roadmap) || [];
+  roadmap[idx].status = 'done';
+  roadmap[idx].completedDate = new Date().toISOString().split('T')[0];
+  if (roadmap[idx+1]) roadmap[idx+1].status = 'active';
+  if (roadmap[idx+2] && roadmap[idx+2].status==='locked') roadmap[idx+2].status = 'next';
+  save(KEYS.roadmap, roadmap);
+  renderRoadmap();
+  showToast('Phase selesai! 🎉 Lanjut ke phase berikutnya.');
+}
+
+// ══════════════════════════════════════
+// SPACED REPETITION
+// ══════════════════════════════════════
+function renderSpaced() {
+  const spaced = load(KEYS.spaced) || [];
+  const today = new Date(); today.setHours(0,0,0,0);
+  const sorted = [...spaced].map((s,origIdx) => ({...s, origIdx}))
+    .sort((a,b)=> new Date(a.nextReview)-new Date(b.nextReview));
+  if (!sorted.length) {
+    document.getElementById('spaced-list').innerHTML = '<div class="empty"><div class="empty-icon">⊙</div><div>Belum ada materi. Tambahkan setelah selesai tiap phase!</div></div>';
+    return;
+  }
+  document.getElementById('spaced-list').innerHTML = sorted.map(s => {
+    const rev = new Date(s.nextReview); rev.setHours(0,0,0,0);
+    const diffDays = Math.ceil((rev - today) / 86400000);
+    let cls, label;
+    if (diffDays <= 0) { cls='due-today'; label='Harus review HARI INI'; }
+    else if (diffDays <= 2) { cls='due-soon'; label=`${diffDays} hari lagi`; }
+    else { cls='due-later'; label=`${diffDays} hari lagi`; }
+    return `<div class="review-item">
+      <div>
+        <div class="review-topic">${s.topic}</div>
+        <div class="review-when">Dipelajari: ${s.learnedDate} · Interval: ${s.interval} hari</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+        <span class="review-due ${cls}">${label}</span>
+        ${diffDays<=0?`<button class="btn btn-sm" onclick="markReviewed(${s.origIdx})">Sudah review ↻</button>`:''}
+        <button class="btn btn-sm btn-danger" onclick="deleteSpaced(${s.origIdx})">hapus</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openSpacedModal() {
+  document.getElementById('sp-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('sp-topic').value = '';
+  document.getElementById('spaced-modal').classList.add('open');
+}
+
+function saveSpaced() {
+  const spaced = load(KEYS.spaced) || [];
+  const topic = document.getElementById('sp-topic').value.trim();
+  const dateStr = document.getElementById('sp-date').value;
+  const interval = parseInt(document.getElementById('sp-interval').value);
+  if (!topic) { showToast('Isi topik dulu!'); return; }
+  const next = new Date(dateStr);
+  next.setDate(next.getDate() + interval);
+  spaced.push({ topic, learnedDate: dateStr, nextReview: next.toISOString().split('T')[0], interval });
+  save(KEYS.spaced, spaced);
+  closeModal('spaced-modal');
+  renderSpaced();
+  showToast('Materi ditambahkan ke jadwal review!');
+}
+
+function markReviewed(idx) {
+  const spaced = load(KEYS.spaced) || [];
+  const NEXT_INTERVALS = { 1:3, 3:7, 7:14, 14:30, 30:60 };
+  const cur = spaced[idx].interval;
+  const nextInterval = NEXT_INTERVALS[cur] || 60;
+  const next = new Date();
+  next.setDate(next.getDate() + nextInterval);
+  spaced[idx].interval = nextInterval;
+  spaced[idx].nextReview = next.toISOString().split('T')[0];
+  save(KEYS.spaced, spaced);
+  renderSpaced();
+  showToast(`Review dicatat! Interval naik ke ${nextInterval} hari ✓`);
+}
+
+function deleteSpaced(idx) {
+  const spaced = load(KEYS.spaced) || [];
+  spaced.splice(idx, 1);
+  save(KEYS.spaced, spaced);
+  renderSpaced();
+}
+
+// ══════════════════════════════════════
+// VOCAB & COLLOCATIONS
+// ══════════════════════════════════════
+function renderVocab() {
+  const colloc = load(KEYS.colloc) || [];
+  const vocab = load(KEYS.vocab) || [];
+
+  document.getElementById('colloc-grid').innerHTML = colloc.map((c,i) => `
+    <div class="colloc-chip">
+      <div class="colloc-phrase">${c.phrase}</div>
+      <div class="colloc-example">${c.example}</div>
+      <button onclick="deleteColloc(${i})" style="background:none;border:none;cursor:pointer;font-size:10px;color:var(--ink-mute);text-align:left;margin-top:4px;">× hapus</button>
+    </div>
+  `).join('');
+
+  document.getElementById('vocab-table').innerHTML = vocab.map((v,i) => `
+    <tr>
+      <td style="color:var(--ink-mute)">${v.b7}</td>
+      <td style="font-weight:700;color:var(--ink)">${v.b85}</td>
+      <td style="font-size:12px;color:var(--ink-mute)">${v.context||'—'}
+        <button onclick="deleteVocab(${i})" style="background:none;border:none;cursor:pointer;font-size:10px;color:var(--accent);margin-left:8px;">× hapus</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openVocabModal() {
+  document.getElementById('v-phrase').value='';
+  document.getElementById('v-example').value='';
+  document.getElementById('v-b7').value='';
+  document.getElementById('v-b85').value='';
+  document.getElementById('v-context').value='';
+  document.getElementById('vocab-modal').classList.add('open');
+  document.getElementById('v-vtype').dispatchEvent(new Event('change'));
+}
+
+document.getElementById('v-vtype').addEventListener('change', function() {
+  document.getElementById('v-colloc-fields').style.display = this.value==='colloc'?'':'none';
+  document.getElementById('v-upgrade-fields').style.display = this.value==='upgrade'?'':'none';
+});
+
+function saveVocab() {
+  const type = document.getElementById('v-vtype').value;
+  if (type === 'colloc') {
+    const colloc = load(KEYS.colloc) || [];
+    const phrase = document.getElementById('v-phrase').value.trim();
+    if (!phrase) { showToast('Isi phrase!'); return; }
+    colloc.push({ phrase, example: document.getElementById('v-example').value.trim() });
+    save(KEYS.colloc, colloc);
+  } else {
+    const vocab = load(KEYS.vocab) || [];
+    const b7 = document.getElementById('v-b7').value.trim();
+    const b85 = document.getElementById('v-b85').value.trim();
+    if (!b7||!b85) { showToast('Isi kedua kata!'); return; }
+    vocab.push({ b7, b85, context: document.getElementById('v-context').value.trim() });
+    save(KEYS.vocab, vocab);
+  }
+  closeModal('vocab-modal');
+  renderVocab();
+  showToast('Ditambahkan!');
+}
+
+function deleteColloc(i) {
+  const c = load(KEYS.colloc)||[]; c.splice(i,1); save(KEYS.colloc,c); renderVocab();
+}
+function deleteVocab(i) {
+  const v = load(KEYS.vocab)||[]; v.splice(i,1); save(KEYS.vocab,v); renderVocab();
+}
+
+// ══════════════════════════════════════
+// UTILITIES
+// ══════════════════════════════════════
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+initData();
+renderDashboard();
+</script>
+</body>
+</html>
