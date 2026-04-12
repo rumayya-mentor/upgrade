@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<!-- Family Growth System v1.0 — 2026-04-12 -->
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Growth System v1.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#F7F5F0;
+      --surface:#FFFFFF;
+      --surface-soft:#FBFAF7;
+      --text:#1F2937;
+      --muted:#6B7280;
+      --border:#E5E7EB;
+      --border-strong:#D1D5DB;
+      --primary:#23201C;
+      --primary-soft:#3A352F;
+      --success:#15803D;
+      --success-soft:#DCFCE7;
+      --danger:#B91C1C;
+      --danger-soft:#FEE2E2;
+      --shadow:0 10px 30px rgba(17, 24, 39, 0.06);
+      --radius:12px;
+      --radius-lg:16px;
+      --max-width:1120px;
+      --ayah:#2563EB;
+      --bunda:#7C3AED;
+      --maryam:#0D9488;
+      --musa:#EA580C;
+      --maymunah:#DB2777;
+      --bersama:#4B5563;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      font-size:14px;
+      line-height:1.5;
+    }
+    button,input,textarea,select{font:inherit}
+    button,input,textarea{font-size:16px}
+    button{cursor:pointer}
+    .app{max-width:var(--max-width); margin:0 auto; padding:16px 16px 120px}
+    .header{
+      margin-bottom:14px;
+    }
+    .title-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius-lg);
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    .title-card h1{
+      margin:0 0 6px;
+      font-size:clamp(22px, 4vw, 32px);
+      line-height:1.15;
+    }
+    .title-card p{
+      margin:0;
+      color:var(--muted);
+    }
+    .chip-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:36px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:var(--surface-soft);
+      border:1px solid var(--border);
+      font-weight:600;
+      white-space:nowrap;
+    }
+    .chip-dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+
+    .tabs-wrap{
+      position:sticky;
+      top:0;
+      z-index:20;
+      padding:10px 0 12px;
+      background:linear-gradient(180deg, var(--bg) 78%, rgba(247,245,240,0));
+      margin-bottom:10px;
+    }
+    .tabs{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:2px;
+    }
+    .tab-btn{
+      min-height:44px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:var(--surface);
+      padding:10px 14px;
+      white-space:nowrap;
+      color:var(--text);
+      font-weight:600;
+      box-shadow:var(--shadow);
+      transition:transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .tab-btn.active{
+      background:var(--primary);
+      color:#fff;
+      border-color:var(--primary);
+    }
+
+    .panel{display:none; animation:fadeIn .18s ease}
+    .panel.active{display:block}
+    @keyframes fadeIn{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius-lg);
+      padding:16px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    .card h2,.card h3{
+      margin:0 0 6px;
+      line-height:1.2;
+    }
+    .card p.helper,
+    .helper{margin:0;color:var(--muted)}
+    .section-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .section-head .meta{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+    }
+    .goals-grid{grid-template-columns:1fr}
+    .two-col{grid-template-columns:1fr}
+
+    .person-card{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      overflow:hidden;
+      background:var(--surface-soft);
+    }
+    .person-card-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      background:var(--surface);
+    }
+    .person-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+    }
+    .person-counter{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+    }
+    .goal-list{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .goal-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid var(--border);
+      background:var(--surface);
+      border-radius:12px;
+      padding:12px;
+    }
+    .goal-item.done{
+      opacity:.65;
+    }
+    .goal-item.done .goal-text{
+      text-decoration:line-through;
+    }
+    .goal-check{
+      margin-top:2px;
+      width:20px;
+      height:20px;
+      accent-color:var(--primary);
+      flex:0 0 auto;
+    }
+    .goal-body{flex:1;min-width:0}
+    .goal-text{word-break:break-word}
+    .icon-btn{
+      min-height:44px;
+      min-width:44px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--danger);
+      font-weight:700;
+      flex:0 0 auto;
+    }
+    .add-goal-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      padding:12px;
+      border-top:1px dashed var(--border);
+      background:var(--surface);
+    }
+
+    .input,
+    .textarea,
+    .select{
+      width:100%;
+      min-height:44px;
+      border-radius:12px;
+      border:1px solid var(--border-strong);
+      background:#fff;
+      color:var(--text);
+      padding:12px 14px;
+      outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    .input:focus,
+    .textarea:focus,
+    .select:focus{
+      border-color:#9CA3AF;
+      box-shadow:0 0 0 3px rgba(107, 114, 128, 0.08);
+    }
+    .textarea{
+      min-height:112px;
+      resize:vertical;
+    }
+    .btn{
+      min-height:44px;
+      border-radius:12px;
+      border:1px solid var(--primary);
+      background:var(--primary);
+      color:#fff;
+      padding:10px 14px;
+      font-weight:700;
+    }
+    .btn.secondary{
+      background:var(--surface);
+      color:var(--text);
+      border-color:var(--border-strong);
+    }
+    .btn.danger{
+      background:var(--danger);
+      border-color:var(--danger);
+    }
+    .btn-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .btn-row > .btn,
+    .btn-row > .input{flex:1 1 180px}
+
+    .member-switcher{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      padding-bottom:2px;
+      margin-bottom:12px;
+    }
+    .member-btn{
+      min-height:44px;
+      border-radius:999px;
+      border:1.5px solid var(--border);
+      background:var(--surface);
+      padding:10px 12px;
+      white-space:nowrap;
+      font-weight:700;
+      transition:background .15s, color .15s, border-color .15s;
+    }
+    .member-btn.active{
+      color:#fff;
+    }
+    .question-list{display:grid;gap:12px;margin-top:12px}
+    .question-item{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      background:var(--surface-soft);
+    }
+    .question-item label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:600;
+    }
+    .journal-log,
+    .review-log,
+    .product-log{display:grid;gap:10px}
+    details.log-item{
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--surface-soft);
+      overflow:hidden;
+    }
+    details.log-item > summary{
+      list-style:none;
+      cursor:pointer;
+      padding:13px 14px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    details.log-item > summary::-webkit-details-marker{display:none}
+    .summary-meta{font-size:12px;color:var(--muted);font-weight:600}
+    .log-body{padding:0 14px 14px}
+    .entry-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      margin-top:10px;
+    }
+    .entry-card:first-child{margin-top:0}
+    .entry-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+    .qa-list{display:grid;gap:8px}
+    .qa-item{
+      padding:10px;
+      border-radius:10px;
+      background:var(--surface-soft);
+      border:1px solid var(--border);
+    }
+    .qa-q{font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:600}
+    .qa-a{white-space:pre-wrap;word-break:break-word}
+
+    .tracker-grid{
+      display:grid;
+      grid-template-columns:repeat(5, minmax(0, 1fr));
+      gap:8px;
+      margin-top:12px;
+    }
+    .day-btn{
+      min-height:52px;
+      border-radius:12px;
+      border:1px solid var(--border-strong);
+      background:#ECECEC;
+      color:var(--text);
+      padding:8px;
+      font-weight:700;
+      transition:background .15s ease, transform .15s ease, border-color .15s ease;
+    }
+    .day-btn.done{
+      background:var(--success-soft);
+      border-color:#86EFAC;
+      color:#166534;
+    }
+    .day-btn small{display:block;font-weight:600;opacity:.85}
+
+    .sticky-export{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:30;
+      padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+      background:linear-gradient(180deg, rgba(247,245,240,0), rgba(247,245,240,0.95) 38%, rgba(247,245,240,1) 100%);
+    }
+    .sticky-export-inner{
+      max-width:var(--max-width);
+      margin:0 auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .sticky-export-inner .btn{flex:1 1 220px}
+
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      background:rgba(17, 24, 39, 0.42);
+      z-index:40;
+      padding:14px;
+    }
+    .modal.show{display:flex}
+    .modal-sheet{
+      width:min(860px, 100%);
+      max-height:92vh;
+      overflow:auto;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:18px 18px 0 0;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .modal-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .modal-head h3{margin:0 0 4px}
+    .summary-output{
+      width:100%;
+      min-height:280px;
+      border-radius:12px;
+      border:1px solid var(--border-strong);
+      padding:12px;
+      background:var(--surface-soft);
+      white-space:pre-wrap;
+    }
+    .muted-text{color:var(--muted);font-size:13px}
+
+    .toast{
+      position:fixed;
+      bottom:80px;
+      left:50%;
+      transform:translateX(-50%) translateY(12px);
+      background:var(--primary);
+      color:#fff;
+      padding:10px 20px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:14px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s, transform .2s;
+      z-index:50;
+      white-space:nowrap;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 860px){
+      .goals-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+      .two-col{grid-template-columns:1fr 1fr}
+      .tracker-grid{grid-template-columns:repeat(6, minmax(0, 1fr))}
+      .modal{align-items:center}
+      .modal-sheet{border-radius:18px}
+    }
+    @media (min-width: 1080px){
+      .goals-grid{grid-template-columns:repeat(3, minmax(0, 1fr))}
+      .tracker-grid{grid-template-columns:repeat(10, minmax(0, 1fr))}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="title-card">
+        <h1>Family Growth System v1.0</h1>
+        <p>Sistem manajemen pertumbuhan keluarga yang simpel, langsung pakai hari ini, dan tersimpan di browser.</p>
+        <div class="chip-row" id="familyChips"></div>
+      </div>
+    </header>
+
+    <div class="tabs-wrap">
+      <nav class="tabs" aria-label="Tab navigasi">
+        <button class="tab-btn active" data-tab="goals">Goals</button>
+        <button class="tab-btn" data-tab="journal">Journal</button>
+        <button class="tab-btn" data-tab="weekly">Weekly Review</button>
+      </nav>
+    </div>
+
+    <main>
+      <section class="panel active" id="panel-goals">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h2>Goals</h2>
+              <p class="helper">Dikelompokkan per orang. Bisa centang selesai, tambah goal baru, dan hapus.</p>
+            </div>
+            <div class="meta">Data tersimpan otomatis di localStorage browser</div>
+          </div>
+          <div class="grid goals-grid" id="goalsGrid"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-journal">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h2>Journal</h2>
+              <p class="helper">Simpan jurnal harian per anggota dengan guiding questions yang berbeda.</p>
+            </div>
+            <div class="meta" id="journalTodayLabel"></div>
+          </div>
+
+          <div class="member-switcher" id="journalMemberSwitcher"></div>
+
+          <div id="journalFormWrap"></div>
+        </div>
+
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h3>Log jurnal</h3>
+              <p class="helper">Entri sebelumnya tampil collapsible per hari.</p>
+            </div>
+          </div>
+          <div class="journal-log" id="journalLog"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-weekly">
+        <div class="grid two-col">
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h2>Weekly Review</h2>
+                  <p class="helper">Evaluasi mingguan keluarga.</p>
+                </div>
+              </div>
+              <div class="question-list">
+                <div class="question-item">
+                  <label for="wentWell">1. Yang berjalan baik minggu ini</label>
+                  <textarea id="wentWell" class="textarea" placeholder="Contoh: English speaking lebih konsisten, Maryam menulis, dll."></textarea>
+                </div>
+                <div class="question-item">
+                  <label for="toImprove">2. Yang perlu diperbaiki</label>
+                  <textarea id="toImprove" class="textarea" placeholder="Apa yang perlu dibenahi minggu depan?"></textarea>
+                </div>
+                <div class="question-item">
+                  <label for="commitment">3. Komitmen untuk minggu depan</label>
+                  <textarea id="commitment" class="textarea" placeholder="Komitmen konkret dan realistis."></textarea>
+                </div>
+              </div>
+              <div class="btn-row" style="margin-top:12px">
+                <button class="btn" id="saveReviewBtn">Simpan Review</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Riwayat review</h3>
+                  <p class="helper">Review sebelumnya tampil collapsible berdasarkan tanggal simpan.</p>
+                </div>
+              </div>
+              <div class="review-log" id="reviewLog"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>English Speaking Tracker</h3>
+                  <p class="helper">Klik untuk tandai done / belum. Hijau = done, abu = belum.</p>
+                </div>
+                <div class="btn-row" style="margin:0">
+                  <button class="btn secondary" id="resetEnglishBtn">Reset Tracker</button>
+                </div>
+              </div>
+              <div class="muted-text" id="englishCountLabel">Hari selesai: 0/30</div>
+              <div class="tracker-grid" id="englishTracker"></div>
+            </div>
+
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>1W1Product Log</h3>
+                  <p class="helper">Catat produk yang dibuat minggu ini.</p>
+                </div>
+              </div>
+              <div class="btn-row">
+                <input id="productName" class="input" type="text" placeholder="Nama produk minggu ini">
+                <button class="btn" id="addProductBtn">Tambah Produk</button>
+              </div>
+              <div class="product-log" id="productLog" style="margin-top:12px"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="sticky-export">
+    <div class="sticky-export-inner">
+      <button class="btn" id="openExportBtn">📋 Export ke Claude</button>
+    </div>
+  </div>
+
+  <div class="modal" id="exportModal" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="exportTitle">Export Summary</h3>
+          <p class="helper">Kompilasi semua data menjadi teks siap paste ke Claude.</p>
+        </div>
+        <button class="btn secondary" id="closeExportBtn">Tutup</button>
+      </div>
+
+      <div class="question-item">
+        <label for="extraNotes">Pertanyaan / catatan tambahan</label>
+        <textarea id="extraNotes" class="textarea" placeholder="Tambahkan konteks atau pertanyaan khusus sebelum export."></textarea>
+      </div>
+
+      <div class="btn-row" style="margin-top:12px;margin-bottom:12px">
+        <button class="btn" id="generateSummaryBtn">Generate Summary</button>
+        <button class="btn secondary" id="copySummaryBtn">Salin</button>
+      </div>
+
+      <textarea id="summaryOutput" class="summary-output" placeholder="Summary akan muncul di sini..."></textarea>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEYS = {
+      goals: 'fgs_goals',
+      journal: 'fgs_journal',
+      weeklyReviews: 'fgs_weekly_reviews',
+      englishDays: 'fgs_english_days',
+      products: 'fgs_products'
+    };
+
+    const PEOPLE = [
+      { key: 'Bersama', color: 'var(--bersama)', role: 'Goal keluarga' },
+      { key: 'Ayah', color: 'var(--ayah)', role: 'PhD Economics, Dosen, Konsultan' },
+      { key: 'Bunda', color: 'var(--bunda)', role: 'Business Psychology, Researcher' },
+      { key: 'Maryam', color: 'var(--maryam)', role: 'Writer, French & Japanese' },
+      { key: 'Musa', color: 'var(--musa)', role: 'CS Star Australia, AI & astrofisika' },
+      { key: 'Maymunah', color: 'var(--maymunah)', role: 'Math, English, Chess, Chinese' }
+    ];
+
+    const JOURNAL_PEOPLE = ['Ayah', 'Bunda', 'Maryam', 'Musa', 'Maymunah'];
+
+    const JOURNAL_QUESTIONS = {
+      Ayah: [
+        'Progress hari ini — paper, riset, atau IELTS prep?',
+        'Ada insight baru untuk tulisan / artikel ilmiah?',
+        'Bagaimana AI membantu pekerjaan hari ini?',
+        'Fokus & energi hari ini (1-5)',
+        'Apa hambatan terbesar hari ini dan solusinya?',
+        '1 langkah konkret yang akan dikerjakan besok'
+      ],
+      Bunda: [
+        'Progress riset atau tulisan (buku/paper) hari ini?',
+        'Bagaimana ilmu Business Psychology terhubung ke kehidupan nyata hari ini?',
+        'Energi & mental hari ini (1-5)',
+        'Ada insight yang bisa dikembangkan jadi produk/training?',
+        'Kemenangan kecil hari ini (sekecil apapun)',
+        'Next step yang paling penting besok'
+      ],
+      Maryam: [
+        'Hari ini nulis cerita atau dapat ide baru untuk buku?',
+        'Kata baru apa yang dipelajari hari ini (French atau Japanese)?',
+        'Ada yang dibuat — gambar, desain, tulisan?',
+        'Perasaan hari ini (emoji atau kata-kata)',
+        'Apa yang mau dilakukan besok?'
+      ],
+      Musa: [
+        'Belajar apa hari ini (CS/AI/riset/apapun)?',
+        'Ada yang dikerjakan untuk CS Star Australia hari ini?',
+        'Progress riset mandiri — ada temuan baru?',
+        'Tantangan yang dihadapi hari ini?',
+        'Next step yang paling ingin dikerjakan'
+      ],
+      Maymunah: [
+        'Math apa yang dipelajari atau dipraktekkan hari ini?',
+        'Kata baru dalam English atau Chinese?',
+        'Belajar Science hari ini? Tentang apa?',
+        'Main chess hari ini? Gimana hasilnya?',
+        'Hal paling seru hari ini?'
+      ]
+    };
+
+    const GOAL_SEED = [
+      { person: 'Bersama', text: 'Stay dan berjuang bersama — di sini, sekarang', done: false },
+      { person: 'Bersama', text: 'Berjuang pribadi DAN bersama setiap hari', done: false },
+      { person: 'Bersama', text: 'Speak English everyday (semua anggota)', done: false },
+      { person: 'Bersama', text: '1W1Product — setiap pekan buat 1 produk (siapa saja bisa berkontribusi)', done: false },
+      { person: 'Bersama', text: 'Family dinner tanpa HP minimal 3x seminggu', done: false },
+
+      { person: 'Ayah', text: 'Capai IELTS 8.5', done: false },
+      { person: 'Ayah', text: 'Jadi first author pada minimal 1 artikel/paper ilmiah', done: false },
+      { person: 'Ayah', text: 'Riset: Dampak latar belakang terhadap kepemimpinan & pembangunan daerah (bersama Bunda)', done: false },
+      { person: 'Ayah', text: 'Riset: Kandungan makanan tradisional dan jenisnya (bersama Bunda)', done: false },
+      { person: 'Ayah', text: 'Riset: Dampak tontonan kriminalitas sebagai tren di daerah (bersama Bunda)', done: false },
+
+      { person: 'Bunda', text: 'Selesaikan thesis / riset Business Psychology', done: false },
+      { person: 'Bunda', text: 'Tulis buku bersama Ayah', done: false },
+      { person: 'Bunda', text: 'Tulis paper bersama Ayah', done: false },
+      { person: 'Bunda', text: 'Riset: Mental health ibu hamil terhadap kesehatan bayi (bersama Ayah)', done: false },
+      { person: 'Bunda', text: 'Bangun & launch program training Business Psychology', done: false },
+
+      { person: 'Maryam', text: 'Hari libur: buat cerita & tulis buku', done: false },
+      { person: 'Maryam', text: 'Belajar French — konsisten tiap minggu', done: false },
+      { person: 'Maryam', text: 'Belajar Japanese — konsisten tiap minggu', done: false },
+      { person: 'Maryam', text: 'Selesaikan minimal 1 cerita per bulan', done: false },
+
+      { person: 'Musa', text: 'Aktif sebagai Coordinator CS Star Australia', done: false },
+      { person: 'Musa', text: 'Kerjakan riset mandiri (topik pilihan sendiri)', done: false },
+      { person: 'Musa', text: 'Buat minimal 1 produk per pekan (1W1Product)', done: false },
+      { person: 'Musa', text: 'Konsisten belajar AI & hal baru setiap hari', done: false },
+
+      { person: 'Maymunah', text: 'Praktek Math setiap hari', done: false },
+      { person: 'Maymunah', text: 'Praktek English setiap hari', done: false },
+      { person: 'Maymunah', text: 'Belajar Science setiap minggu', done: false },
+      { person: 'Maymunah', text: 'Main & belajar Chess rutin', done: false },
+      { person: 'Maymunah', text: 'Belajar Chinese setiap hari', done: false }
+    ];
+
+    let currentTab = 'goals';
+    let currentJournalPerson = 'Ayah';
+
+    function uid(prefix = 'id') {
+      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function getTodayISO() {
+      const now = new Date();
+      const offset = now.getTimezoneOffset();
+      const local = new Date(now.getTime() - offset * 60000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr + 'T00:00:00');
+      return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function readJSON(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (err) {
+        console.error('Read error', key, err);
+        return fallback;
+      }
+    }
+
+    function writeJSON(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function ensureSeedData() {
+      if (!localStorage.getItem(STORAGE_KEYS.goals)) {
+        const seededGoals = GOAL_SEED.map(goal => ({ id: uid('goal'), ...goal }));
+        writeJSON(STORAGE_KEYS.goals, seededGoals);
+      }
+      if (!localStorage.getItem(STORAGE_KEYS.journal)) writeJSON(STORAGE_KEYS.journal, []);
+      if (!localStorage.getItem(STORAGE_KEYS.weeklyReviews)) writeJSON(STORAGE_KEYS.weeklyReviews, []);
+      if (!localStorage.getItem(STORAGE_KEYS.englishDays)) writeJSON(STORAGE_KEYS.englishDays, {});
+      if (!localStorage.getItem(STORAGE_KEYS.products)) writeJSON(STORAGE_KEYS.products, []);
+    }
+
+    function getGoals() { return readJSON(STORAGE_KEYS.goals, []); }
+    function setGoals(goals) { writeJSON(STORAGE_KEYS.goals, goals); }
+    function getJournal() { return readJSON(STORAGE_KEYS.journal, []); }
+    function setJournal(entries) { writeJSON(STORAGE_KEYS.journal, entries); }
+    function getReviews() { return readJSON(STORAGE_KEYS.weeklyReviews, []); }
+    function setReviews(entries) { writeJSON(STORAGE_KEYS.weeklyReviews, entries); }
+    function getEnglishDays() { return readJSON(STORAGE_KEYS.englishDays, {}); }
+    function setEnglishDays(days) { writeJSON(STORAGE_KEYS.englishDays, days); }
+    function getProducts() { return readJSON(STORAGE_KEYS.products, []); }
+    function setProducts(products) { writeJSON(STORAGE_KEYS.products, products); }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function getPersonColor(person) {
+      const match = PEOPLE.find(item => item.key === person);
+      return match ? match.color : 'var(--bersama)';
+    }
+
+    function renderFamilyChips() {
+      const target = document.getElementById('familyChips');
+      target.innerHTML = PEOPLE.filter(p => p.key !== 'Bersama').map(person => `
+        <span class="chip">
+          <span class="chip-dot" style="background:${person.color}"></span>
+          ${escapeHtml(person.key)}
+        </span>
+      `).join('');
+    }
+
+    function renderTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === currentTab);
+      });
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === `panel-${currentTab}`);
+      });
+    }
+
+    function renderGoals() {
+      const goals = getGoals();
+      const grid = document.getElementById('goalsGrid');
+      grid.innerHTML = PEOPLE.map(person => {
+        const personGoals = goals.filter(goal => goal.person === person.key);
+        const doneCount = personGoals.filter(goal => goal.done).length;
+        return `
+          <section class="person-card">
+            <div class="person-card-head">
+              <div class="person-title">
+                <span class="chip-dot" style="background:${person.color}"></span>
+                <span>${escapeHtml(person.key)}</span>
+              </div>
+              <div class="person-counter">${doneCount}/${personGoals.length} selesai</div>
+            </div>
+            <div class="goal-list">
+              ${personGoals.length ? personGoals.map(goal => `
+                <div class="goal-item ${goal.done ? 'done' : ''}">
+                  <input class="goal-check" type="checkbox" aria-label="Tandai selesai" ${goal.done ? 'checked' : ''} onchange="toggleGoal('${goal.id}')">
+                  <div class="goal-body">
+                    <div class="goal-text">${escapeHtml(goal.text)}</div>
+                  </div>
+                  <button class="icon-btn" aria-label="Hapus goal" onclick="deleteGoal('${goal.id}')">✕</button>
+                </div>
+              `).join('') : '<div class="helper">Belum ada goal.</div>'}
+            </div>
+            <div class="add-goal-row">
+              <input class="input" id="new-goal-${escapeHtml(person.key)}" type="text" placeholder="Tambah goal baru untuk ${escapeHtml(person.key)}">
+              <button class="btn" onclick="addGoal('${escapeHtml(person.key)}')">Tambah</button>
+            </div>
+          </section>
+        `;
+      }).join('');
+    }
+
+    function addGoal(person) {
+      const input = document.getElementById(`new-goal-${person}`);
+      const text = input.value.trim();
+      if (!text) return;
+      const goals = getGoals();
+      goals.push({ id: uid('goal'), person, text, done: false });
+      setGoals(goals);
+      input.value = '';
+      renderGoals();
+    }
+
+    function toggleGoal(id) {
+      const goals = getGoals().map(goal => goal.id === id ? { ...goal, done: !goal.done } : goal);
+      setGoals(goals);
+      renderGoals();
+    }
+
+    function deleteGoal(id) {
+      if (!confirm('Hapus goal ini?')) return;
+      const goals = getGoals().filter(goal => goal.id !== id);
+      setGoals(goals);
+      renderGoals();
+    }
+
+    function renderJournalMemberSwitcher() {
+      const wrap = document.getElementById('journalMemberSwitcher');
+      wrap.innerHTML = JOURNAL_PEOPLE.map(person => {
+        const color = PEOPLE.find(p => p.key === person)?.color || 'var(--bersama)';
+        const isActive = currentJournalPerson === person;
+        const style = isActive
+          ? `background:${color};border-color:${color};`
+          : `border-color:${color};color:${color};`;
+        return `<button class="member-btn ${isActive ? 'active' : ''}" style="${style}" onclick="setJournalPerson('${person}')">${escapeHtml(person)}</button>`;
+      }).join('');
+      document.getElementById('journalTodayLabel').textContent = `Tanggal hari ini: ${formatDate(getTodayISO())}`;
+    }
+
+    function setJournalPerson(person) {
+      currentJournalPerson = person;
+      renderJournalMemberSwitcher();
+      renderJournalForm();
+    }
+
+    function renderJournalForm() {
+      const wrap = document.getElementById('journalFormWrap');
+      const questions = JOURNAL_QUESTIONS[currentJournalPerson] || [];
+      wrap.innerHTML = `
+        <div class="question-list">
+          ${questions.map((question, index) => `
+            <div class="question-item">
+              <label for="journal-answer-${index}">${index + 1}. ${escapeHtml(question)}</label>
+              <textarea id="journal-answer-${index}" class="textarea" placeholder="Tulis jawaban di sini..."></textarea>
+            </div>
+          `).join('')}
+          <div class="question-item">
+            <label for="journal-free-note">Catatan bebas (opsional)</label>
+            <textarea id="journal-free-note" class="textarea" placeholder="Catatan tambahan hari ini..."></textarea>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn" id="saveJournalBtn">Simpan Jurnal Hari Ini</button>
+        </div>
+      `;
+      document.getElementById('saveJournalBtn').addEventListener('click', saveJournalEntry);
+    }
+
+    function saveJournalEntry() {
+      const questions = JOURNAL_QUESTIONS[currentJournalPerson] || [];
+      const answers = questions.map((question, index) => ({
+        question,
+        answer: document.getElementById(`journal-answer-${index}`).value.trim()
+      }));
+      const freeNote = document.getElementById('journal-free-note').value.trim();
+
+      const hasContent = answers.some(item => item.answer) || freeNote;
+      if (!hasContent) return;
+
+      const journal = getJournal();
+      journal.unshift({
+        id: uid('journal'),
+        person: currentJournalPerson,
+        date: getTodayISO(),
+        answers,
+        freeNote,
+        timestamp: new Date().toISOString()
+      });
+      setJournal(journal);
+      renderJournalForm();
+      renderJournalLog();
+      showToast('Jurnal ' + currentJournalPerson + ' tersimpan ✓');
+    }
+
+    function groupByDate(entries) {
+      return entries.reduce((acc, entry) => {
+        if (!acc[entry.date]) acc[entry.date] = [];
+        acc[entry.date].push(entry);
+        return acc;
+      }, {});
+    }
+
+    function renderJournalLog() {
+      const target = document.getElementById('journalLog');
+      const journal = getJournal();
+      if (!journal.length) {
+        target.innerHTML = '<div class="helper">Belum ada jurnal yang disimpan.</div>';
+        return;
+      }
+      const grouped = groupByDate(journal);
+      const dates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+      target.innerHTML = dates.map((date, idx) => `
+        <details class="log-item" ${idx === 0 ? 'open' : ''}>
+          <summary>
+            <span>${formatDate(date)}</span>
+            <span class="summary-meta">${grouped[date].length} entri</span>
+          </summary>
+          <div class="log-body">
+            ${grouped[date].map(entry => `
+              <div class="entry-card">
+                <div class="entry-head">
+                  <span><span class="chip-dot" style="background:${getPersonColor(entry.person)};margin-right:8px"></span>${escapeHtml(entry.person)}</span>
+                  <span class="summary-meta">${new Date(entry.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+                <div class="qa-list">
+                  ${entry.answers.map(item => `
+                    <div class="qa-item">
+                      <div class="qa-q">${escapeHtml(item.question)}</div>
+                      <div class="qa-a">${escapeHtml(item.answer || '-')}</div>
+                    </div>
+                  `).join('')}
+                  <div class="qa-item">
+                    <div class="qa-q">Catatan bebas</div>
+                    <div class="qa-a">${escapeHtml(entry.freeNote || '-')}</div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </details>
+      `).join('');
+    }
+
+    function saveWeeklyReview() {
+      const wentWell = document.getElementById('wentWell').value.trim();
+      const toImprove = document.getElementById('toImprove').value.trim();
+      const commitment = document.getElementById('commitment').value.trim();
+      if (!wentWell && !toImprove && !commitment) return;
+
+      const reviews = getReviews();
+      reviews.unshift({
+        id: uid('review'),
+        date: getTodayISO(),
+        wentWell,
+        toImprove,
+        commitment
+      });
+      setReviews(reviews);
+      document.getElementById('wentWell').value = '';
+      document.getElementById('toImprove').value = '';
+      document.getElementById('commitment').value = '';
+      renderReviewLog();
+      showToast('Weekly review tersimpan ✓');
+    }
+
+    function renderReviewLog() {
+      const target = document.getElementById('reviewLog');
+      const reviews = getReviews();
+      if (!reviews.length) {
+        target.innerHTML = '<div class="helper">Belum ada weekly review.</div>';
+        return;
+      }
+      target.innerHTML = reviews.map((review, idx) => `
+        <details class="log-item" ${idx === 0 ? 'open' : ''}>
+          <summary>
+            <span>Minggu ${formatDate(review.date)}</span>
+            <span class="summary-meta">Review tersimpan</span>
+          </summary>
+          <div class="log-body">
+            <div class="qa-list">
+              <div class="qa-item">
+                <div class="qa-q">Yang berjalan baik minggu ini</div>
+                <div class="qa-a">${escapeHtml(review.wentWell || '-')}</div>
+              </div>
+              <div class="qa-item">
+                <div class="qa-q">Yang perlu diperbaiki</div>
+                <div class="qa-a">${escapeHtml(review.toImprove || '-')}</div>
+              </div>
+              <div class="qa-item">
+                <div class="qa-q">Komitmen untuk minggu depan</div>
+                <div class="qa-a">${escapeHtml(review.commitment || '-')}</div>
+              </div>
+            </div>
+          </div>
+        </details>
+      `).join('');
+    }
+
+    function renderEnglishTracker() {
+      const target = document.getElementById('englishTracker');
+      const days = getEnglishDays();
+      const completed = Object.values(days).filter(Boolean).length;
+      document.getElementById('englishCountLabel').textContent = `Hari selesai: ${completed}/30`;
+      target.innerHTML = Array.from({ length: 30 }, (_, index) => {
+        const day = String(index + 1);
+        const done = !!days[day];
+        return `
+          <button class="day-btn ${done ? 'done' : ''}" onclick="toggleEnglishDay('${day}')">
+            Hari ${day}
+            <small>${done ? 'Done' : 'Belum'}</small>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleEnglishDay(day) {
+      const days = getEnglishDays();
+      days[day] = !days[day];
+      if (!days[day]) delete days[day];
+      setEnglishDays(days);
+      renderEnglishTracker();
+    }
+
+    function resetEnglishTracker() {
+      if (!confirm('Reset semua tracker English? Data hari yang sudah di-centang akan hilang.')) return;
+      setEnglishDays({});
+      renderEnglishTracker();
+      showToast('Tracker English direset');
+    }
+
+    function addProduct() {
+      const input = document.getElementById('productName');
+      const name = input.value.trim();
+      if (!name) return;
+      const products = getProducts();
+      products.unshift({ id: uid('product'), name, date: getTodayISO() });
+      setProducts(products);
+      input.value = '';
+      renderProductLog();
+    }
+
+    function deleteProduct(id) {
+      const products = getProducts().filter(product => product.id !== id);
+      setProducts(products);
+      renderProductLog();
+    }
+
+    function renderProductLog() {
+      const target = document.getElementById('productLog');
+      const products = getProducts();
+      if (!products.length) {
+        target.innerHTML = '<div class="helper">Belum ada produk yang dicatat.</div>';
+        return;
+      }
+      target.innerHTML = products.map(product => `
+        <div class="entry-card">
+          <div class="entry-head">
+            <span>${escapeHtml(product.name)}</span>
+            <span class="summary-meta">${formatDate(product.date)}</span>
+          </div>
+          <div class="btn-row" style="margin-top:8px">
+            <button class="btn secondary" onclick="deleteProduct('${product.id}')">Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function buildSummaryText() {
+      const goals = getGoals();
+      const journal = getJournal();
+      const reviews = getReviews();
+      const englishDays = getEnglishDays();
+      const products = getProducts();
+      const extraNotes = document.getElementById('extraNotes').value.trim();
+      const today = getTodayISO();
+
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      const cutoffISO = sevenDaysAgo.toISOString().slice(0, 10);
+      const recentJournal = journal.filter(entry => entry.date >= cutoffISO);
+
+      const goalsSection = PEOPLE.map(person => {
+        const personGoals = goals.filter(goal => goal.person === person.key);
+        const lines = personGoals.map(goal => `${goal.done ? '✓' : '○'} ${goal.text}`);
+        return `${person.key}:\n${lines.length ? lines.join('\n') : '-'}\n`;
+      }).join('\n');
+
+      const journalSection = recentJournal.length
+        ? recentJournal.map(entry => {
+            const answersText = entry.answers.map(item => `- ${item.question}\n  ${item.answer || '-'}`).join('\n');
+            return `[${entry.person}] ${formatDate(entry.date)}\n${answersText}\n- Catatan bebas\n  ${entry.freeNote || '-'}`;
+          }).join('\n\n')
+        : 'Belum ada jurnal dalam 7 hari terakhir.';
+
+      const latestReview = reviews[0]
+        ? `Tanggal: ${formatDate(reviews[0].date)}\nYang berjalan baik: ${reviews[0].wentWell || '-'}\nYang perlu diperbaiki: ${reviews[0].toImprove || '-'}\nKomitmen: ${reviews[0].commitment || '-'}`
+        : 'Belum ada review yang disimpan.';
+
+      const englishDoneCount = Object.values(englishDays).filter(Boolean).length;
+      const productsSection = products.length
+        ? products.map(product => `- ${product.name} (${formatDate(product.date)})`).join('\n')
+        : '- Belum ada produk yang dicatat';
+
+      return [
+        '=== FAMILY GROWTH SYSTEM — SUMMARY ===',
+        `Tanggal: ${formatDate(today)}`,
+        '',
+        '--- GOALS STATUS ---',
+        goalsSection.trim(),
+        '',
+        '--- JURNAL 7 HARI TERAKHIR ---',
+        journalSection,
+        '',
+        '--- WEEKLY REVIEW TERAKHIR ---',
+        latestReview,
+        '',
+        '--- ENGLISH TRACKER ---',
+        `Hari selesai: ${englishDoneCount}/30`,
+        '',
+        '--- PRODUK DIBUAT ---',
+        productsSection,
+        '',
+        '=== PERTANYAAN / CATATAN TAMBAHAN ===',
+        extraNotes || '-',
+        '',
+        '=== PROMPT KE CLAUDE ===',
+        'Ini adalah data keluarga kami dari Family Growth System. Tolong analisa dan berikan:',
+        '1. Observasi pola dari data di atas',
+        '2. Apa yang berjalan baik?',
+        '3. Apa yang perlu perhatian?',
+        '4. 3 rekomendasi konkret untuk minggu depan'
+      ].join('\n');
+    }
+
+    function openExportModal() {
+      document.getElementById('exportModal').classList.add('show');
+      document.getElementById('exportModal').setAttribute('aria-hidden', 'false');
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').classList.remove('show');
+      document.getElementById('exportModal').setAttribute('aria-hidden', 'true');
+    }
+
+    function generateSummary() {
+      document.getElementById('summaryOutput').value = buildSummaryText();
+    }
+
+    async function copySummary() {
+      const output = document.getElementById('summaryOutput');
+      if (!output.value.trim()) output.value = buildSummaryText();
+      try {
+        await navigator.clipboard.writeText(output.value);
+      } catch (err) {
+        output.select();
+        document.execCommand('copy');
+      }
+      showToast('Summary disalin ke clipboard ✓');
+    }
+
+    function attachEvents() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentTab = btn.dataset.tab;
+          renderTabs();
+        });
+      });
+
+      document.getElementById('saveReviewBtn').addEventListener('click', saveWeeklyReview);
+      document.getElementById('resetEnglishBtn').addEventListener('click', resetEnglishTracker);
+      document.getElementById('addProductBtn').addEventListener('click', addProduct);
+      document.getElementById('openExportBtn').addEventListener('click', openExportModal);
+      document.getElementById('closeExportBtn').addEventListener('click', closeExportModal);
+      document.getElementById('generateSummaryBtn').addEventListener('click', generateSummary);
+      document.getElementById('copySummaryBtn').addEventListener('click', copySummary);
+      document.getElementById('exportModal').addEventListener('click', (event) => {
+        if (event.target.id === 'exportModal') closeExportModal();
+      });
+      document.getElementById('productName').addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          addProduct();
+        }
+      });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Enter' && event.target.matches('input[id^="new-goal-"]')) {
+          event.preventDefault();
+          const person = event.target.id.replace('new-goal-', '');
+          addGoal(person);
+        }
+      });
+    }
+
+    function init() {
+      ensureSeedData();
+      renderFamilyChips();
+      renderTabs();
+      renderGoals();
+      renderJournalMemberSwitcher();
+      renderJournalForm();
+      renderJournalLog();
+      renderReviewLog();
+      renderEnglishTracker();
+      renderProductLog();
+      attachEvents();
+    }
+
+    window.addGoal = addGoal;
+    window.toggleGoal = toggleGoal;
+    window.deleteGoal = deleteGoal;
+    window.setJournalPerson = setJournalPerson;
+    window.toggleEnglishDay = toggleEnglishDay;
+    window.deleteProduct = deleteProduct;
+
+    init();
+  </script>
+</body>
+</html>
