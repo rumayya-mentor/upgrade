@@ -574,7 +574,7 @@
       { person: 'Ayah', text: 'Riset: Dampak latar belakang terhadap kepemimpinan & pembangunan daerah (bersama Bunda)', done: false },
       { person: 'Ayah', text: 'Riset: Kandungan makanan tradisional dan jenisnya (bersama Bunda)', done: false },
       { person: 'Ayah', text: 'Riset: Dampak tontonan kriminalitas sebagai tren di daerah (bersama Bunda)', done: false },
-      { person: 'Bunda', text: 'Selesaikan thesis / riset Business Psychology', done: false },
+      { person: 'Bunda', text: 'Selesaikan kuliah Master of Business Psychology di UWA', done: false },
       { person: 'Bunda', text: 'Tulis buku bersama Ayah', done: false },
       { person: 'Bunda', text: 'Tulis paper bersama Ayah', done: false },
       { person: 'Bunda', text: 'Riset: Mental health ibu hamil terhadap kesehatan bayi (bersama Ayah)', done: false },
@@ -618,10 +618,18 @@
     }
 
     function migrateGoals(){
-      const goals = readJSON(STORAGE_KEYS.goals, []).map(g => ({
-        measure:'', deadline:'', why:'', reviewDate:'',
-        ...g
-      }));
+      const goals = readJSON(STORAGE_KEYS.goals, []).map(g => {
+        const normalized = {
+          measure:'', deadline:'', why:'', reviewDate:'',
+          ...g
+        };
+
+        if (normalized.person === 'Bunda' && normalized.text === 'Selesaikan thesis / riset Business Psychology') {
+          normalized.text = 'Selesaikan kuliah Master of Business Psychology di UWA';
+        }
+
+        return normalized;
+      });
       writeJSON(STORAGE_KEYS.goals, goals);
     }
 
