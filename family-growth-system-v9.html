@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- Family Growth System v7.2.0 — 2026-04-15 -->
+<!-- Family Growth System v7.2.1 — 2026-04-15 -->
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Family Growth System v7.2.0</title>
+  <title>Family Growth System v7.2.1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
@@ -309,7 +309,7 @@
     <header class="card title-card">
       <div class="section-head" style="margin-bottom:10px">
         <div>
-          <h1>Family Growth System v7.2.0</h1>
+          <h1>Family Growth System v7.2.1</h1>
                   </div>
         <div class="toolbar">
           <span class="sync-pill loading" id="syncStatus">Memuat...</span>
@@ -1004,7 +1004,10 @@
       return PEOPLE.find(p=>p.key===person)?.color || 'var(--bersama)';
     }
     function isGlobalAllSelected(){
-      return !Array.isArray(state.selectedPeople) || !state.selectedPeople.length || state.selectedPeople.includes('Bersama');
+      return Array.isArray(state.selectedPeople) && state.selectedPeople.includes('__ALL__');
+    }
+    function isDefaultBersamaScope(){
+      return Array.isArray(state.selectedPeople) && state.selectedPeople.length===1 && state.selectedPeople[0]==='Bersama';
     }
     function getSelectedPeopleKeys(){
       return isGlobalAllSelected() ? PEOPLE.map(p=>p.key) : state.selectedPeople.slice();
@@ -1762,7 +1765,7 @@
       target.innerHTML = `
         <span class="badge info">Scope aktif: ${escapeHtml(label)}</span>
         <span class="mini-muted">Gunakan chip keluarga di header untuk ganti fokus. Bisa pilih beberapa orang sekaligus untuk project couple / kolaborasi.</span>
-        ${isGlobalAllSelected() ? '' : '<button class="btn secondary small" id="resetGlobalScopeBtn">Kembali ke Bersama</button>'}
+        ${isDefaultBersamaScope() ? '' : '<button class="btn secondary small" id="resetGlobalScopeBtn">Kembali ke Bersama</button>'}
       `;
       document.getElementById('resetGlobalScopeBtn')?.addEventListener('click', ()=>toggleGlobalPerson('Bersama'));
     }
@@ -2488,8 +2491,8 @@
 
     function renderTimeline(){
       const feedPersonOptions = ['all', ...getSelectedPeopleKeys().filter(p=>p!=='Bersama')];
-      document.getElementById('feedPersonFilter').innerHTML = (isGlobalAllSelected() ? ['all', ...PEOPLE.map(p=>p.key)] : ['all', ...feedPersonOptions]).map(value=>`<option value="${value}">${value==='all'?'Semua dalam scope':value}</option>`).join('');
-      if(state.currentFeedPerson !== 'all' && !isGlobalAllSelected() && !getSelectedPeopleKeys().includes(state.currentFeedPerson)) state.currentFeedPerson = 'all';
+      document.getElementById('feedPersonFilter').innerHTML = ['all', ...feedPersonOptions].map(value=>`<option value="${value}">${value==='all'?'Semua dalam scope':value}</option>`).join('');
+      if(state.currentFeedPerson !== 'all' && !getSelectedPeopleKeys().includes(state.currentFeedPerson)) state.currentFeedPerson = 'all';
       renderGantt();
       renderTimelineFeed();
       document.getElementById('feedTypeFilter').value = state.currentFeedType;
@@ -2721,6 +2724,9 @@
       toggleProductTypeWrap();
       toggleProductEditTypeWrap();
       attachEvents();
+      state.cache = migrateCache({});
+      setSyncStatus('loading', 'Memuat...');
+      renderAll();
       try{
         await loadRemote(true);
       } catch(err){
