@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<!-- Family Growth System v6.1.0 — 2026-04-15 -->
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Growth System v6.1.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    
+:root{
+      --bg:#070b17;
+      --surface:#0f172a;
+      --surface-soft:#111c34;
+      --surface-alt:#15213e;
+      --text:#e5eefc;
+      --muted:#94a3b8;
+      --border:#23314f;
+      --border-strong:#33476f;
+      --primary:#3b82f6;
+      --primary-soft:#60a5fa;
+      --success:#22c55e;
+      --success-soft:rgba(34,197,94,.15);
+      --warning:#fbbf24;
+      --warning-soft:rgba(251,191,36,.16);
+      --danger:#fb7185;
+      --danger-soft:rgba(251,113,133,.16);
+      --info:#38bdf8;
+      --info-soft:rgba(56,189,248,.16);
+      --shadow:0 18px 40px rgba(2,6,23,.42);
+      --radius:14px;
+      --radius-lg:20px;
+      --max-width:1440px;
+      --ayah:#60a5fa;
+      --bunda:#a78bfa;
+      --maryam:#34d399;
+      --musa:#f59e0b;
+      --maymunah:#f472b6;
+      --bersama:#94a3b8;
+      --calendar-header:#153b73;
+      --calendar-header-2:#1d4f91;
+      --calendar-grid:#24324f;
+      --calendar-weekend:rgba(255,255,255,.035);
+      --calendar-today:#ef4444;
+      --font-ui:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --font-display:'Space Grotesk',system-ui,sans-serif;
+      --font-condensed:'Barlow Condensed',system-ui,sans-serif;
+      --field-bg:#0d1830;
+      --field-bg-2:#122140;
+      --field-text:#eef4ff;
+      --field-placeholder:#91a4c8;
+      --surface-strong:#091224;
+      --surface-contrast:#dce8ff;
+      --text-on-light:#10203c;
+      --muted-on-light:#4f6488;
+      --day-col:42px;
+      --label-col:340px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:radial-gradient(circle at top, #0f2147 0%, #070b17 42%, #060913 100%);
+      color:var(--text);
+      font-family:var(--font-ui);
+      font-size:14px;
+      line-height:1.5;
+    }
+    button,input,textarea,select{font:inherit}
+    button,input,textarea,select{font-size:16px}
+    .app{max-width:var(--max-width);margin:0 auto;padding:16px 16px 120px}
+    .card{
+      background:linear-gradient(180deg, rgba(15,23,42,.92), rgba(11,18,32,.96));
+      border:1px solid var(--border);
+      border-radius:var(--radius-lg);
+      padding:16px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    .title-card h1{margin:0 0 8px;font-size:clamp(28px,4.2vw,38px);line-height:1.02;font-family:var(--font-display);font-weight:800;letter-spacing:-.035em}
+    .title-card p{margin:0;color:#bfd0ec;font-size:14px;line-height:1.55;max-width:72ch}
+    .chip-row,.tabs,.member-switcher,.subtabs,.toolbar,.segment,.legend-row{display:flex;gap:8px;flex-wrap:wrap}
+    .chip,.stat-chip,.legend-chip{
+      color:var(--text);
+      display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:7px 12px;
+      border-radius:999px;background:var(--surface-soft);border:1px solid var(--border);font-weight:700;white-space:nowrap;
+    }
+    .chip-dot{width:10px;height:10px;border-radius:999px;display:inline-block;flex:0 0 auto}
+    .tabs-wrap{position:sticky;top:0;z-index:20;padding:10px 0 12px;background:linear-gradient(180deg,rgba(7,11,23,.98) 78%,rgba(7,11,23,0));margin-bottom:10px}
+    .tabs{overflow:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+    .tab-btn,.member-btn,.subtab-btn,.segment-btn{
+      min-height:42px;border-radius:999px;border:1px solid var(--border);background:var(--surface);
+      padding:9px 14px;white-space:nowrap;font-weight:800;color:var(--text);box-shadow:var(--shadow);cursor:pointer;
+    }
+    .tab-btn.active,.subtab-btn.active,.segment-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .member-btn.active{color:#fff}
+    .panel{display:none;animation:fadeIn .18s ease}
+    .panel.active{display:block}
+    @keyframes fadeIn{from{opacity:.35;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    .section-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px}
+    .section-head h2,.section-head h3,.section-head h4{margin:0 0 6px;line-height:1.12;font-family:var(--font-display);letter-spacing:-.03em;color:#f6f9ff}
+    .section-head h2{font-size:clamp(22px,2vw,26px);font-weight:800}
+    .section-head h3{font-size:clamp(18px,1.6vw,21px);font-weight:800}
+    .section-head h4{font-size:15px;font-weight:800}
+    .helper{margin:0;color:#a9bddf;font-size:13px;line-height:1.55;max-width:72ch}
+    .meta{margin:0;color:#b9cbed;font-size:12px;line-height:1.45}
+    .grid{display:grid;gap:14px}
+    .two-col,.three-col,.goals-grid{grid-template-columns:1fr}
+    .toolbar{align-items:center}
+    .toolbar .btn{min-width:auto}
+    .input,.textarea,.select{
+      width:100%;min-height:44px;border-radius:12px;border:1px solid var(--border-strong);background:linear-gradient(180deg,var(--field-bg),var(--field-bg-2));
+      color:var(--field-text);padding:12px 14px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .input::placeholder,.textarea::placeholder{color:var(--field-placeholder);opacity:1}
+    .input:focus,.textarea:focus,.select:focus{border-color:#5d89d8;box-shadow:0 0 0 3px rgba(59,130,246,.18)}
+    .select{appearance:none;padding-right:36px;background-image:linear-gradient(45deg,transparent 50%, #9fb3d9 50%), linear-gradient(135deg,#9fb3d9 50%,transparent 50%);background-position:calc(100% - 18px) calc(50% - 3px),calc(100% - 12px) calc(50% - 3px);background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+    select option{background:#0d1830;color:#eef4ff}
+    .textarea{min-height:110px;resize:vertical}
+    .textarea.sm{min-height:78px}
+    .btn{min-height:42px;border-radius:12px;border:1px solid var(--primary);background:var(--primary);color:#fff;padding:10px 14px;font-weight:800;cursor:pointer}
+    .btn.secondary{background:var(--surface);color:var(--text);border-color:var(--border-strong)}
+    .btn.danger{background:var(--danger);border-color:var(--danger)}
+    .btn.info{background:var(--info);border-color:var(--info)}
+    .btn.ghost{background:transparent;color:var(--text);border-color:var(--border)}
+    .btn.small,.icon-btn.small{min-height:34px;padding:6px 10px;font-size:13px}
+    .icon-btn{
+      min-height:38px;min-width:38px;border-radius:10px;border:1px solid #35548a;background:linear-gradient(180deg,#0f1b34,#0b1528);color:#eaf2ff;font-size:20px;font-weight:800;line-height:1;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .icon-btn:hover{background:linear-gradient(180deg,#15264a,#10203b);border-color:#5b84d6}
+    .icon-btn:disabled{opacity:.38;cursor:not-allowed}
+    .icon-btn.danger{color:#ffd7df;border-color:rgba(251,113,133,.55)}
+    .warn-box,.info-box,.success-box,.danger-box{
+      border-radius:12px;padding:12px;border:1px solid var(--border);background:var(--surface-soft);
+    }
+    .warn-box{background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.45);color:#fde68a}
+    .info-box{background:rgba(56,189,248,.15);border-color:rgba(96,165,250,.45);color:#bfdbfe}
+    .success-box{background:rgba(34,197,94,.14);border-color:rgba(74,222,128,.45);color:#bbf7d0}
+    .danger-box{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.45);color:#fecdd3}
+    .note-box{padding:12px;border-radius:12px;background:var(--surface-soft);border:1px solid var(--border)}
+    .note-box strong{display:block;margin-bottom:4px}
+    .mini-muted{font-size:12px;line-height:1.45;color:#9eb2d5}
+    .panel-stack{display:grid;gap:12px}
+    .person-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface-soft)}
+    .person-card-head{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface)}
+    .person-title{display:flex;align-items:center;gap:10px;font-size:19px;font-family:var(--font-display);font-weight:800;letter-spacing:-.02em}
+    .person-counter{font-size:12px;color:#a9bddf;font-weight:700}
+    .goal-sections{padding:12px;display:grid;gap:14px}
+    .goal-section-title{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .goal-section-title h4{font-size:15px;font-weight:800;color:#f8fbff}
+    .goal-list{display:grid;gap:10px}
+    .goal-item{
+      display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:flex-start;
+      border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:12px;
+    }
+    .goal-item.done{opacity:.92;background:#0a152a;border-color:#31476d}
+    .goal-check{margin-top:4px;width:20px;height:20px;accent-color:var(--primary);cursor:pointer}
+    .goal-main{display:grid;gap:8px;min-width:0}
+    .goal-title{font-size:17px;font-weight:800;line-height:1.2;word-break:break-word;font-family:var(--font-display);letter-spacing:-.025em}
+    .goal-item{--goal-font-color:#eef4ff;--goal-font-muted:#c4d4f0;--goal-font-family:var(--font-display)}
+    .goal-item .goal-main{color:var(--goal-font-color);font-family:var(--goal-font-family)}
+    .goal-item .goal-title{color:var(--goal-font-color);font-family:var(--goal-font-family)}
+    .goal-item .goal-main .mini-muted,.goal-item .progress-wrap .mini-muted{color:var(--goal-font-muted)}
+    .goal-item.person-ayah{--goal-font-color:#f8fbff;--goal-font-muted:#dce8ff;--goal-font-family:var(--font-display)}
+    .goal-item.person-bunda{--goal-font-color:#93f7ac;--goal-font-muted:#d9ffe2;--goal-font-family:Georgia,Cambria,'Times New Roman',serif}
+    .goal-item.person-musa{--goal-font-color:#ffd46b;--goal-font-muted:#ffe8aa;--goal-font-family:var(--font-condensed)}
+    .goal-item.person-maryam{--goal-font-color:#7de8d4;--goal-font-muted:#cbfff3;--goal-font-family:'Trebuchet MS',var(--font-ui)}
+    .goal-item.person-maymunah{--goal-font-color:#ff9fd1;--goal-font-muted:#ffd3ea;--goal-font-family:'Avenir Next','Segoe UI',var(--font-ui)}
+    .goal-item.person-bersama{--goal-font-color:#d8e6ff;--goal-font-muted:#eef4ff;--goal-font-family:var(--font-ui)}
+    .goal-next{font-size:13px;line-height:1.45;color:#f5f8ff;padding:8px 10px;border-radius:10px;border:1px solid rgba(141,177,240,.18);background:rgba(13,24,48,.54)}
+    .goal-next strong{color:#cfe0ff;font-weight:800}
+    .goal-support,.goal-blocker{font-size:12px;line-height:1.45;color:#d7e4fb}
+    .goal-alert{font-size:12px;line-height:1.4;color:#ffd7a1;padding:8px 10px;border-radius:10px;border:1px solid rgba(251,191,36,.28);background:rgba(251,191,36,.10)}
+    .health-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid transparent}
+    .health-good{background:rgba(34,197,94,.14);color:#bbf7d0;border-color:rgba(74,222,128,.24)}
+    .health-warn{background:rgba(251,191,36,.14);color:#fde68a;border-color:rgba(251,191,36,.24)}
+    .health-bad{background:rgba(251,113,133,.14);color:#fecdd3;border-color:rgba(251,113,133,.24)}
+    .goal-meta-row,.chip-wrap,.stat-row{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;
+      font-size:12px;font-weight:800;border:1px solid var(--border);background:var(--surface-soft);
+    }
+    .badge.info{background:rgba(59,130,246,.16);border-color:rgba(96,165,250,.45);color:#dbeafe}
+    .badge.success{background:rgba(34,197,94,.18);border-color:rgba(74,222,128,.45);color:#dcfce7}
+    .badge.warning{background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.45);color:#fde68a}
+    .badge.danger{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.45);color:#fecdd3}
+    .progress-wrap{display:grid;gap:6px}
+    .progress-bar{height:8px;border-radius:999px;background:#17253f;overflow:hidden;border:1px solid rgba(255,255,255,.05)}
+    .progress-fill{height:100%;background:var(--primary)}
+    .goal-actions,.product-actions{display:grid;gap:8px}
+    .add-goal-box,.form-box{border-top:1px dashed var(--border);padding:12px;background:var(--surface)}
+    .form-grid{display:grid;gap:10px}
+    .question-list,.qa-list,.timeline-feed,.product-log,.tracker-grid{display:grid;gap:10px}
+    .question-item,.feed-item,.product-card,.entry-card,.qa-item{
+      border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface-soft);
+    }
+    .question-item label,.field label{display:block;margin-bottom:8px;font-size:14px;font-weight:800;letter-spacing:-.01em;color:#f5f8ff}
+    .qa-q{font-size:12px;color:#9fb4da;margin-bottom:4px;font-weight:700;letter-spacing:.01em}
+    .qa-a{font-size:14px;line-height:1.6;color:#eff5ff;white-space:pre-wrap;word-break:break-word}
+    .day-btn{min-height:52px;border-radius:12px;border:1px solid var(--border-strong);background:linear-gradient(180deg,#0f1b33,#0b1528);color:#eaf2ff;padding:8px;font-weight:800;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+    .day-btn.done{background:linear-gradient(180deg,rgba(34,197,94,.30),rgba(22,163,74,.22));border-color:rgba(74,222,128,.45);color:#dcfce7}
+    .day-btn small{display:block;font-weight:700;opacity:.85}
+    .sticky-export{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(7,11,23,0),rgba(7,11,23,.95) 38%,rgba(7,11,23,1) 100%)}
+    .sticky-export-inner{max-width:var(--max-width);margin:0 auto;display:flex;gap:10px;flex-wrap:wrap}
+    .sticky-export-inner .btn{flex:1 1 220px}
+    .modal{position:fixed;inset:0;display:none;align-items:flex-end;justify-content:center;background:rgba(17,24,39,.42);z-index:50;padding:14px}
+    .modal.show{display:flex}
+    .modal-sheet{width:min(900px,100%);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:18px 18px 0 0;box-shadow:var(--shadow);padding:16px}
+    .summary-output{width:100%;min-height:320px;border-radius:12px;border:1px solid var(--border-strong);padding:12px;background:#0a152a;color:#edf4ff;white-space:pre-wrap}
+    .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--primary);color:#fff;padding:10px 20px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:60;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .sync-pill{display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:6px 12px;border-radius:999px;font-weight:800;border:1px solid var(--border)}
+    .sync-pill.loading{background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.45);color:#fde68a}
+    .sync-pill.saved{background:rgba(34,197,94,.16);border-color:rgba(74,222,128,.45);color:#dcfce7}
+    .sync-pill.error{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.45);color:#fecdd3}
+    .sync-pill.conflict{background:rgba(56,189,248,.15);border-color:rgba(96,165,250,.45);color:#dbeafe}
+    .section-divider{height:1px;background:var(--border);margin:14px 0}
+    .week-group{display:grid;gap:8px}
+    .week-title{font-weight:800;color:#9fb4da;text-transform:uppercase;font-size:11px;letter-spacing:.08em}
+    .feed-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start}
+    .feed-title{font-weight:800}
+    .feed-meta{font-size:11px;color:#a9bddf;font-weight:700;letter-spacing:.01em}
+    .product-log-wrap{display:grid;gap:12px}
+    .product-card{background:var(--surface);display:grid;gap:10px}
+    .thread{display:grid;gap:8px}
+    .thread-item{padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface-soft)}
+    .thread-date{font-size:11px;color:#a9bddf;font-weight:700;margin-bottom:4px}
+    .field-grid-2,.field-grid-3{display:grid;gap:10px;grid-template-columns:1fr}
+    .inline-help{font-size:12px;color:var(--muted);margin-top:6px}
+    .summary-meta{font-size:11px;color:#a9bddf;font-weight:700}
+    details.log-item{border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);overflow:hidden}
+    details.log-item > summary{list-style:none;cursor:pointer;padding:13px 14px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    details.log-item > summary::-webkit-details-marker{display:none}
+    .gantt-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:14px}
+    .gantt-table{border-collapse:collapse;width:100%;min-width:820px;font-size:13px;background:#fff}
+    .gantt-table th,.gantt-table td{border:1px solid var(--border);padding:0;vertical-align:middle}
+    .gantt-table th{background:var(--surface-soft);padding:8px 10px;font-weight:800;position:sticky;top:0;z-index:2}
+    .gantt-table th.label-col,.gantt-table td.label-col{position:sticky;left:0;background:#fff;z-index:3}
+    .gantt-table td.label-col{padding:10px;min-width:220px;max-width:260px}
+    .gantt-table .week-header.current{background:var(--info-soft)}
+    .gantt-cell{position:relative;height:46px}
+    .gantt-bar{position:absolute;top:10px;bottom:10px;border-radius:999px;opacity:.92}
+    .gantt-bar.done{opacity:.52}
+    .gantt-today{position:absolute;top:0;bottom:0;width:2px;background:#EF4444;opacity:.7;z-index:2}
+    .gantt-overdue-note{font-size:11px;color:var(--danger);font-weight:800;padding:0 8px}
+    .smarter-box{display:grid;gap:8px;padding:12px;border-radius:12px;background:var(--surface-soft);border:1px dashed var(--border)}
+    .summary-grid{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+    .summary-grid .stat-chip{justify-content:center}
+
+    .feed-title{font-family:var(--font-display);font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.025em}
+    .feed-item,.qa-item,.question-item,.entry-card,.thread-item{background:linear-gradient(180deg,rgba(15,27,51,.72),rgba(10,19,37,.82))}
+    .feed-filter-bar .select{flex:1 1 220px;min-width:0}
+    .goal-item .mini-muted,.qa-q,.feed-meta,.thread-date,.summary-meta,.inline-help{color:#a8bcdf}
+    .gantt-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:16px;background:#081120;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+    .gantt-table{border-collapse:collapse;width:max-content;min-width:max-content;font-size:13px;background:#081120;color:#e8f0ff}
+    .gantt-table th,.gantt-table td{border:1px solid rgba(99,125,172,.28);padding:0;vertical-align:middle}
+    .gantt-table th{padding:0;font-weight:800;position:sticky;top:0;z-index:2}
+    .gantt-table th.label-col,.gantt-table td.label-col{position:sticky;left:0;z-index:4;background:linear-gradient(180deg,#071120,#081427)}
+    .gantt-table td.label-col{padding:16px 14px 14px;min-width:var(--label-col);max-width:var(--label-col);border-right:1px solid rgba(118,145,196,.34)}
+    .gantt-table th.label-col{min-width:var(--label-col);max-width:var(--label-col);font-size:18px;line-height:1.2}
+    .month-header{background:linear-gradient(180deg,#15396d,#0f2750);color:#f8fbff;font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.03em;text-align:center;height:52px;border-bottom:1px solid rgba(141,177,240,.18)}
+    .day-header{background:#0c1d3b;color:#eff5ff;width:var(--day-col);min-width:var(--day-col);max-width:var(--day-col);height:62px;text-align:center}
+    .day-header.weekend{background:#12274c}
+    .day-header.today{background:#17305c}
+    .day-header > span{display:block;line-height:1}
+    .day-number{font-family:var(--font-display);font-size:16px;font-weight:800;padding-top:9px;color:#f8fbff}
+    .day-dow{font-size:10px;font-weight:700;letter-spacing:.04em;color:#9bb4dc;padding:5px 0 9px}
+    .day-header.today .day-number{color:#fff1f2;text-shadow:0 0 16px rgba(251,113,133,.28)}
+    .gantt-table tbody td:not(.label-col){width:var(--day-col);min-width:var(--day-col);max-width:var(--day-col);background:#081120}
+    .gantt-table tbody td:not(.label-col):nth-child(2n+1){background:#091427}
+    .gantt-cell{position:relative;height:78px;background:transparent}
+    .gantt-cell.weekend{background:rgba(255,255,255,.03)}
+    .gantt-bar{position:absolute;top:22px;left:3px;height:34px;border-radius:999px;opacity:.98;box-shadow:0 8px 20px rgba(2,6,23,.35), inset 0 1px 0 rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.16)}
+    .gantt-today{position:absolute;top:0;bottom:0;width:3px;background:#fb7185;opacity:.95;z-index:3;box-shadow:0 0 18px rgba(251,113,133,.38)}
+    .gantt-overdue-note{font-size:11px;color:#fecdd3;font-weight:800;padding:0 8px}
+    .goal-row-title{font-family:var(--font-display);font-size:17px;line-height:1.22;font-weight:800;color:#edf3ff;margin-bottom:10px;letter-spacing:-.025em}
+    .goal-row-meta{display:flex;flex-wrap:wrap;gap:6px 8px}
+    .goal-row-chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 9px;border-radius:999px;border:1px solid rgba(135,161,206,.28);background:rgba(18,32,61,.88);font-size:11px;font-weight:800;color:#d3e1fb}
+    .gantt-no-deadline{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:10px;line-height:1.2;color:#a8bcdf;font-weight:700;max-width:calc(var(--day-col) - 12px)}
+    .gantt-review-pin{position:absolute;top:16px;width:10px;height:10px;border-radius:999px;background:#fbbf24;border:2px solid #fff7d6;box-shadow:0 0 0 3px rgba(251,191,36,.18), 0 0 12px rgba(251,191,36,.35)}
+    .gantt-review-pin::after{content:'';position:absolute;left:50%;transform:translateX(-50%);top:9px;width:2px;height:24px;background:linear-gradient(180deg,rgba(251,191,36,.92),rgba(251,191,36,.12))}
+    @media (max-width:700px){
+      .feed-filter-bar{display:grid;grid-template-columns:1fr;gap:10px}
+      .feed-filter-bar .select{width:100%}
+      .gantt-table td.label-col,.gantt-table th.label-col{min-width:260px;max-width:260px}
+      .goal-row-title{font-size:15px}
+      .goal-row-chip{font-size:10px}
+      .day-number{font-size:15px}
+      .month-header{font-size:18px}
+    }
+
+    @media (min-width:860px){
+      .two-col{grid-template-columns:1.1fr .9fr}
+      .three-col{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .goals-grid{grid-template-columns:1fr 1fr}
+      .field-grid-2{grid-template-columns:1fr 1fr}
+      .field-grid-3{grid-template-columns:repeat(3,1fr)}
+      .tracker-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+      .modal{align-items:center}
+      .modal-sheet{border-radius:18px}
+      .summary-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    }
+    @media (min-width:1120px){
+      .goals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .tracker-grid{grid-template-columns:repeat(10,minmax(0,1fr))}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="card title-card">
+      <div class="section-head" style="margin-bottom:10px">
+        <div>
+          <h1>Family Growth System v6.1.0</h1>
+          <p>Cloud-synced dashboard keluarga dengan timeline kalender harian, dark theme yang lebih kontras, dan workflow 1W1Product.</p>
+        </div>
+        <div class="toolbar">
+          <span class="sync-pill loading" id="syncStatus">Memuat...</span>
+          <button class="btn secondary small" id="syncNowBtn">Sync now</button>
+          <button class="btn secondary small" id="forceSaveBtn" style="display:none">Force save local</button>
+        </div>
+      </div>
+      <div class="chip-row" id="familyChips"></div>
+      <details style="margin-top:10px">
+        <summary class="inline-help" style="cursor:pointer;user-select:none">Backup & restore (advanced)</summary>
+        <div class="toolbar" style="margin-top:8px">
+          <button class="btn secondary small" id="exportDataBtn">Backup data</button>
+          <button class="btn secondary small" id="importDataBtn">Restore backup</button>
+          <input type="file" id="importDataInput" accept="application/json" style="display:none" />
+        </div>
+      </details>
+      <div class="inline-help" id="syncMetaLabel">Belum tersinkron.</div>
+    </header>
+
+    <div class="tabs-wrap">
+      <nav class="tabs" aria-label="Tab navigasi">
+        <button class="tab-btn active" data-tab="goals">Goals</button>
+        <button class="tab-btn" data-tab="timeline">Timeline</button>
+        <button class="tab-btn" data-tab="journal">Journal</button>
+        <button class="tab-btn" data-tab="weekly">Weekly Review</button>
+        <button class="tab-btn" data-tab="products">1W1Product</button>
+      </nav>
+    </div>
+
+    <main>
+      <section class="panel active" id="panel-goals">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h2>Goals</h2>
+              <p class="helper">Dipisah jadi goal aktif dan goal selesai. Deadline, status, progress, dan prioritas terlihat langsung.</p>
+            </div>
+            <div class="toolbar" id="goalSummaryChips"></div>
+          </div>
+          <div class="toolbar" style="margin-bottom:12px" id="goalFilterBar"></div>
+          <div class="goals-grid" id="goalsGrid"></div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-timeline">
+        <div class="grid two-col">
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h2>Goal Calendar Gantt</h2>
+                  <p class="helper">Timeline dimulai dari hari ini, kecuali ada start date aktif yang lebih awal. Goal selesai otomatis hilang dari timeline. Header kalender dibaca: bulan → tanggal → hari.</p>
+                </div>
+                <div class="toolbar">
+                  <button class="btn secondary small" id="timelinePrevBtn">&larr; Sebelumnya</button>
+                  <button class="btn secondary small" id="timelineTodayBtn">Hari ini</button>
+                  <button class="btn secondary small" id="timelineNextBtn">Berikutnya &rarr;</button>
+                </div>
+              </div>
+              <div class="summary-grid" id="timelineStats" style="margin-bottom:12px"></div>
+              <div class="legend-row" id="ganttLegend" style="margin-bottom:12px"></div>
+              <div class="gantt-wrap" id="ganttWrap"></div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h2>Activity Feed</h2>
+                  <p class="helper">Journal, weekly review, progress produk, dan goal selesai dalam urutan kronologis terbalik.</p>
+                </div>
+              </div>
+              <div class="toolbar feed-filter-bar" style="margin-bottom:12px">
+                <select id="feedTypeFilter" class="select">
+                  <option value="all">Semua jenis</option>
+                  <option value="Journal">Journal</option>
+                  <option value="Weekly Review">Weekly Review</option>
+                  <option value="1W1Product">1W1Product</option>
+                  <option value="Goal Selesai">Goal Selesai</option>
+                </select>
+                <select id="feedPersonFilter" class="select"></select>
+              </div>
+              <div class="timeline-feed" id="timelineFeed"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-journal">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <h2>Journal</h2>
+              <p class="helper">Jurnal harian per anggota keluarga.</p>
+            </div>
+            <div class="meta" id="journalTodayLabel"></div>
+          </div>
+          <div class="member-switcher" id="journalMemberSwitcher" style="margin-bottom:12px"></div>
+          <div id="journalFormWrap"></div>
+          <div class="btn-row" style="margin-top:12px">
+            <button class="btn secondary" id="openJournalHistoryBtn">Lihat riwayat jurnal</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-weekly">
+        <div class="grid two-col">
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h2>Weekly Review</h2>
+                  <p class="helper">Isi 1x seminggu untuk evaluasi pola keluarga.</p>
+                </div>
+              </div>
+              <div class="note-box" style="margin-bottom:12px">
+                <strong>Kapan diisi?</strong>
+                Idealnya Minggu malam atau Senin pagi. Fokus pada pola satu minggu penuh, bukan detail harian.
+              </div>
+              <div class="question-list">
+                <div class="question-item">
+                  <label for="wentWell">1. Yang berjalan baik minggu ini</label>
+                  <textarea id="wentWell" class="textarea" placeholder="Contoh: English speaking lebih konsisten, Maryam menulis, dll."></textarea>
+                </div>
+                <div class="question-item">
+                  <label for="toImprove">2. Yang perlu diperbaiki</label>
+                  <textarea id="toImprove" class="textarea" placeholder="Apa yang perlu dibenahi minggu depan?"></textarea>
+                </div>
+                <div class="question-item">
+                  <label for="commitment">3. Komitmen untuk minggu depan</label>
+                  <textarea id="commitment" class="textarea" placeholder="Komitmen konkret dan realistis."></textarea>
+                </div>
+              </div>
+              <div class="toolbar" style="margin-top:12px">
+                <button class="btn" id="saveReviewBtn">Simpan review</button>
+                <button class="btn secondary" id="openWeeklyHistoryBtn">Lihat riwayat weekly review</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>English Speaking Tracker</h3>
+                  <p class="helper">Klik untuk tandai done/belum. Hijau = done.</p>
+                </div>
+                <button class="btn secondary" id="resetEnglishBtn">Reset tracker</button>
+              </div>
+              <div class="meta" id="englishCountLabel">Hari selesai: 0/30</div>
+              <div class="tracker-grid" id="englishTracker"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-products">
+        <div class="grid two-col">
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h2>1W1Product</h2>
+                  <p class="helper">Form awal diringankan. Progress dan penyelesaian dicatat sebagai workflow terpisah.</p>
+                </div>
+              </div>
+              <div class="note-box" style="margin-bottom:12px">
+                <strong>Alur kerja:</strong>
+                buat produk → tambah update progres → tandai selesai → arsip.
+                <div class="product-helper">Tanggal selesai dan pelajaran utama diisi saat benar-benar selesai, bukan sejak awal.</div>
+              </div>
+              <div class="form-grid">
+                <div class="question-item">
+                  <label for="productWeek">Pekan mulai / tanggal entry</label>
+                  <input id="productWeek" class="input" type="date" />
+                </div>
+                <div class="question-item">
+                  <label for="productName">Nama produk / output</label>
+                  <input id="productName" class="input" type="text" placeholder="Contoh: Draft cerita Maryam" />
+                </div>
+                <div class="field-grid-2">
+                  <div class="question-item">
+                    <label for="productType">Jenis output</label>
+                    <select id="productType" class="select">
+                      <option value="Tulisan">Tulisan</option>
+                      <option value="Riset">Riset</option>
+                      <option value="Desain">Desain</option>
+                      <option value="Presentasi">Presentasi</option>
+                      <option value="Sistem">Sistem</option>
+                      <option value="Video/Audio">Video/Audio</option>
+                      <option value="Belajar/Latihan">Belajar/Latihan</option>
+                      <option value="Lainnya">Lainnya</option>
+                    </select>
+                  </div>
+                  <div class="question-item">
+                    <label for="productOwner">Siapa penanggung jawab utama?</label>
+                    <select id="productOwner" class="select"></select>
+                  </div>
+                </div>
+                <div class="question-item" id="productTypeOtherWrap" style="display:none">
+                  <label for="productTypeOther">Kalau "Lainnya", isi manual</label>
+                  <input id="productTypeOther" class="input" type="text" placeholder="Contoh: worksheet, prototype game" />
+                </div>
+                <div class="question-item">
+                  <label for="productUse">Untuk siapa / digunakan untuk apa?</label>
+                  <textarea id="productUse" class="textarea sm" placeholder="Tujuan praktis output ini."></textarea>
+                </div>
+                <div class="field-grid-2">
+                  <div class="question-item">
+                    <label for="productTargetDate">Tanggal target selesai</label>
+                    <input id="productTargetDate" class="input" type="date" />
+                  </div>
+                  <div class="question-item">
+                    <label for="productFirstStep">Langkah pertama</label>
+                    <textarea id="productFirstStep" class="textarea sm" placeholder="Langkah paling awal yang akan dikerjakan minggu ini."></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="toolbar" style="margin-top:12px">
+                <button class="btn" id="addProductBtn">Simpan produk baru</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="section-head">
+                <div>
+                  <h3>Rekap Produk</h3>
+                  <p class="helper">Pantau produk aktif, molor, review, dan arsip selesai.</p>
+                </div>
+              </div>
+              <div class="toolbar" style="margin-bottom:12px" id="productFilterBar"></div>
+              <div class="stat-row" id="productStats" style="margin-bottom:12px"></div>
+              <div class="product-log-wrap">
+                <div>
+                  <div class="goal-section-title" style="margin-bottom:8px"><h4 style="margin:0">Sedang dibangun</h4></div>
+                  <div class="product-log" id="activeProductLog"></div>
+                </div>
+                <div>
+                  <div class="goal-section-title" style="margin-bottom:8px"><h4 style="margin:0">Selesai / Arsip</h4></div>
+                  <div class="product-log" id="completedProductLog"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="sticky-export">
+    <div class="sticky-export-inner">
+      <button class="btn" id="openExportBtn">Export summary</button>
+    </div>
+  </div>
+
+  <div class="modal" id="exportModal" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+      <div class="section-head">
+        <div>
+          <h3 id="exportTitle">Export Summary</h3>
+          <p class="helper">Kompilasi semua data menjadi teks siap paste ke AI lain.</p>
+        </div>
+        <button class="btn secondary" data-close-modal="exportModal">Tutup</button>
+      </div>
+      <div class="question-item">
+        <label for="extraNotes">Pertanyaan / catatan tambahan</label>
+        <textarea id="extraNotes" class="textarea" placeholder="Tambahkan konteks atau pertanyaan khusus sebelum export."></textarea>
+      </div>
+      <div class="toolbar" style="margin-top:12px;margin-bottom:12px">
+        <button class="btn" id="generateSummaryBtn">Generate summary</button>
+        <button class="btn secondary" id="copySummaryBtn">Salin</button>
+      </div>
+      <textarea id="summaryOutput" class="summary-output" placeholder="Summary akan muncul di sini..."></textarea>
+    </div>
+  </div>
+
+  <div class="modal" id="historyModal" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
+      <div class="section-head">
+        <div>
+          <h3 id="historyTitle">Riwayat</h3>
+          <p class="helper" id="historySubtitle">Data tersimpan bisa dibuka lagi di sini.</p>
+        </div>
+        <button class="btn secondary" data-close-modal="historyModal">Tutup</button>
+      </div>
+      <div id="historyContent"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="goalModal" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
+      <div class="section-head">
+        <div>
+          <h3 id="goalModalTitle">Edit Goal</h3>
+          <p class="helper">SMARTER di sini dibuat praktis: goal harus jelas, punya definition of done, alasan penting, langkah berikutnya, deadline/review, dan ruang untuk revisi bila mandek.</p>
+        </div>
+        <button class="btn secondary" data-close-modal="goalModal">Tutup</button>
+      </div>
+      <div class="smarter-box" style="margin-bottom:12px">
+        <div><strong>SMARTER singkat</strong></div>
+        <div class="mini-muted">Specific: goal jelas. Measurable: ada bukti konkret. Achievable: realistis untuk kapasitas sekarang. Relevant: penting untuk arah keluarga/proyek. Time-bound: ada deadline atau review date. Evaluate &amp; Re-adjust: dicek dan disesuaikan kalau mandek.</div>
+      </div>
+      <input type="hidden" id="goalModalId" />
+      <div class="form-grid">
+        <div class="question-item">
+          <label for="goalModalText">Nama goal</label>
+          <input id="goalModalText" class="input" type="text" />
+        </div>
+        <div class="field-grid-3">
+          <div class="question-item">
+            <label for="goalModalPerson">Owner</label>
+            <select id="goalModalPerson" class="select"></select>
+          </div>
+          <div class="question-item">
+            <label for="goalModalCategory">Kategori</label>
+            <select id="goalModalCategory" class="select">
+              <option value="">Pilih kategori</option>
+              <option value="Akademik">Akademik</option>
+              <option value="Family">Family</option>
+              <option value="Health">Health</option>
+              <option value="Finance">Finance</option>
+              <option value="Anak">Anak</option>
+              <option value="Spiritual">Spiritual</option>
+              <option value="Project">Project</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="question-item">
+            <label for="goalModalStatus">Status</label>
+            <select id="goalModalStatus" class="select">
+              <option value="Aktif">Aktif</option>
+              <option value="Pause">Pause</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="goalModalProgress">Progress (%)</label>
+            <input id="goalModalProgress" class="input" type="number" min="0" max="100" />
+          </div>
+          <div class="question-item">
+            <label for="goalModalRealisticNow">Kenapa realistis sekarang?</label>
+            <textarea id="goalModalRealisticNow" class="textarea sm" placeholder="Contoh: waktu tersedia, resource ada, partner sudah siap."></textarea>
+          </div>
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="goalModalStartDate">Tanggal mulai</label>
+            <input id="goalModalStartDate" class="input" type="date" />
+          </div>
+          <div class="question-item">
+            <label for="goalModalStartTime">Jam mulai (opsional)</label>
+            <input id="goalModalStartTime" class="input" type="time" />
+          </div>
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="goalModalDeadline">Deadline</label>
+            <input id="goalModalDeadline" class="input" type="date" />
+          </div>
+          <div class="question-item">
+            <label for="goalModalDeadlineTime">Jam deadline (opsional)</label>
+            <input id="goalModalDeadlineTime" class="input" type="time" />
+          </div>
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="goalModalReviewDate">Tanggal review berikutnya</label>
+            <input id="goalModalReviewDate" class="input" type="date" />
+          </div>
+          <div class="question-item">
+            <label for="goalModalReviewTime">Jam review (opsional)</label>
+            <input id="goalModalReviewTime" class="input" type="time" />
+          </div>
+        </div>
+        <div class="question-item">
+          <label for="goalModalMeasure">Ukuran keberhasilan</label>
+          <textarea id="goalModalMeasure" class="textarea sm" placeholder="Bagaimana tahu goal ini benar-benar tercapai?"></textarea>
+        </div>
+        <div class="question-item">
+          <label for="goalModalWhy">Kenapa ini penting?</label>
+          <textarea id="goalModalWhy" class="textarea sm"></textarea>
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="goalModalFirstStep">Langkah pertama</label>
+            <textarea id="goalModalFirstStep" class="textarea sm" placeholder="Langkah paling kecil untuk mulai minggu ini."></textarea>
+          </div>
+          <div class="question-item">
+            <label for="goalModalNextAction">Langkah berikutnya</label>
+            <textarea id="goalModalNextAction" class="textarea sm" placeholder="Aksi konkret yang harus dilakukan berikutnya."></textarea>
+          </div>
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="goalModalBlocker">Blocker / risiko utama</label>
+            <textarea id="goalModalBlocker" class="textarea sm" placeholder="Hambatan terbesar yang bisa bikin goal mandek."></textarea>
+          </div>
+          <div class="question-item">
+            <label for="goalModalSupportNeeded">Support / resource yang dibutuhkan</label>
+            <textarea id="goalModalSupportNeeded" class="textarea sm" placeholder="Contoh: waktu fokus, feedback, bahan, partner, dana."></textarea>
+          </div>
+        </div>
+        <div class="question-item">
+          <label for="goalModalNewNote">Tambah update / hambatan goal</label>
+          <textarea id="goalModalNewNote" class="textarea sm" placeholder="Contoh: Progress IELTS stagnan minggu ini karena belum konsisten speaking."></textarea>
+          <div class="toolbar" style="margin-top:8px">
+            <button class="btn secondary small" id="addGoalNoteBtn">Tambah note</button>
+          </div>
+        </div>
+        <div class="question-item">
+          <label>Riwayat note</label>
+          <div class="thread" id="goalModalNotes"></div>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-top:12px">
+        <button class="btn" id="saveGoalModalBtn">Simpan perubahan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="productEditModal" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="productEditTitle">
+      <div class="section-head">
+        <div>
+          <h3 id="productEditTitle">Edit Produk</h3>
+          <p class="helper">Ubah informasi utama tanpa hapus entry lama.</p>
+        </div>
+        <button class="btn secondary" data-close-modal="productEditModal">Tutup</button>
+      </div>
+      <input type="hidden" id="productEditId" />
+      <div class="form-grid">
+        <div class="question-item">
+          <label for="productEditName">Nama produk</label>
+          <input id="productEditName" class="input" type="text" />
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="productEditType">Jenis</label>
+            <select id="productEditType" class="select"></select>
+          </div>
+          <div class="question-item">
+            <label for="productEditOwner">Owner</label>
+            <select id="productEditOwner" class="select"></select>
+          </div>
+        </div>
+        <div class="question-item" id="productEditTypeOtherWrap" style="display:none">
+          <label for="productEditTypeOther">Kalau "Lainnya", isi manual</label>
+          <input id="productEditTypeOther" class="input" type="text" />
+        </div>
+        <div class="question-item">
+          <label for="productEditUse">Untuk apa</label>
+          <textarea id="productEditUse" class="textarea sm"></textarea>
+        </div>
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="productEditTargetDate">Target selesai</label>
+            <input id="productEditTargetDate" class="input" type="date" />
+          </div>
+          <div class="question-item">
+            <label for="productEditStatus">Status</label>
+            <select id="productEditStatus" class="select">
+              <option value="Sedang dibangun">Sedang dibangun</option>
+              <option value="Butuh review">Butuh review</option>
+              <option value="Pause">Pause</option>
+              <option value="Selesai">Selesai</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-top:12px">
+        <button class="btn" id="saveProductEditBtn">Simpan perubahan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="productProgressModal" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="productProgressTitle">
+      <div class="section-head">
+        <div>
+          <h3 id="productProgressTitle">Tambah Update Progres</h3>
+          <p class="helper">Gunakan untuk mencatat perkembangan mingguan produk.</p>
+        </div>
+        <button class="btn secondary" data-close-modal="productProgressModal">Tutup</button>
+      </div>
+      <input type="hidden" id="productProgressId" />
+      <div class="form-grid">
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="productProgressDate">Tanggal update</label>
+            <input id="productProgressDate" class="input" type="date" />
+          </div>
+          <div class="question-item">
+            <label for="productProgressNext">Langkah berikutnya</label>
+            <textarea id="productProgressNext" class="textarea sm" placeholder="Akan otomatis terisi dari langkah berikutnya terakhir jika ada."></textarea>
+          </div>
+        </div>
+        <div class="question-item">
+          <label for="productProgressText">Catatan progres</label>
+          <textarea id="productProgressText" class="textarea" placeholder="Contoh: outline selesai, data awal masuk, desain versi 1 jadi."></textarea>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-top:12px">
+        <button class="btn" id="saveProductProgressBtn">Simpan update progres</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="productCompleteModal" aria-hidden="true">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="productCompleteTitle">
+      <div class="section-head">
+        <div>
+          <h3 id="productCompleteTitle">Tandai Produk Selesai</h3>
+          <p class="helper">Tanggal aktual selesai dan pelajaran utama dicatat di sini.</p>
+        </div>
+        <button class="btn secondary" data-close-modal="productCompleteModal">Tutup</button>
+      </div>
+      <input type="hidden" id="productCompleteId" />
+      <div class="form-grid">
+        <div class="field-grid-2">
+          <div class="question-item">
+            <label for="productCompleteDate">Tanggal selesai</label>
+            <input id="productCompleteDate" class="input" type="date" />
+          </div>
+          <div class="question-item">
+            <label for="productCompleteLearning">Pelajaran utama</label>
+            <textarea id="productCompleteLearning" class="textarea sm" placeholder="Apa pelajaran terbesar dari proses ini?"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-top:12px">
+        <button class="btn" id="saveProductCompleteBtn">Simpan dan tandai selesai</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEYS = {
+      goals: 'fgs_goals',
+      journal: 'fgs_journal',
+      weeklyReviews: 'fgs_weekly_reviews',
+      englishDays: 'fgs_english_days',
+      products: 'fgs_products'
+    };
+    const SCHEMA_VERSION = 5;
+
+    const PEOPLE = [
+      { key: 'Bersama', color: 'var(--bersama)' },
+      { key: 'Ayah', color: 'var(--ayah)' },
+      { key: 'Bunda', color: 'var(--bunda)' },
+      { key: 'Musa', color: 'var(--musa)' },
+      { key: 'Maryam', color: 'var(--maryam)' },
+      { key: 'Maymunah', color: 'var(--maymunah)' }
+    ];
+    const JOURNAL_PEOPLE = ['Ayah', 'Bunda', 'Musa', 'Maryam', 'Maymunah'];
+
+    const JOURNAL_QUESTIONS = {
+      Ayah: [
+        'Progress hari ini — paper, riset, atau IELTS prep?',
+        'Ada insight baru untuk tulisan / artikel ilmiah?',
+        'Bagaimana AI membantu pekerjaan hari ini?',
+        'Fokus & energi hari ini (1-5)',
+        'Apa hambatan terbesar hari ini dan solusinya?',
+        '1 langkah konkret yang akan dikerjakan besok'
+      ],
+      Bunda: [
+        'Progress riset atau tulisan (buku/paper) hari ini?',
+        'Bagaimana ilmu Business Psychology terhubung ke kehidupan nyata hari ini?',
+        'Energi & mental hari ini (1-5)',
+        'Ada insight yang bisa dikembangkan jadi produk/training?',
+        'Kemenangan kecil hari ini (sekecil apapun)',
+        'Next step yang paling penting besok'
+      ],
+      Maryam: [
+        'Hari ini nulis cerita atau dapat ide baru untuk buku?',
+        'Kata baru apa yang dipelajari hari ini (French atau Japanese)?',
+        'Ada yang dibuat — gambar, desain, tulisan?',
+        'Perasaan hari ini (emoji atau kata-kata)',
+        'Apa yang mau dilakukan besok?'
+      ],
+      Musa: [
+        'Belajar apa hari ini (CS/AI/riset/apapun)?',
+        'Ada yang dikerjakan untuk CS Star Australia hari ini?',
+        'Progress riset mandiri — ada temuan baru?',
+        'Tantangan yang dihadapi hari ini?',
+        'Next step yang paling ingin dikerjakan'
+      ],
+      Maymunah: [
+        'Math apa yang dipelajari atau dipraktekkan hari ini?',
+        'Kata baru dalam English atau Chinese?',
+        'Belajar Science hari ini? Tentang apa?',
+        'Main chess hari ini? Gimana hasilnya?',
+        'Hal paling seru hari ini?'
+      ]
+    };
+
+    const GOAL_SEED = [
+      { person: 'Bersama', text: 'Stay dan berjuang bersama — di sini, sekarang' },
+      { person: 'Bersama', text: 'Berjuang pribadi DAN bersama setiap hari' },
+      { person: 'Bersama', text: 'Speak English everyday (semua anggota)' },
+      { person: 'Bersama', text: '1W1Product — setiap pekan buat 1 produk (siapa saja bisa berkontribusi)' },
+      { person: 'Ayah', text: 'Capai IELTS 8.5' },
+      { person: 'Ayah', text: 'Jadi first author pada minimal 1 artikel/paper ilmiah' },
+      { person: 'Ayah', text: 'Riset: Dampak latar belakang terhadap kepemimpinan & pembangunan daerah (bersama Bunda)' },
+      { person: 'Ayah', text: 'Riset: Kandungan makanan tradisional dan jenisnya (bersama Bunda)' },
+      { person: 'Ayah', text: 'Riset: Dampak tontonan kriminalitas sebagai tren di daerah (bersama Bunda)' },
+      { person: 'Bunda', text: 'Selesaikan kuliah Master of Business Psychology di UWA' },
+      { person: 'Bunda', text: 'Tulis buku bersama Ayah' },
+      { person: 'Bunda', text: 'Tulis paper bersama Ayah' },
+      { person: 'Bunda', text: 'Riset: Mental health ibu hamil terhadap kesehatan bayi (bersama Ayah)' },
+      { person: 'Maryam', text: 'Hari libur: buat cerita & tulis buku' },
+      { person: 'Maryam', text: 'Belajar French — konsisten tiap minggu' },
+      { person: 'Maryam', text: 'Belajar Japanese — konsisten tiap minggu' },
+      { person: 'Musa', text: 'Aktif sebagai Coordinator CS Star Australia' },
+      { person: 'Musa', text: 'Kerjakan riset mandiri (topik pilihan sendiri)' },
+      { person: 'Musa', text: 'Buat minimal 1 produk per pekan (1W1Product)' },
+      { person: 'Maymunah', text: 'Praktek Math setiap hari' },
+      { person: 'Maymunah', text: 'Praktek English setiap hari' },
+      { person: 'Maymunah', text: 'Belajar Science setiap minggu' },
+      { person: 'Maymunah', text: 'Main & belajar Chess rutin' },
+      { person: 'Maymunah', text: 'Belajar Chinese setiap hari' }
+    ];
+
+    const PRODUCT_TYPES = ['Tulisan','Riset','Desain','Presentasi','Sistem','Video/Audio','Belajar/Latihan','Lainnya'];
+
+    const BIN_ID = '69ddec72aaba882197f895ae';
+    const API_KEY = '$2a$10$zAbW.4QhJZu8IHpGw.fzt.2PYYDmbxe6KDsyFNsJQvgqKsRIiQv76';
+    const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+
+    let state = {
+      currentTab: 'goals',
+      currentJournalPerson: 'Ayah',
+      currentGoalFilter: 'all',
+      currentProductFilter: 'all',
+      currentFeedType: 'all',
+      currentFeedPerson: 'all',
+      timelineWindowOffset: 0,
+      cache: null,
+      localDirty: false,
+      saveTimer: null,
+      saveInFlight: false,
+      conflict: false,
+      lastSyncedRevision: 0,
+      lastSyncedAt: null
+    };
+
+    function uid(prefix='id'){
+      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+    }
+    function getTodayISO(){
+      const now = new Date();
+      const offset = now.getTimezoneOffset();
+      const local = new Date(now.getTime()-offset*60000);
+      return local.toISOString().slice(0,10);
+    }
+    function formatDate(dateStr){
+      if(!dateStr) return '-';
+      const date = new Date(dateStr + 'T00:00:00');
+      if(Number.isNaN(date.getTime())) return '-';
+      return date.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+    }
+    function formatShort(dateStr){
+      if(!dateStr) return '-';
+      const date = new Date(dateStr + 'T00:00:00');
+      if(Number.isNaN(date.getTime())) return '-';
+      return date.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+    }
+    function formatTime(timeStr){
+      if(!timeStr) return '';
+      return timeStr.slice(0,5);
+    }
+    function formatDateTimeParts(dateStr, timeStr){
+      if(!dateStr) return '-';
+      return `${formatShort(dateStr)}${timeStr ? ` ${formatTime(timeStr)}` : ''}`;
+    }
+    function weekdayShort(dateObj){
+      return ['Min','Sen','Sel','Rab','Kam','Jum','Sab'][dateObj.getDay()];
+    }
+    function formatDateTime(dateStr){
+      if(!dateStr) return '-';
+      const date = new Date(dateStr);
+      if(Number.isNaN(date.getTime())) return '-';
+      return date.toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    }
+    function escapeHtml(v){
+      return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+    function getPersonColor(person){
+      return PEOPLE.find(p=>p.key===person)?.color || 'var(--bersama)';
+    }
+    function getPersonClass(person){
+      const map = { Bersama:'bersama', Ayah:'ayah', Bunda:'bunda', Musa:'musa', Maryam:'maryam', Maymunah:'maymunah' };
+      return map[person] || 'bersama';
+    }
+    function clamp(num, min, max){
+      return Math.min(max, Math.max(min, Number(num) || 0));
+    }
+    function isoTodayPlus(days){
+      const d = new Date(getTodayISO() + 'T00:00:00');
+      d.setDate(d.getDate() + days);
+      return d.toISOString().slice(0,10);
+    }
+    function compareDateStrings(a,b){
+      return String(a || '').localeCompare(String(b || ''));
+    }
+    function startOfWeek(dateObj){
+      const d = new Date(dateObj);
+      const day = d.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      d.setDate(d.getDate()+diff);
+      d.setHours(0,0,0,0);
+      return d;
+    }
+    function weekRangeLabel(dateStr){
+      const base = new Date((dateStr || getTodayISO()) + 'T00:00:00');
+      if(Number.isNaN(base.getTime())) return 'Tanpa tanggal';
+      const start = startOfWeek(base);
+      const end = new Date(start);
+      end.setDate(end.getDate()+6);
+      return `Minggu ${start.toLocaleDateString('id-ID',{day:'numeric',month:'short'})}–${end.toLocaleDateString('id-ID',{day:'numeric',month:'short'})}`;
+    }
+    function statusLabel(text, type){
+      return `<span class="badge ${type}">${text}</span>`;
+    }
+    function getDeadlineInfo(deadline, done){
+      if(!deadline) return null;
+      const today = new Date(getTodayISO() + 'T00:00:00');
+      const due = new Date(deadline + 'T00:00:00');
+      const diff = Math.ceil((due - today)/86400000);
+      if(done) return { cls:'success', text:`Selesai · ${formatShort(deadline)}` };
+      if(diff < 0) return { cls:'danger', text:`Molor ${Math.abs(diff)} hari` };
+      if(diff <= 7) return { cls:'warning', text:`${diff} hari lagi` };
+      return { cls:'info', text:`Deadline ${formatShort(deadline)}` };
+    }
+    function getGoalHealth(goal){
+      let score = 0;
+      if(goal.measure) score += 1;
+      if(goal.deadline) score += 1;
+      if(goal.nextAction) score += 1;
+      if(goal.reviewDate && compareDateStrings(goal.reviewDate, getTodayISO()) >= 0) score += 1;
+      const lastNoteDate = goal.notes && goal.notes.length ? goal.notes[goal.notes.length-1].date : '';
+      if(lastNoteDate && compareDateStrings(lastNoteDate, isoTodayPlus(-7)) >= 0) score += 1;
+      if(score >= 4) return { label:'Sehat', cls:'health-good' };
+      if(score >= 2) return { label:'Perlu perhatian', cls:'health-warn' };
+      return { label:'Mandek', cls:'health-bad' };
+    }
+    function getGoalWarnings(goal){
+      const warnings = [];
+      if(!goal.nextAction) warnings.push('Belum ada langkah berikutnya.');
+      if(!goal.measure) warnings.push('Definition of done belum jelas.');
+      if(goal.reviewDate && compareDateStrings(goal.reviewDate, getTodayISO()) < 0) warnings.push('Tanggal review sudah lewat.');
+      return warnings;
+    }
+    function bumpMeta(){
+      state.cache.__meta = state.cache.__meta || {};
+      state.cache.__meta.updatedAt = new Date().toISOString();
+      state.cache.__meta.revision = Number(state.cache.__meta.revision || 0) + 1;
+    }
+    function clone(obj){
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    function defaultGoalFields(goal={}, index=0){
+      const createdAt = goal.createdAt || goal.date || getTodayISO();
+      const done = goal.done === true || goal.status === 'Selesai';
+      const progress = done ? 100 : clamp(goal.progress ?? 0, 0, 100);
+      const status = done ? 'Selesai' : (goal.status || 'Aktif');
+      return {
+        id: goal.id || uid('goal'),
+        person: goal.person || 'Bersama',
+        text: goal.text || '',
+        done,
+        status,
+        progress,
+        measure: goal.measure || '',
+        deadline: goal.deadline || '',
+        why: goal.why || '',
+        category: goal.category || '',
+        realisticNow: goal.realisticNow || '',
+        firstStep: goal.firstStep || '',
+        nextAction: goal.nextAction || '',
+        blocker: goal.blocker || '',
+        supportNeeded: goal.supportNeeded || '',
+        reviewDate: goal.reviewDate || '',
+        startDate: goal.startDate || createdAt,
+        startTime: goal.startTime || '',
+        deadlineTime: goal.deadlineTime || '',
+        reviewTime: goal.reviewTime || '',
+        createdAt,
+        order: Number.isFinite(goal.order) ? goal.order : index,
+        notes: Array.isArray(goal.notes) ? goal.notes.map((n, i)=>({
+          id: n.id || uid('note'),
+          date: n.date || createdAt,
+          text: n.text || n.note || ''
+        })).filter(n=>n.text) : [],
+        completedAt: goal.completedAt || (done ? createdAt : '')
+      };
+    }
+
+    function defaultProductFields(item={}){
+      const createdAt = item.createdAt || item.date || getTodayISO();
+      const updates = Array.isArray(item.updates) ? item.updates : [];
+      const legacySeed = [];
+      if(!updates.length){
+        if(item.firstStep){
+          legacySeed.push({ id: uid('upd'), date: createdAt, text: item.firstStep, next: item.next || '' });
+        } else if(item.evidence){
+          legacySeed.push({ id: uid('upd'), date: createdAt, text: item.evidence, next: item.next || '' });
+        }
+      }
+      const status = item.actualDate ? 'Selesai' : (item.status || 'Sedang dibangun');
+      return {
+        id: item.id || uid('product'),
+        weekOf: item.weekOf || item.date || getTodayISO(),
+        owner: item.owner || 'Bersama',
+        type: item.type || 'Lainnya',
+        typeOther: item.typeOther || '',
+        name: item.name || '',
+        status,
+        targetDate: item.targetDate || '',
+        actualDate: item.actualDate || '',
+        use: item.use || '',
+        createdAt,
+        learning: item.learning || '',
+        updates: [...legacySeed, ...updates].map((u, idx)=>({
+          id: u.id || uid('upd'),
+          date: u.date || createdAt,
+          text: u.text || '',
+          next: u.next || (idx===0 ? item.next || '' : '')
+        })).filter(u=>u.text || u.next)
+      };
+    }
+
+    function migrateCache(raw){
+      const cache = raw && typeof raw === 'object' ? clone(raw) : {};
+      cache.__schemaVersion = Number(cache.__schemaVersion || 0);
+      cache.__meta = cache.__meta || { revision: 0, updatedAt: '' };
+
+      if(!Array.isArray(cache[STORAGE_KEYS.goals]) || !cache[STORAGE_KEYS.goals].length){
+        cache[STORAGE_KEYS.goals] = GOAL_SEED.map((g, index)=>defaultGoalFields(g, index));
+      } else {
+        cache[STORAGE_KEYS.goals] = cache[STORAGE_KEYS.goals].map((g, index)=>defaultGoalFields(g, index));
+      }
+      cache[STORAGE_KEYS.goals].sort((a,b)=>a.person.localeCompare(b.person) || a.order - b.order);
+
+      if(!Array.isArray(cache[STORAGE_KEYS.journal])) cache[STORAGE_KEYS.journal] = [];
+      cache[STORAGE_KEYS.journal] = cache[STORAGE_KEYS.journal].map(entry => ({
+        id: entry.id || uid('journal'),
+        person: entry.person || 'Ayah',
+        date: entry.date || getTodayISO(),
+        answers: Array.isArray(entry.answers) ? entry.answers : [],
+        freeNote: entry.freeNote || '',
+        timestamp: entry.timestamp || new Date().toISOString()
+      }));
+
+      if(!Array.isArray(cache[STORAGE_KEYS.weeklyReviews])) cache[STORAGE_KEYS.weeklyReviews] = [];
+      cache[STORAGE_KEYS.weeklyReviews] = cache[STORAGE_KEYS.weeklyReviews].map(item => ({
+        id: item.id || uid('review'),
+        date: item.date || getTodayISO(),
+        wentWell: item.wentWell || '',
+        toImprove: item.toImprove || '',
+        commitment: item.commitment || ''
+      }));
+
+      if(!cache[STORAGE_KEYS.englishDays] || typeof cache[STORAGE_KEYS.englishDays] !== 'object') cache[STORAGE_KEYS.englishDays] = {};
+
+      if(!Array.isArray(cache[STORAGE_KEYS.products])) cache[STORAGE_KEYS.products] = [];
+      cache[STORAGE_KEYS.products] = cache[STORAGE_KEYS.products].map(defaultProductFields);
+
+      cache.__schemaVersion = SCHEMA_VERSION;
+      return cache;
+    }
+
+    async function loadRemote(showLoading=true){
+      if(showLoading) setSyncStatus('loading', 'Memuat...');
+      const res = await fetch(BIN_URL + '/latest', {
+        headers: { 'X-Access-Key': API_KEY }
+      });
+      const json = await res.json();
+      const record = json.record && typeof json.record === 'object' ? json.record : {};
+      state.cache = migrateCache(record);
+      state.lastSyncedRevision = Number(state.cache.__meta?.revision || 0);
+      state.lastSyncedAt = state.cache.__meta?.updatedAt || '';
+      state.localDirty = false;
+      state.conflict = false;
+      setSyncStatus('saved', 'Tersinkron');
+      renderAll();
+    }
+
+    async function forceSaveRemote(){
+      if(!state.cache) return;
+      bumpMeta();
+      const payload = clone(state.cache);
+      await fetch(BIN_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Access-Key': API_KEY },
+        body: JSON.stringify(payload)
+      });
+      state.lastSyncedRevision = Number(payload.__meta?.revision || 0);
+      state.lastSyncedAt = payload.__meta?.updatedAt || '';
+      state.localDirty = false;
+      state.conflict = false;
+      setSyncStatus('saved', 'Tersimpan');
+      renderSyncMeta();
+    }
+
+    async function saveRemote(){
+      if(state.saveInFlight || !state.localDirty || !state.cache) return;
+      state.saveInFlight = true;
+      setSyncStatus('loading', 'Menyimpan...');
+      try{
+        const latestRes = await fetch(BIN_URL + '/latest', { headers: { 'X-Access-Key': API_KEY } });
+        const latestJson = await latestRes.json();
+        const serverRecord = migrateCache(latestJson.record || {});
+        const serverRevision = Number(serverRecord.__meta?.revision || 0);
+
+        if(serverRevision !== state.lastSyncedRevision){
+          state.conflict = true;
+          setSyncStatus('conflict', 'Server lebih baru');
+          document.getElementById('forceSaveBtn').style.display = 'inline-flex';
+          showToast('Ada versi server yang lebih baru. Sync now untuk ambil versi terbaru, atau Force save local untuk menimpa.');
+          return;
+        }
+
+        bumpMeta();
+        const payload = clone(state.cache);
+        await fetch(BIN_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'X-Access-Key': API_KEY },
+          body: JSON.stringify(payload)
+        });
+        state.lastSyncedRevision = Number(payload.__meta?.revision || 0);
+        state.lastSyncedAt = payload.__meta?.updatedAt || '';
+        state.localDirty = false;
+        state.conflict = false;
+        document.getElementById('forceSaveBtn').style.display = 'none';
+        setSyncStatus('saved', 'Tersimpan');
+      } catch(err){
+        console.error(err);
+        setSyncStatus('error', 'Gagal simpan');
+      } finally {
+        state.saveInFlight = false;
+        renderSyncMeta();
+      }
+    }
+
+    function queueSave(){
+      state.localDirty = true;
+      document.getElementById('forceSaveBtn').style.display = state.conflict ? 'inline-flex' : 'none';
+      setSyncStatus('loading', 'Perubahan lokal');
+      clearTimeout(state.saveTimer);
+      state.saveTimer = setTimeout(saveRemote, 900);
+      renderSyncMeta();
+    }
+
+    function setSyncStatus(kind, text){
+      const el = document.getElementById('syncStatus');
+      el.className = `sync-pill ${kind}`;
+      el.textContent = text;
+      renderSyncMeta();
+    }
+    function renderSyncMeta(){
+      const label = document.getElementById('syncMetaLabel');
+      const dirtyText = state.localDirty ? 'Ada perubahan lokal belum tersimpan.' : 'Tidak ada perubahan lokal tertunda.';
+      const synced = state.lastSyncedAt ? `Terakhir sinkron: ${formatDateTime(state.lastSyncedAt)}.` : 'Belum ada waktu sinkron.';
+      const revision = `Revision lokal/server terakhir: ${state.lastSyncedRevision}.`;
+      label.textContent = `${synced} ${revision} ${dirtyText}`;
+    }
+
+    function readData(key, fallback){
+      if(!state.cache) return fallback;
+      const value = state.cache[key];
+      return value === undefined ? fallback : value;
+    }
+    function writeData(key, value){
+      state.cache[key] = value;
+      queueSave();
+      renderAll();
+    }
+
+    function getGoals(){
+      return readData(STORAGE_KEYS.goals, []);
+    }
+    function setGoals(list){
+      writeData(STORAGE_KEYS.goals, list);
+    }
+    function getJournal(){
+      return readData(STORAGE_KEYS.journal, []);
+    }
+    function setJournal(list){
+      writeData(STORAGE_KEYS.journal, list);
+    }
+    function getReviews(){
+      return readData(STORAGE_KEYS.weeklyReviews, []);
+    }
+    function setReviews(list){
+      writeData(STORAGE_KEYS.weeklyReviews, list);
+    }
+    function getEnglishDays(){
+      return readData(STORAGE_KEYS.englishDays, {});
+    }
+    function setEnglishDays(obj){
+      writeData(STORAGE_KEYS.englishDays, obj);
+    }
+    function getProducts(){
+      return readData(STORAGE_KEYS.products, []);
+    }
+    function setProducts(list){
+      writeData(STORAGE_KEYS.products, list);
+    }
+
+    function showToast(msg){
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(()=>el.classList.remove('show'), 2500);
+    }
+
+    function renderFamilyChips(){
+      document.getElementById('familyChips').innerHTML = PEOPLE.map(p=>`<span class="chip"><span class="chip-dot" style="background:${p.color}"></span>${escapeHtml(p.key)}</span>`).join('');
+    }
+
+    function renderTabs(){
+      document.querySelectorAll('.tab-btn').forEach(btn=>btn.classList.toggle('active', btn.dataset.tab === state.currentTab));
+      document.querySelectorAll('.panel').forEach(panel=>panel.classList.toggle('active', panel.id === `panel-${state.currentTab}`));
+    }
+
+    function normalizeGoalOrder(person){
+      const goals = getGoals();
+      const personGoals = goals.filter(g=>g.person===person).sort((a,b)=>a.order-b.order).map((g, idx)=>({ ...g, order: idx }));
+      const others = goals.filter(g=>g.person!==person);
+      setGoals([...others, ...personGoals]);
+    }
+
+    function moveGoal(id, direction){
+      const goals = getGoals();
+      const goal = goals.find(g=>g.id===id);
+      if(!goal) return;
+      const personGoals = goals.filter(g=>g.person===goal.person).sort((a,b)=>a.order-b.order);
+      const idx = personGoals.findIndex(g=>g.id===id);
+      const targetIdx = idx + direction;
+      if(targetIdx < 0 || targetIdx >= personGoals.length) return;
+      const temp = personGoals[idx].order;
+      personGoals[idx].order = personGoals[targetIdx].order;
+      personGoals[targetIdx].order = temp;
+      const map = Object.fromEntries(personGoals.map(g=>[g.id,g]));
+      setGoals(goals.map(g=>map[g.id] ? map[g.id] : g));
+    }
+
+    function toggleGoalDone(id){
+      const goals = getGoals().map(g => {
+        if(g.id !== id) return g;
+        const done = !g.done;
+        return {
+          ...g,
+          done,
+          status: done ? 'Selesai' : 'Aktif',
+          progress: done ? 100 : (g.progress === 100 ? 0 : g.progress),
+          completedAt: done ? getTodayISO() : ''
+        };
+      });
+      setGoals(goals);
+      showToast('Status goal diperbarui');
+    }
+
+    function deleteGoal(id){
+      if(!confirm('Hapus goal ini?')) return;
+      const goals = getGoals().filter(g=>g.id!==id);
+      setGoals(goals);
+      showToast('Goal dihapus');
+    }
+
+    function addGoal(person){
+      const input = document.getElementById(`new-goal-${person}`);
+      const placement = document.getElementById(`new-goal-placement-${person}`);
+      const text = input.value.trim();
+      if(!text) return;
+      const goals = getGoals();
+      const personGoals = goals.filter(g=>g.person===person);
+      const order = placement.value === 'top' ? -1 : personGoals.length;
+      let updated = [...goals, defaultGoalFields({
+        person,
+        text,
+        done:false,
+        status:'Aktif',
+        progress:0,
+        createdAt:getTodayISO(),
+        order
+      }, order)];
+      if(placement.value === 'top'){
+        updated = updated.map(g => g.person===person ? { ...g, order: g.id === updated[updated.length-1].id ? 0 : g.order + 1 } : g);
+      }
+      setGoals(updated.map((g, idx)=>g.person===person ? { ...g, order: g.order } : g));
+      normalizePersonOrders();
+      input.value = '';
+      showToast('Goal baru ditambahkan');
+    }
+
+    function normalizePersonOrders(){
+      const byPerson = {};
+      getGoals().forEach(g => {
+        byPerson[g.person] = byPerson[g.person] || [];
+        byPerson[g.person].push(g);
+      });
+      let merged = [];
+      PEOPLE.forEach(p => {
+        const personGoals = (byPerson[p.key] || []).sort((a,b)=>a.order-b.order).map((g, idx)=>({ ...g, order: idx }));
+        merged = merged.concat(personGoals);
+      });
+      setGoals(merged);
+    }
+
+    function openGoalModal(id){
+      const goal = getGoals().find(g=>g.id===id);
+      if(!goal) return;
+      document.getElementById('goalModalId').value = goal.id;
+      document.getElementById('goalModalText').value = goal.text || '';
+      document.getElementById('goalModalPerson').value = goal.person || 'Bersama';
+      document.getElementById('goalModalCategory').value = goal.category || '';
+      document.getElementById('goalModalStatus').value = goal.done ? 'Selesai' : (goal.status || 'Aktif');
+      document.getElementById('goalModalProgress').value = goal.progress ?? 0;
+      document.getElementById('goalModalRealisticNow').value = goal.realisticNow || '';
+      document.getElementById('goalModalStartDate').value = goal.startDate || goal.createdAt || '';
+      document.getElementById('goalModalStartTime').value = goal.startTime || '';
+      document.getElementById('goalModalDeadline').value = goal.deadline || '';
+      document.getElementById('goalModalDeadlineTime').value = goal.deadlineTime || '';
+      document.getElementById('goalModalReviewDate').value = goal.reviewDate || '';
+      document.getElementById('goalModalReviewTime').value = goal.reviewTime || '';
+      document.getElementById('goalModalMeasure').value = goal.measure || '';
+      document.getElementById('goalModalWhy').value = goal.why || '';
+      document.getElementById('goalModalFirstStep').value = goal.firstStep || '';
+      document.getElementById('goalModalNextAction').value = goal.nextAction || '';
+      document.getElementById('goalModalBlocker').value = goal.blocker || '';
+      document.getElementById('goalModalSupportNeeded').value = goal.supportNeeded || '';
+      document.getElementById('goalModalNewNote').value = '';
+      renderGoalModalNotes(goal.notes || []);
+      openModal('goalModal');
+    }
+
+    function renderGoalModalNotes(notes){
+      const target = document.getElementById('goalModalNotes');
+      target.innerHTML = notes.length ? notes.slice().sort((a,b)=>compareDateStrings(b.date,a.date)).map(note => `
+        <div class="thread-item">
+          <div class="thread-date">${formatDate(note.date)}</div>
+          <div>${escapeHtml(note.text)}</div>
+        </div>
+      `).join('') : '<div class="mini-muted">Belum ada note goal.</div>';
+    }
+
+    function addGoalNoteFromModal(){
+      const id = document.getElementById('goalModalId').value;
+      const text = document.getElementById('goalModalNewNote').value.trim();
+      if(!text) return;
+      const goals = getGoals().map(g => g.id===id ? { ...g, notes:[...(g.notes||[]), { id: uid('note'), date:getTodayISO(), text }] } : g);
+      setGoals(goals);
+      const goal = goals.find(g=>g.id===id);
+      renderGoalModalNotes(goal.notes || []);
+      document.getElementById('goalModalNewNote').value = '';
+      showToast('Note goal ditambahkan');
+    }
+
+    function saveGoalFromModal(){
+      const id = document.getElementById('goalModalId').value;
+      const goals = getGoals().map(g => {
+        if(g.id !== id) return g;
+        const status = document.getElementById('goalModalStatus').value;
+        const progress = clamp(document.getElementById('goalModalProgress').value, 0, 100);
+        const done = status === 'Selesai';
+        const oldPerson = g.person;
+        const newPerson = document.getElementById('goalModalPerson').value;
+        const updated = {
+          ...g,
+          text: document.getElementById('goalModalText').value.trim(),
+          person: newPerson,
+          status,
+          done,
+          progress: done ? 100 : progress,
+          category: document.getElementById('goalModalCategory').value,
+          realisticNow: document.getElementById('goalModalRealisticNow').value.trim(),
+          startDate: document.getElementById('goalModalStartDate').value || g.startDate || g.createdAt || getTodayISO(),
+          startTime: document.getElementById('goalModalStartTime').value,
+          deadline: document.getElementById('goalModalDeadline').value,
+          deadlineTime: document.getElementById('goalModalDeadlineTime').value,
+          reviewDate: document.getElementById('goalModalReviewDate').value,
+          reviewTime: document.getElementById('goalModalReviewTime').value,
+          measure: document.getElementById('goalModalMeasure').value.trim(),
+          why: document.getElementById('goalModalWhy').value.trim(),
+          firstStep: document.getElementById('goalModalFirstStep').value.trim(),
+          nextAction: document.getElementById('goalModalNextAction').value.trim(),
+          blocker: document.getElementById('goalModalBlocker').value.trim(),
+          supportNeeded: document.getElementById('goalModalSupportNeeded').value.trim(),
+          completedAt: done ? (g.completedAt || getTodayISO()) : ''
+        };
+        if(oldPerson !== newPerson){
+          const maxOrder = Math.max(-1, ...getGoals().filter(x=>x.person===newPerson).map(x=>x.order));
+          updated.order = maxOrder + 1;
+        }
+        return updated;
+      });
+      setGoals(goals);
+      closeModal('goalModal');
+      normalizePersonOrders();
+      showToast('Goal diperbarui');
+    }
+
+    function getFilteredPeople(){
+      return state.currentGoalFilter === 'all'
+        ? PEOPLE
+        : PEOPLE.filter(p=>p.key===state.currentGoalFilter);
+    }
+
+    function renderGoalFilterBar(){
+      const target = document.getElementById('goalFilterBar');
+      const summary = getGoals().reduce((acc,g)=>{
+        acc[g.person] = acc[g.person] || { active:0, done:0 };
+        if(g.done) acc[g.person].done += 1;
+        else acc[g.person].active += 1;
+        return acc;
+      }, {});
+      const buttons = [`<button class="segment-btn ${state.currentGoalFilter==='all'?'active':''}" data-goal-filter="all">Semua</button>`]
+        .concat(PEOPLE.map(p => {
+          const data = summary[p.key] || { active:0, done:0 };
+          return `<button class="segment-btn ${state.currentGoalFilter===p.key?'active':''}" data-goal-filter="${p.key}">${p.key} (${data.active}/${data.done})</button>`;
+        }));
+      target.innerHTML = buttons.join('');
+      target.querySelectorAll('[data-goal-filter]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{ state.currentGoalFilter = btn.dataset.goalFilter; renderGoals(); });
+      });
+    }
+
+    function renderGoalSummary(){
+      const goals = getGoals();
+      const active = goals.filter(g=>!g.done);
+      const done = goals.filter(g=>g.done);
+      const overdue = active.filter(g=>g.deadline && getDeadlineInfo(g.deadline, false)?.cls === 'danger');
+      const dueSoon = active.filter(g=>g.deadline && getDeadlineInfo(g.deadline, false)?.cls === 'warning');
+      const needAttention = active.filter(g=>getGoalHealth(g).label !== 'Sehat').length;
+      document.getElementById('goalSummaryChips').innerHTML = [
+        `<span class="stat-chip">Aktif ${active.length}</span>`,
+        `<span class="stat-chip">Selesai ${done.length}</span>`,
+        `<span class="stat-chip">Deadline minggu ini ${dueSoon.length}</span>`,
+        `<span class="stat-chip">Molor ${overdue.length}</span>`,
+        `<span class="stat-chip">Perlu perhatian ${needAttention}</span>`
+      ].join('');
+    }
+
+    function renderGoals(){
+      renderGoalSummary();
+      renderGoalFilterBar();
+      const target = document.getElementById('goalsGrid');
+      const peopleToRender = getFilteredPeople();
+      target.innerHTML = peopleToRender.map(person => {
+        const goals = getGoals().filter(g=>g.person===person.key).sort((a,b)=>a.order-b.order);
+        const activeGoals = goals.filter(g=>!g.done);
+        const doneGoals = goals.filter(g=>g.done).sort((a,b)=>compareDateStrings(b.completedAt,a.completedAt));
+        const tooMany = activeGoals.length > 5;
+        const activeHtml = activeGoals.length ? activeGoals.map((goal, idx)=>renderGoalCard(goal, idx, activeGoals.length)).join('') : '<div class="mini-muted">Belum ada goal aktif.</div>';
+        const doneHtml = doneGoals.length ? doneGoals.map(goal=>renderGoalCard(goal, 0, 0, true)).join('') : '<div class="mini-muted">Belum ada goal selesai.</div>';
+        return `
+          <section class="person-card">
+            <div class="person-card-head">
+              <div class="person-title"><span class="chip-dot" style="background:${person.color}"></span>${escapeHtml(person.key)}</div>
+              <div class="person-counter">${activeGoals.length} aktif · ${doneGoals.length} selesai</div>
+            </div>
+            <div class="goal-sections">
+              ${tooMany ? `<div class="warn-box">Goal aktif ${person.key} sekarang ${activeGoals.length}. Pertimbangkan fokuskan ke 3–5 goal terpenting dulu.</div>` : ''}
+              <div>
+                <div class="goal-section-title">
+                  <h4 style="margin:0">Masih berjalan</h4>
+                  <div class="summary-meta">Prioritas bisa diatur naik-turun</div>
+                </div>
+                <div class="goal-list">${activeHtml}</div>
+              </div>
+              <div>
+                <div class="goal-section-title">
+                  <h4 style="margin:0">Sudah tercapai</h4>
+                </div>
+                <div class="goal-list">${doneHtml}</div>
+              </div>
+            </div>
+            <div class="add-goal-box">
+              <div class="field-grid-2">
+                <input class="input" id="new-goal-${person.key}" type="text" placeholder="Tambah goal baru untuk ${person.key}" />
+                <select class="select" id="new-goal-placement-${person.key}">
+                  <option value="top">Masukkan di paling atas</option>
+                  <option value="bottom">Masukkan di paling bawah</option>
+                </select>
+              </div>
+              <div class="toolbar" style="margin-top:10px">
+                <button class="btn" onclick="addGoal('${person.key}')">Tambah goal</button>
+              </div>
+            </div>
+          </section>
+        `;
+      }).join('');
+    }
+
+    function renderGoalCard(goal, idx, total, doneSection=false){
+      const due = getDeadlineInfo(goal.deadline, goal.done);
+      const health = getGoalHealth(goal);
+      const warnings = getGoalWarnings(goal);
+      const badges = [
+        statusLabel(goal.done ? 'Selesai' : goal.status, goal.done ? 'success' : (goal.status === 'Pause' ? 'warning' : 'info')),
+        goal.progress ? statusLabel(`Progress ${goal.progress}%`, 'info') : '',
+        `<span class="health-badge ${health.cls}">${health.label}</span>`
+      ];
+      if(goal.category) badges.push(statusLabel(goal.category, 'info'));
+      if(due) badges.push(statusLabel(due.text, due.cls));
+      if(goal.reviewDate) badges.push(statusLabel(`Review ${formatDateTimeParts(goal.reviewDate, goal.reviewTime)}`, 'warning'));
+      if(goal.deadline && goal.deadlineTime) badges.push(statusLabel(`Jam ${formatTime(goal.deadlineTime)}`, 'danger'));
+      const latestNote = goal.notes && goal.notes.length ? goal.notes[goal.notes.length-1].text : '';
+      return `
+        <div class="goal-item person-${getPersonClass(goal.person)} ${goal.done ? 'done' : ''}">
+          <input class="goal-check" type="checkbox" ${goal.done?'checked':''} onchange="toggleGoalDone('${goal.id}')" />
+          <div class="goal-main">
+            <div class="goal-title">${escapeHtml(goal.text)}</div>
+            <div class="chip-wrap">${badges.join('')}</div>
+            <div class="progress-wrap">
+              <div class="progress-bar"><div class="progress-fill" style="width:${goal.progress || 0}%"></div></div>
+              <div class="mini-muted">${goal.measure ? escapeHtml(goal.measure) : 'Belum ada ukuran keberhasilan.'}</div>
+            </div>
+            ${goal.nextAction ? `<div class="goal-next"><strong>Next action:</strong> ${escapeHtml(goal.nextAction)}</div>` : ''}
+            ${goal.blocker ? `<div class="goal-blocker"><strong>Blocker:</strong> ${escapeHtml(goal.blocker)}</div>` : ''}
+            ${goal.supportNeeded ? `<div class="goal-support"><strong>Support:</strong> ${escapeHtml(goal.supportNeeded)}</div>` : ''}
+            ${warnings.length && !goal.done ? `<div class="goal-alert">${warnings.map(escapeHtml).join(' ')}</div>` : ''}
+            ${latestNote ? `<div class="mini-muted">Update terakhir: ${escapeHtml(latestNote)}</div>` : ''}
+          </div>
+          <div class="goal-actions">
+            ${!doneSection ? `<button class="icon-btn small" ${idx===0?'disabled':''} onclick="moveGoal('${goal.id}',-1)">↑</button>
+            <button class="icon-btn small" ${idx===total-1?'disabled':''} onclick="moveGoal('${goal.id}',1)">↓</button>` : ''}
+            <button class="btn secondary small" onclick="openGoalModal('${goal.id}')">Edit</button>
+            <button class="icon-btn danger small" onclick="deleteGoal('${goal.id}')">✕</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderJournalMemberSwitcher(){
+      const wrap = document.getElementById('journalMemberSwitcher');
+      wrap.innerHTML = JOURNAL_PEOPLE.map(person => {
+        const color = getPersonColor(person);
+        const isActive = person===state.currentJournalPerson;
+        return `<button class="member-btn ${isActive?'active':''}" style="${isActive?`background:${color};border-color:${color};`:`border-color:${color};color:${color};`}" onclick="setJournalPerson('${person}')">${person}</button>`;
+      }).join('');
+      document.getElementById('journalTodayLabel').textContent = `Tanggal hari ini: ${formatDate(getTodayISO())}`;
+    }
+    function setJournalPerson(person){
+      state.currentJournalPerson = person;
+      renderJournalMemberSwitcher();
+      renderJournalForm();
+    }
+    function renderJournalForm(){
+      const questions = JOURNAL_QUESTIONS[state.currentJournalPerson] || [];
+      document.getElementById('journalFormWrap').innerHTML = `
+        <div class="question-list">
+          ${questions.map((q,i)=>`<div class="question-item"><label for="journal-answer-${i}">${i+1}. ${escapeHtml(q)}</label><textarea id="journal-answer-${i}" class="textarea" placeholder="Tulis jawaban di sini..."></textarea></div>`).join('')}
+          <div class="question-item"><label for="journal-free-note">Catatan bebas (opsional)</label><textarea id="journal-free-note" class="textarea" placeholder="Catatan tambahan hari ini..."></textarea></div>
+        </div>
+        <div class="toolbar" style="margin-top:12px"><button class="btn" id="saveJournalBtn">Simpan jurnal hari ini</button></div>`;
+      document.getElementById('saveJournalBtn').addEventListener('click', saveJournalEntry);
+    }
+    function saveJournalEntry(){
+      const questions = JOURNAL_QUESTIONS[state.currentJournalPerson] || [];
+      const answers = questions.map((question,index)=>({ question, answer: document.getElementById(`journal-answer-${index}`).value.trim() }));
+      const freeNote = document.getElementById('journal-free-note').value.trim();
+      if(!answers.some(a=>a.answer) && !freeNote) return;
+      const journal = getJournal();
+      journal.unshift({ id: uid('journal'), person: state.currentJournalPerson, date: getTodayISO(), answers, freeNote, timestamp: new Date().toISOString() });
+      setJournal(journal);
+      renderJournalForm();
+      showToast(`Jurnal ${state.currentJournalPerson} tersimpan`);
+    }
+    function groupByDate(entries){
+      return entries.reduce((acc,e)=>((acc[e.date] ||= []).push(e), acc), {});
+    }
+    function getJournalHistoryHTML(){
+      const journal = getJournal();
+      if(!journal.length) return '<div class="mini-muted">Belum ada jurnal yang disimpan.</div>';
+      const grouped = groupByDate(journal);
+      const dates = Object.keys(grouped).sort((a,b)=>b.localeCompare(a));
+      return dates.map((date,idx)=>`
+        <details class="log-item" ${idx===0?'open':''}>
+          <summary><span>${formatDate(date)}</span><span class="summary-meta">${grouped[date].length} entri</span></summary>
+          <div style="padding:0 14px 14px">
+            ${grouped[date].map(entry => `
+              <div class="entry-card" style="margin-top:10px">
+                <div class="feed-top"><span><span class="chip-dot" style="background:${getPersonColor(entry.person)};margin-right:8px"></span>${escapeHtml(entry.person)}</span><span class="summary-meta">${formatDateTime(entry.timestamp)}</span></div>
+                <div class="qa-list" style="margin-top:8px">
+                  ${entry.answers.map(item=>`<div class="qa-item"><div class="qa-q">${escapeHtml(item.question)}</div><div class="qa-a">${escapeHtml(item.answer || '-')}</div></div>`).join('')}
+                  <div class="qa-item"><div class="qa-q">Catatan bebas</div><div class="qa-a">${escapeHtml(entry.freeNote || '-')}</div></div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </details>`).join('');
+    }
+
+    function saveWeeklyReview(){
+      const wentWell = document.getElementById('wentWell').value.trim();
+      const toImprove = document.getElementById('toImprove').value.trim();
+      const commitment = document.getElementById('commitment').value.trim();
+      if(!wentWell && !toImprove && !commitment) return;
+      const reviews = getReviews();
+      reviews.unshift({ id: uid('review'), date: getTodayISO(), wentWell, toImprove, commitment });
+      setReviews(reviews);
+      document.getElementById('wentWell').value='';
+      document.getElementById('toImprove').value='';
+      document.getElementById('commitment').value='';
+      showToast('Weekly review tersimpan');
+    }
+    function getReviewHistoryHTML(){
+      const reviews = getReviews();
+      if(!reviews.length) return '<div class="mini-muted">Belum ada weekly review.</div>';
+      return reviews.map((review,idx)=>`
+        <details class="log-item" ${idx===0?'open':''}>
+          <summary><span>Minggu ${formatDate(review.date)}</span><span class="summary-meta">Review tersimpan</span></summary>
+          <div style="padding:0 14px 14px">
+            <div class="qa-list" style="margin-top:10px">
+              <div class="qa-item"><div class="qa-q">Yang berjalan baik minggu ini</div><div class="qa-a">${escapeHtml(review.wentWell || '-')}</div></div>
+              <div class="qa-item"><div class="qa-q">Yang perlu diperbaiki</div><div class="qa-a">${escapeHtml(review.toImprove || '-')}</div></div>
+              <div class="qa-item"><div class="qa-q">Komitmen untuk minggu depan</div><div class="qa-a">${escapeHtml(review.commitment || '-')}</div></div>
+            </div>
+          </div>
+        </details>`).join('');
+    }
+
+    function renderEnglishTracker(){
+      const days = getEnglishDays();
+      const doneCount = Object.values(days).filter(Boolean).length;
+      document.getElementById('englishCountLabel').textContent = `Hari selesai: ${doneCount}/30`;
+      document.getElementById('englishTracker').innerHTML = Array.from({length:30}, (_,i)=>{
+        const day = String(i+1);
+        const done = !!days[day];
+        return `<button class="day-btn ${done?'done':''}" onclick="toggleEnglishDay('${day}')">Hari ${day}<small>${done?'Done':'Belum'}</small></button>`;
+      }).join('');
+    }
+    function toggleEnglishDay(day){
+      const days = { ...getEnglishDays() };
+      days[day] = !days[day];
+      if(!days[day]) delete days[day];
+      setEnglishDays(days);
+    }
+    function resetEnglishTracker(){
+      if(!confirm('Reset semua tracker English?')) return;
+      setEnglishDays({});
+      showToast('Tracker English direset');
+    }
+
+    function fillSelectOptions(){
+      const ownerOptions = PEOPLE.map(p=>`<option value="${p.key}">${p.key}</option>`).join('');
+      document.getElementById('productOwner').innerHTML = ownerOptions;
+      document.getElementById('productEditOwner').innerHTML = ownerOptions;
+      document.getElementById('goalModalPerson').innerHTML = ownerOptions;
+      const typeOptions = PRODUCT_TYPES.map(type=>`<option value="${type}">${type}</option>`).join('');
+      document.getElementById('productEditType').innerHTML = typeOptions;
+      const feedPerson = ['all', ...PEOPLE.map(p=>p.key)];
+      document.getElementById('feedPersonFilter').innerHTML = feedPerson.map(value=>`<option value="${value}">${value==='all'?'Semua orang':value}</option>`).join('');
+      document.getElementById('productWeek').value = getTodayISO();
+      document.getElementById('productOwner').value = 'Bersama';
+    }
+
+    function toggleProductTypeWrap(){
+      document.getElementById('productTypeOtherWrap').style.display = document.getElementById('productType').value === 'Lainnya' ? 'block' : 'none';
+    }
+    function toggleProductEditTypeWrap(){
+      document.getElementById('productEditTypeOtherWrap').style.display = document.getElementById('productEditType').value === 'Lainnya' ? 'block' : 'none';
+    }
+
+    function addProduct(){
+      const weekOf = document.getElementById('productWeek').value || getTodayISO();
+      const owner = document.getElementById('productOwner').value || 'Bersama';
+      const duplicate = getProducts().some(p=>p.owner===owner && p.weekOf===weekOf);
+      if(duplicate && !confirm(`${owner} sudah punya 1 produk di pekan ini. Tetap tambah?`)) return;
+      const name = document.getElementById('productName').value.trim();
+      if(!name) return;
+      const item = defaultProductFields({
+        id: uid('product'),
+        weekOf,
+        owner,
+        type: document.getElementById('productType').value || 'Lainnya',
+        typeOther: document.getElementById('productTypeOther').value.trim(),
+        name,
+        status: 'Sedang dibangun',
+        targetDate: document.getElementById('productTargetDate').value || '',
+        use: document.getElementById('productUse').value.trim(),
+        createdAt: getTodayISO(),
+        updates: [{
+          id: uid('upd'),
+          date: getTodayISO(),
+          text: document.getElementById('productFirstStep').value.trim(),
+          next: document.getElementById('productFirstStep').value.trim()
+        }]
+      });
+      const products = getProducts();
+      products.unshift(item);
+      setProducts(products);
+      clearProductForm();
+      showToast('Produk baru ditambahkan');
+    }
+
+    function clearProductForm(){
+      document.getElementById('productWeek').value = getTodayISO();
+      document.getElementById('productOwner').value = 'Bersama';
+      document.getElementById('productType').value = 'Tulisan';
+      document.getElementById('productTypeOther').value = '';
+      document.getElementById('productName').value = '';
+      document.getElementById('productUse').value = '';
+      document.getElementById('productTargetDate').value = '';
+      document.getElementById('productFirstStep').value = '';
+      toggleProductTypeWrap();
+    }
+
+    function productTimingBadge(item){
+      if(item.status === 'Selesai'){
+        if(item.targetDate && item.actualDate){
+          const actual = new Date(item.actualDate + 'T00:00:00');
+          const target = new Date(item.targetDate + 'T00:00:00');
+          return actual <= target ? statusLabel('On time', 'success') : statusLabel(`Lewat target ${Math.ceil((actual-target)/86400000)} hari`, 'warning');
+        }
+        return statusLabel('Selesai', 'success');
+      }
+      if(item.targetDate){
+        const info = getDeadlineInfo(item.targetDate, false);
+        if(info?.cls === 'danger') return statusLabel(info.text, 'danger');
+        if(info?.cls === 'warning') return statusLabel(info.text, 'warning');
+      }
+      return statusLabel(item.status || 'Sedang dibangun', item.status === 'Pause' ? 'warning' : 'info');
+    }
+
+    function openProductEditModal(id){
+      const item = getProducts().find(p=>p.id===id);
+      if(!item) return;
+      document.getElementById('productEditId').value = item.id;
+      document.getElementById('productEditName').value = item.name || '';
+      document.getElementById('productEditType').value = item.type || 'Tulisan';
+      document.getElementById('productEditOwner').value = item.owner || 'Bersama';
+      document.getElementById('productEditTypeOther').value = item.typeOther || '';
+      document.getElementById('productEditUse').value = item.use || '';
+      document.getElementById('productEditTargetDate').value = item.targetDate || '';
+      document.getElementById('productEditStatus').value = item.status || 'Sedang dibangun';
+      toggleProductEditTypeWrap();
+      openModal('productEditModal');
+    }
+    function saveProductEdit(){
+      const id = document.getElementById('productEditId').value;
+      const products = getProducts().map(item => {
+        if(item.id !== id) return item;
+        const status = document.getElementById('productEditStatus').value;
+        return {
+          ...item,
+          name: document.getElementById('productEditName').value.trim(),
+          type: document.getElementById('productEditType').value,
+          typeOther: document.getElementById('productEditTypeOther').value.trim(),
+          owner: document.getElementById('productEditOwner').value,
+          use: document.getElementById('productEditUse').value.trim(),
+          targetDate: document.getElementById('productEditTargetDate').value,
+          status,
+          actualDate: status === 'Selesai' ? (item.actualDate || getTodayISO()) : item.actualDate
+        };
+      });
+      setProducts(products);
+      closeModal('productEditModal');
+      showToast('Produk diperbarui');
+    }
+
+    function openProductProgressModal(id){
+      const item = getProducts().find(p=>p.id===id);
+      if(!item) return;
+      document.getElementById('productProgressId').value = id;
+      document.getElementById('productProgressDate').value = getTodayISO();
+      const lastNext = item.updates?.length ? (item.updates[item.updates.length-1].next || '') : '';
+      document.getElementById('productProgressNext').value = lastNext;
+      document.getElementById('productProgressText').value = '';
+      openModal('productProgressModal');
+    }
+    function saveProductProgress(){
+      const id = document.getElementById('productProgressId').value;
+      const text = document.getElementById('productProgressText').value.trim();
+      if(!text) return;
+      const update = {
+        id: uid('upd'),
+        date: document.getElementById('productProgressDate').value || getTodayISO(),
+        text,
+        next: document.getElementById('productProgressNext').value.trim()
+      };
+      const products = getProducts().map(item => item.id===id ? { ...item, updates:[...(item.updates||[]), update] } : item);
+      setProducts(products);
+      closeModal('productProgressModal');
+      showToast('Progress produk ditambahkan');
+    }
+
+    function openProductCompleteModal(id){
+      document.getElementById('productCompleteId').value = id;
+      document.getElementById('productCompleteDate').value = getTodayISO();
+      const product = getProducts().find(p=>p.id===id);
+      document.getElementById('productCompleteLearning').value = product?.learning || '';
+      openModal('productCompleteModal');
+    }
+    function saveProductComplete(){
+      const id = document.getElementById('productCompleteId').value;
+      const date = document.getElementById('productCompleteDate').value || getTodayISO();
+      const learning = document.getElementById('productCompleteLearning').value.trim();
+      const products = getProducts().map(item => item.id===id ? { ...item, status:'Selesai', actualDate:date, learning } : item);
+      setProducts(products);
+      closeModal('productCompleteModal');
+      showToast('Produk ditandai selesai');
+    }
+
+    function deleteProduct(id){
+      if(!confirm('Hapus entry produk ini?')) return;
+      setProducts(getProducts().filter(p=>p.id!==id));
+      showToast('Produk dihapus');
+    }
+
+    function renderProductFilters(){
+      const target = document.getElementById('productFilterBar');
+      const products = getProducts();
+      const countMap = products.reduce((acc,p)=>{
+        acc[p.owner] = (acc[p.owner] || 0) + 1;
+        return acc;
+      }, {});
+      const buttons = [`<button class="segment-btn ${state.currentProductFilter==='all'?'active':''}" data-product-filter="all">Semua (${products.length})</button>`]
+        .concat(PEOPLE.map(p=>`<button class="segment-btn ${state.currentProductFilter===p.key?'active':''}" data-product-filter="${p.key}">${p.key} (${countMap[p.key] || 0})</button>`));
+      target.innerHTML = buttons.join('');
+      target.querySelectorAll('[data-product-filter]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{ state.currentProductFilter = btn.dataset.productFilter; renderProducts(); });
+      });
+    }
+
+    function renderProducts(){
+      renderProductFilters();
+      const products = state.currentProductFilter==='all' ? getProducts() : getProducts().filter(p=>p.owner===state.currentProductFilter);
+      const active = products.filter(p=>p.status !== 'Selesai');
+      const completed = products.filter(p=>p.status === 'Selesai').sort((a,b)=>compareDateStrings(b.actualDate,a.actualDate));
+      document.getElementById('productStats').innerHTML = [
+        `<span class="stat-chip">Total ${products.length}</span>`,
+        `<span class="stat-chip">Aktif ${active.length}</span>`,
+        `<span class="stat-chip">Review ${products.filter(p=>p.status==='Butuh review').length}</span>`,
+        `<span class="stat-chip">Pause ${products.filter(p=>p.status==='Pause').length}</span>`,
+        `<span class="stat-chip">Selesai ${completed.length}</span>`
+      ].join('');
+      document.getElementById('activeProductLog').innerHTML = active.length ? active.map(renderProductCard).join('') : '<div class="mini-muted">Belum ada produk aktif.</div>';
+      document.getElementById('completedProductLog').innerHTML = completed.length ? completed.map(renderProductCard).join('') : '<div class="mini-muted">Belum ada produk selesai.</div>';
+    }
+
+    function renderProductCard(item){
+      const typeLabel = item.type === 'Lainnya' && item.typeOther ? item.typeOther : item.type;
+      const updates = (item.updates || []).slice().sort((a,b)=>compareDateStrings(b.date,a.date));
+      return `
+        <div class="product-card">
+          <div class="feed-top">
+            <div>
+              <div class="feed-title">${escapeHtml(item.name)}</div>
+              <div class="feed-meta">${escapeHtml(item.owner)} · ${escapeHtml(typeLabel || '-')} · mulai ${formatDate(item.weekOf)}</div>
+            </div>
+            <div class="chip-wrap">
+              ${statusLabel(item.status, item.status==='Selesai'?'success':item.status==='Pause'?'warning':'info')}
+              ${productTimingBadge(item)}
+            </div>
+          </div>
+          <div class="qa-list">
+            <div class="qa-item"><div class="qa-q">Untuk apa</div><div class="qa-a">${escapeHtml(item.use || '-')}</div></div>
+            <div class="qa-item"><div class="qa-q">Target selesai</div><div class="qa-a">${item.targetDate ? formatDate(item.targetDate) : '-'}</div></div>
+            <div class="qa-item"><div class="qa-q">Aktual selesai</div><div class="qa-a">${item.actualDate ? formatDate(item.actualDate) : '-'}</div></div>
+            ${item.learning ? `<div class="qa-item"><div class="qa-q">Pelajaran utama</div><div class="qa-a">${escapeHtml(item.learning)}</div></div>` : ''}
+          </div>
+          <div>
+            <div class="qa-q">Thread progres</div>
+            <div class="thread">
+              ${updates.length ? updates.map(upd => `
+                <div class="thread-item">
+                  <div class="thread-date">${formatDate(upd.date)}</div>
+                  <div>${escapeHtml(upd.text || '-')}</div>
+                  ${upd.next ? `<div class="inline-help">Langkah berikutnya: ${escapeHtml(upd.next)}</div>` : ''}
+                </div>`).join('') : '<div class="mini-muted">Belum ada update progres.</div>'}
+            </div>
+          </div>
+          <div class="toolbar">
+            <button class="btn secondary small" onclick="openProductEditModal('${item.id}')">Edit</button>
+            ${item.status !== 'Selesai' ? `<button class="btn secondary small" onclick="openProductProgressModal('${item.id}')">Tambah update progres</button>
+            <button class="btn small" onclick="openProductCompleteModal('${item.id}')">Tandai selesai</button>` : ''}
+            <button class="icon-btn danger small" onclick="deleteProduct('${item.id}')">✕</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildTimelineItems(){
+      const goalDone = getGoals().filter(g=>g.done && g.completedAt).map(g=>({
+        kind:'Goal Selesai',
+        date:g.completedAt,
+        person:g.person,
+        title:g.text,
+        body:g.measure || g.why || '',
+        color:getPersonColor(g.person)
+      }));
+      const journal = getJournal().map(j=>({
+        kind:'Journal',
+        date:j.date,
+        person:j.person,
+        title:`Jurnal ${j.person}`,
+        body:j.answers.find(a=>a.answer)?.answer || j.freeNote || 'Entry jurnal disimpan',
+        color:getPersonColor(j.person)
+      }));
+      const reviews = getReviews().map(r=>({
+        kind:'Weekly Review',
+        date:r.date,
+        person:'Bersama',
+        title:'Weekly Review',
+        body:r.commitment || r.wentWell || r.toImprove || '-',
+        color:'var(--bersama)'
+      }));
+      const products = getProducts().flatMap(p => {
+        const items = [{
+          kind:'1W1Product',
+          date:p.weekOf || p.createdAt,
+          person:p.owner,
+          title:`Mulai: ${p.name}`,
+          body:p.use || '',
+          color:getPersonColor(p.owner)
+        }];
+        (p.updates || []).forEach(upd => items.push({
+          kind:'1W1Product',
+          date:upd.date,
+          person:p.owner,
+          title:`Progress: ${p.name}`,
+          body:upd.text || upd.next || '-',
+          color:getPersonColor(p.owner)
+        }));
+        if(p.actualDate){
+          items.push({
+            kind:'1W1Product',
+            date:p.actualDate,
+            person:p.owner,
+            title:`Selesai: ${p.name}`,
+            body:p.learning || '',
+            color:getPersonColor(p.owner)
+          });
+        }
+        return items;
+      });
+      return [...goalDone, ...journal, ...reviews, ...products].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+    }
+
+    function renderTimelineStats(){
+      const activeGoals = getGoals().filter(g=>!g.done);
+      const activeWithDeadline = activeGoals.filter(g=>g.deadline);
+      const withoutDeadline = activeGoals.filter(g=>!g.deadline);
+      const overdue = activeWithDeadline.filter(g=>getDeadlineInfo(g.deadline, false)?.cls === 'danger');
+      const dueSoon = activeWithDeadline.filter(g=>getDeadlineInfo(g.deadline, false)?.cls === 'warning');
+      const completed = getGoals().filter(g=>g.done);
+      document.getElementById('timelineStats').innerHTML = `
+        <span class="stat-chip">Goal aktif ${activeGoals.length}</span>
+        <span class="stat-chip">Deadline minggu ini ${dueSoon.length}</span>
+        <span class="stat-chip">Molor ${overdue.length}</span>
+        <span class="stat-chip">Tanpa deadline ${withoutDeadline.length}</span>
+        <span class="stat-chip">Goal selesai ${completed.length}</span>
+      `;
+    }
+
+    function getTimelineAnchorDate(activeGoals){
+      const todayIso = getTodayISO();
+      const explicitStartDates = activeGoals
+        .map(goal => goal.startDate || '')
+        .filter(Boolean)
+        .sort(compareDateStrings);
+      const anchorIso = explicitStartDates.length ? explicitStartDates[0] : todayIso;
+      const anchorDate = new Date(anchorIso + 'T00:00:00');
+      anchorDate.setHours(0,0,0,0);
+      return anchorDate;
+    }
+
+    function renderGantt(){
+      renderTimelineStats();
+      const activeGoals = getGoals().filter(g=>!g.done).sort((a,b)=>{
+        const aHas = !!a.deadline;
+        const bHas = !!b.deadline;
+        if(aHas && bHas) return compareDateStrings(a.deadline,b.deadline) || a.person.localeCompare(b.person) || a.order-b.order;
+        if(aHas !== bHas) return aHas ? -1 : 1;
+        return a.person.localeCompare(b.person) || a.order-b.order;
+      });
+      const today = new Date(getTodayISO() + 'T00:00:00');
+      const windowDays = 90;
+      const shiftDays = 21;
+      const anchorDate = getTimelineAnchorDate(activeGoals);
+      const chartStart = new Date(anchorDate);
+      chartStart.setDate(chartStart.getDate() + state.timelineWindowOffset * shiftDays);
+      chartStart.setHours(0,0,0,0);
+      const days = Array.from({length:windowDays}, (_,i)=>{
+        const date = new Date(chartStart);
+        date.setDate(chartStart.getDate()+i);
+        const iso = date.toISOString().slice(0,10);
+        const weekend = date.getDay()===0 || date.getDay()===6;
+        const todayFlag = iso === getTodayISO();
+        return {date, iso, weekend, todayFlag};
+      });
+      const monthSegments = [];
+      days.forEach((d, idx)=>{
+        const label = d.date.toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+        const existing = monthSegments[monthSegments.length-1];
+        if(existing && existing.label===label) existing.span += 1;
+        else monthSegments.push({label, span:1, start:idx});
+      });
+
+      const countMap = activeGoals.reduce((acc,g)=>{
+        acc[g.person] = (acc[g.person] || 0) + 1;
+        return acc;
+      }, {});
+      document.getElementById('ganttLegend').innerHTML = PEOPLE.map(p=>`<span class="legend-chip"><span class="chip-dot" style="background:${p.color}"></span>${p.key} (${countMap[p.key] || 0})</span>`).join('');
+
+      if(!activeGoals.length){
+        document.getElementById('ganttWrap').innerHTML = '<div class="info-box" style="margin:12px">Belum ada goal aktif.</div>';
+        return;
+      }
+
+      const monthHeader = monthSegments.map(seg=>`<th class="month-header" colspan="${seg.span}">${seg.label}</th>`).join('');
+      const dayHeader = days.map((d, idx)=>`<th class="day-header ${d.weekend?'weekend':''} ${d.todayFlag?'today':''}"><span class="day-number">${d.date.getDate()}</span><span class="day-dow">${weekdayShort(d.date)}</span></th>`).join('');
+
+      const rows = activeGoals.map(goal=>{
+        const rowId = `gantt_${goal.id}`;
+        const dueLabel = goal.deadline ? formatDateTimeParts(goal.deadline, goal.deadlineTime) : 'Tanpa deadline';
+        const startLabel = formatDateTimeParts(goal.startDate || goal.createdAt, goal.startTime);
+        const health = getGoalHealth(goal);
+        return `<tr>
+          <td class="label-col">
+            <div class="goal-row-title">${escapeHtml(goal.text)}</div>
+            <div class="goal-row-meta">
+              <span class="goal-row-chip" style="border-color:${getPersonColor(goal.person)};color:${getPersonColor(goal.person)}">${escapeHtml(goal.person)}</span>
+              ${goal.category ? `<span class="goal-row-chip">${escapeHtml(goal.category)}</span>` : ''}
+              <span class="goal-row-chip">Start ${escapeHtml(startLabel)}</span>
+              <span class="goal-row-chip">Due ${escapeHtml(dueLabel)}</span>
+              <span class="goal-row-chip">${goal.progress || 0}%</span>
+              <span class="goal-row-chip">${health.label}</span>
+            </div>
+          </td>
+          ${days.map((d, idx)=>`<td><div class="gantt-cell ${d.weekend?'weekend':''}" id="${rowId}_${idx}"></div></td>`).join('')}
+        </tr>`;
+      }).join('');
+
+      document.getElementById('ganttWrap').innerHTML = `
+        <table class="gantt-table">
+          <thead>
+            <tr><th class="label-col month-header" rowspan="2">Goal<br><span class="mini-muted" style="display:block;font-size:11px;color:#9fb4da;margin-top:4px">Start · Due · Progress</span></th>${monthHeader}</tr>
+            <tr>${dayHeader}</tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+
+      const todayIndex = days.findIndex(d=>d.todayFlag);
+      const dayColPx = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--day-col')) || 42;
+      activeGoals.forEach(goal=>{
+        const rowId = `gantt_${goal.id}`;
+        const startIso = goal.startDate || goal.createdAt || getTodayISO();
+        const startIndex = days.findIndex(d=>d.iso===startIso);
+        const endIndex = goal.deadline ? days.findIndex(d=>d.iso===goal.deadline) : -1;
+        const reviewIndex = goal.reviewDate ? days.findIndex(d=>d.iso===goal.reviewDate) : -1;
+
+        days.forEach((d, idx)=>{
+          const cell = document.getElementById(`${rowId}_${idx}`);
+          if(!cell) return;
+          if(todayIndex===idx){
+            const todayLine = document.createElement('div');
+            todayLine.className = 'gantt-today';
+            todayLine.style.left = '50%';
+            cell.appendChild(todayLine);
+          }
+          if(!goal.deadline && idx===0){
+            const note = document.createElement('div');
+            note.className = 'gantt-no-deadline';
+            note.textContent = 'Tanpa deadline';
+            cell.appendChild(note);
+          }
+        });
+
+        if(goal.deadline){
+          const effectiveStart = startIndex >= 0 ? startIndex : 0;
+          const effectiveEnd = endIndex >= 0 ? endIndex : days.length-1;
+          if(effectiveEnd >= 0){
+            const start = Math.max(0, effectiveStart);
+            const end = Math.min(days.length-1, effectiveEnd);
+            const startCell = document.getElementById(`${rowId}_${start}`);
+            if(startCell){
+              const bar = document.createElement('div');
+              bar.className = 'gantt-bar';
+              bar.style.left = '3px';
+              bar.style.width = `${((end-start)+1)*dayColPx - 6}px`;
+              bar.style.background = `linear-gradient(90deg, ${getPersonColor(goal.person)}, color-mix(in srgb, ${getPersonColor(goal.person)} 60%, white 40%))`;
+              bar.title = `${goal.text} | ${goal.person}`;
+              startCell.appendChild(bar);
+            }
+          }
+        }
+        if(reviewIndex >= 0){
+          const cell = document.getElementById(`${rowId}_${reviewIndex}`);
+          if(cell){
+            const pin = document.createElement('div');
+            pin.className = 'gantt-review-pin';
+            pin.style.left = '50%';
+            pin.style.transform = 'translateX(-50%)';
+            pin.title = `Review ${formatDateTimeParts(goal.reviewDate, goal.reviewTime)}`;
+            cell.appendChild(pin);
+          }
+        }
+      });
+    }
+
+    function renderTimelineFeed(){
+      const feed = buildTimelineItems().filter(item => (state.currentFeedType === 'all' || item.kind === state.currentFeedType) && (state.currentFeedPerson === 'all' || item.person === state.currentFeedPerson));
+      const target = document.getElementById('timelineFeed');
+      if(!feed.length){
+        target.innerHTML = '<div class="mini-muted">Belum ada aktivitas pada filter ini.</div>';
+        return;
+      }
+      const grouped = {};
+      feed.forEach(item => {
+        const key = weekRangeLabel(item.date);
+        grouped[key] = grouped[key] || [];
+        grouped[key].push(item);
+      });
+      const order = Object.keys(grouped).sort((a,b)=>{
+        const aDate = grouped[a][0]?.date || '';
+        const bDate = grouped[b][0]?.date || '';
+        return String(bDate).localeCompare(String(aDate));
+      });
+      target.innerHTML = order.map(key => `
+        <div class="week-group">
+          <div class="week-title">${escapeHtml(key)}</div>
+          ${grouped[key].map(item => `
+            <div class="feed-item">
+              <div class="feed-top">
+                <div>
+                  <div class="feed-title"><span class="chip-dot" style="background:${item.color};margin-right:8px"></span>${escapeHtml(item.title)}</div>
+                  <div class="feed-meta">${escapeHtml(item.kind)} · ${escapeHtml(item.person)} · ${formatDate(item.date)}</div>
+                </div>
+              </div>
+              <div style="margin-top:8px">${escapeHtml(item.body || '-')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    function renderTimeline(){
+      renderGantt();
+      renderTimelineFeed();
+      document.getElementById('feedTypeFilter').value = state.currentFeedType;
+      document.getElementById('feedPersonFilter').value = state.currentFeedPerson;
+    }
+
+    function buildSummaryText(){
+      const goals = getGoals();
+      const journal = getJournal();
+      const reviews = getReviews();
+      const englishDays = getEnglishDays();
+      const products = getProducts();
+      const extraNotes = document.getElementById('extraNotes').value.trim();
+      const today = getTodayISO();
+      const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-6); const cutoffISO = cutoff.toISOString().slice(0,10);
+      const recentJournal = journal.filter(e=>e.date >= cutoffISO);
+      const goalsSection = PEOPLE.map(person => {
+        const lines = goals.filter(g=>g.person===person.key).sort((a,b)=>a.order-b.order).map(g => `${g.done ? '✓' : '○'} ${g.text}${g.category ? ` · ${g.category}` : ''}${g.deadline ? ` · deadline ${g.deadline}` : ''}${g.progress ? ` · ${g.progress}%` : ''}${g.nextAction ? ` · next: ${g.nextAction}` : ''}`);
+        return `${person.key}:\n${lines.length ? lines.join('\n') : '-'}`;
+      }).join('\n\n');
+      const journalSection = recentJournal.length ? recentJournal.map(entry => {
+        const answers = entry.answers.map(a => `- ${a.question}\n  ${a.answer || '-'}`).join('\n');
+        return `[${entry.person}] ${formatDate(entry.date)}\n${answers}\n- Catatan bebas\n  ${entry.freeNote || '-'}`;
+      }).join('\n\n') : 'Belum ada jurnal dalam 7 hari terakhir.';
+      const latestReview = reviews[0] ? `Tanggal: ${formatDate(reviews[0].date)}\nYang berjalan baik: ${reviews[0].wentWell || '-'}\nYang perlu diperbaiki: ${reviews[0].toImprove || '-'}\nKomitmen: ${reviews[0].commitment || '-'}` : 'Belum ada review yang disimpan.';
+      const englishDoneCount = Object.values(englishDays).filter(Boolean).length;
+      const productsSection = products.length ? products.map(p => `- ${p.name} | ${p.owner} | pekan ${formatDate(p.weekOf)} | ${p.status}\n  Guna: ${p.use || '-'}\n  Update terakhir: ${(p.updates || []).length ? (p.updates[p.updates.length-1].text || p.updates[p.updates.length-1].next || '-') : '-'}\n  Pelajaran: ${p.learning || '-'}`).join('\n') : '- Belum ada produk yang dicatat';
+      return [
+        '=== FAMILY GROWTH SYSTEM — SUMMARY ===',
+        `Tanggal: ${formatDate(today)}`,
+        '',
+        '--- GOALS STATUS ---',
+        goalsSection,
+        '',
+        '--- JURNAL 7 HARI TERAKHIR ---',
+        journalSection,
+        '',
+        '--- WEEKLY REVIEW TERAKHIR ---',
+        latestReview,
+        '',
+        '--- ENGLISH TRACKER ---',
+        `Hari selesai: ${englishDoneCount}/30`,
+        '',
+        '--- 1W1PRODUCT ---',
+        productsSection,
+        '',
+        '=== PERTANYAAN / CATATAN TAMBAHAN ===',
+        extraNotes || '-',
+        '',
+        '=== PROMPT KE AI ===',
+        'Ini adalah data keluarga kami dari Family Growth System. Tolong analisa dan berikan:',
+        '1. Observasi pola dari data di atas',
+        '2. Apa yang berjalan baik?',
+        '3. Apa yang perlu perhatian?',
+        '4. 3 rekomendasi konkret untuk minggu depan'
+      ].join('\n');
+    }
+
+    function openHistoryModal(type){
+      if(type === 'journal'){
+        document.getElementById('historyTitle').textContent = 'Riwayat Jurnal';
+        document.getElementById('historySubtitle').textContent = 'Semua entry jurnal yang sudah disimpan.';
+        document.getElementById('historyContent').innerHTML = getJournalHistoryHTML();
+      } else {
+        document.getElementById('historyTitle').textContent = 'Riwayat Weekly Review';
+        document.getElementById('historySubtitle').textContent = 'Semua weekly review yang sudah disimpan.';
+        document.getElementById('historyContent').innerHTML = getReviewHistoryHTML();
+      }
+      openModal('historyModal');
+    }
+
+    function openModal(id){
+      const modal = document.getElementById(id);
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+    }
+    function closeModal(id){
+      const modal = document.getElementById(id);
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    function generateSummary(){
+      document.getElementById('summaryOutput').value = buildSummaryText();
+    }
+    async function copySummary(){
+      const out = document.getElementById('summaryOutput');
+      if(!out.value.trim()) out.value = buildSummaryText();
+      try{
+        await navigator.clipboard.writeText(out.value);
+      } catch(err){
+        out.select();
+        document.execCommand('copy');
+      }
+      showToast('Summary disalin');
+    }
+
+    function exportDataJSON(){
+      if(!state.cache) return;
+      const blob = new Blob([JSON.stringify(state.cache, null, 2)], { type:'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `family-growth-system-backup-${getTodayISO()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Backup JSON diunduh');
+    }
+
+    async function importDataJSON(file){
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      if(!confirm('Import akan mengganti data lokal yang sedang tampil. Lanjut?')) return;
+      state.cache = migrateCache(parsed);
+      state.localDirty = true;
+      renderAll();
+      showToast('Data JSON diimpor ke lokal. Klik Force save local bila ingin kirim ke cloud.');
+      state.conflict = true;
+      setSyncStatus('conflict', 'Import lokal siap');
+      document.getElementById('forceSaveBtn').style.display = 'inline-flex';
+    }
+
+    function renderAll(){
+      renderTabs();
+      renderFamilyChips();
+      renderSyncMeta();
+      renderGoals();
+      renderJournalMemberSwitcher();
+      renderJournalForm();
+      renderEnglishTracker();
+      renderProducts();
+      renderTimeline();
+    }
+
+    function attachEvents(){
+      document.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          state.currentTab = btn.dataset.tab;
+          renderTabs();
+          if(state.currentTab === 'timeline') renderTimeline();
+          if(state.currentTab === 'products') renderProducts();
+        });
+      });
+      document.querySelectorAll('[data-close-modal]').forEach(btn=>{
+        btn.addEventListener('click', ()=>closeModal(btn.dataset.closeModal));
+      });
+      document.querySelectorAll('.modal').forEach(modal=>{
+        modal.addEventListener('click', e=>{ if(e.target === modal) closeModal(modal.id); });
+      });
+      document.getElementById('syncNowBtn').addEventListener('click', ()=>loadRemote(true).catch(err=>{
+        console.error(err);
+        setSyncStatus('error', 'Gagal sync');
+      }));
+      document.getElementById('forceSaveBtn').addEventListener('click', async ()=>{
+        try{
+          await forceSaveRemote();
+          showToast('Versi lokal dipaksa simpan ke cloud');
+          document.getElementById('forceSaveBtn').style.display = 'none';
+        } catch(err){
+          console.error(err);
+          setSyncStatus('error', 'Force save gagal');
+        }
+      });
+      document.getElementById('openJournalHistoryBtn').addEventListener('click', ()=>openHistoryModal('journal'));
+      document.getElementById('openWeeklyHistoryBtn').addEventListener('click', ()=>openHistoryModal('weekly'));
+      document.getElementById('saveReviewBtn').addEventListener('click', saveWeeklyReview);
+      document.getElementById('resetEnglishBtn').addEventListener('click', resetEnglishTracker);
+      document.getElementById('productType').addEventListener('change', toggleProductTypeWrap);
+      document.getElementById('productEditType').addEventListener('change', toggleProductEditTypeWrap);
+      document.getElementById('addProductBtn').addEventListener('click', addProduct);
+      document.getElementById('saveGoalModalBtn').addEventListener('click', saveGoalFromModal);
+      document.getElementById('addGoalNoteBtn').addEventListener('click', addGoalNoteFromModal);
+      document.getElementById('saveProductEditBtn').addEventListener('click', saveProductEdit);
+      document.getElementById('saveProductProgressBtn').addEventListener('click', saveProductProgress);
+      document.getElementById('saveProductCompleteBtn').addEventListener('click', saveProductComplete);
+      document.getElementById('feedTypeFilter').addEventListener('change', e=>{ state.currentFeedType = e.target.value; renderTimelineFeed(); });
+      document.getElementById('feedPersonFilter').addEventListener('change', e=>{ state.currentFeedPerson = e.target.value; renderTimelineFeed(); });
+      document.getElementById('timelinePrevBtn').addEventListener('click', ()=>{ state.timelineWindowOffset -= 1; renderGantt(); });
+      document.getElementById('timelineNextBtn').addEventListener('click', ()=>{ state.timelineWindowOffset += 1; renderGantt(); });
+      document.getElementById('timelineTodayBtn').addEventListener('click', ()=>{ state.timelineWindowOffset = 0; renderGantt(); });
+      document.getElementById('openExportBtn').addEventListener('click', ()=>openModal('exportModal'));
+      document.getElementById('generateSummaryBtn').addEventListener('click', generateSummary);
+      document.getElementById('copySummaryBtn').addEventListener('click', copySummary);
+      document.getElementById('exportDataBtn').addEventListener('click', exportDataJSON);
+      document.getElementById('importDataBtn').addEventListener('click', ()=>document.getElementById('importDataInput').click());
+      document.getElementById('importDataInput').addEventListener('change', async e=>{
+        const file = e.target.files?.[0];
+        if(file) await importDataJSON(file);
+        e.target.value = '';
+      });
+
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape'){
+          document.querySelectorAll('.modal.show').forEach(modal => closeModal(modal.id));
+        }
+        if(e.key === 'Enter' && e.target.matches('input[id^="new-goal-"]')){
+          e.preventDefault();
+          addGoal(e.target.id.replace('new-goal-',''));
+        }
+      });
+
+      document.addEventListener('visibilitychange', ()=>{
+        if(document.visibilityState === 'visible' && !state.localDirty){
+          loadRemote(false).catch(()=>{});
+        }
+      });
+
+      setInterval(()=>{
+        if(document.visibilityState === 'visible' && !state.localDirty && !state.saveInFlight){
+          loadRemote(false).catch(()=>{});
+        }
+      }, 30000);
+    }
+
+    window.addGoal = addGoal;
+    window.moveGoal = moveGoal;
+    window.toggleGoalDone = toggleGoalDone;
+    window.deleteGoal = deleteGoal;
+    window.openGoalModal = openGoalModal;
+    window.setJournalPerson = setJournalPerson;
+    window.toggleEnglishDay = toggleEnglishDay;
+    window.openProductEditModal = openProductEditModal;
+    window.openProductProgressModal = openProductProgressModal;
+    window.openProductCompleteModal = openProductCompleteModal;
+    window.deleteProduct = deleteProduct;
+
+    async function init(){
+      fillSelectOptions();
+      toggleProductTypeWrap();
+      toggleProductEditTypeWrap();
+      attachEvents();
+      try{
+        await loadRemote(true);
+      } catch(err){
+        console.error(err);
+        state.cache = migrateCache({});
+        setSyncStatus('error', 'Cloud gagal, mode lokal');
+        renderAll();
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
