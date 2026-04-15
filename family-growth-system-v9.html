@@ -157,9 +157,8 @@
     .goal-list{display:grid;gap:10px}
     .goal-item{
       display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:flex-start;
-      border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:12px;position:relative;overflow:hidden;
+      border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:12px;
     }
-    .goal-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:currentColor;opacity:.65}
     .goal-item.done{opacity:.92;background:#0a152a;border-color:#31476d}
     .goal-check{margin-top:4px;width:20px;height:20px;accent-color:var(--primary);cursor:pointer}
     .goal-main{display:grid;gap:8px;min-width:0}
@@ -168,12 +167,12 @@
     .goal-item .goal-main{color:var(--goal-font-color);font-family:var(--goal-font-family)}
     .goal-item .goal-title{color:var(--goal-font-color);font-family:var(--goal-font-family)}
     .goal-item .goal-main .mini-muted,.goal-item .progress-wrap .mini-muted{color:var(--goal-font-muted)}
-    .goal-item.person-ayah{color:var(--ayah);--goal-font-color:#f8fbff;--goal-font-muted:#dce8ff;--goal-font-family:var(--font-display);background:linear-gradient(180deg,rgba(96,165,250,.17),rgba(10,21,42,.96));border-color:rgba(96,165,250,.42);box-shadow:inset 0 0 0 1px rgba(96,165,250,.10)}
-    .goal-item.person-bunda{color:var(--bunda);--goal-font-color:#f5efff;--goal-font-muted:#e8dcff;--goal-font-family:Georgia,Cambria,'Times New Roman',serif;background:linear-gradient(180deg,rgba(167,139,250,.18),rgba(14,20,41,.96));border-color:rgba(167,139,250,.42);box-shadow:inset 0 0 0 1px rgba(167,139,250,.10)}
-    .goal-item.person-musa{color:var(--musa);--goal-font-color:#ffe3a1;--goal-font-muted:#ffe8aa;--goal-font-family:var(--font-condensed);background:linear-gradient(180deg,rgba(245,158,11,.17),rgba(22,18,10,.96));border-color:rgba(245,158,11,.42);box-shadow:inset 0 0 0 1px rgba(245,158,11,.10)}
-    .goal-item.person-maryam{color:var(--maryam);--goal-font-color:#ccfff4;--goal-font-muted:#cbfff3;--goal-font-family:'Trebuchet MS',var(--font-ui);background:linear-gradient(180deg,rgba(52,211,153,.17),rgba(8,24,26,.96));border-color:rgba(52,211,153,.40);box-shadow:inset 0 0 0 1px rgba(52,211,153,.10)}
-    .goal-item.person-maymunah{color:var(--maymunah);--goal-font-color:#ffd8ee;--goal-font-muted:#ffd3ea;--goal-font-family:'Avenir Next','Segoe UI',var(--font-ui);background:linear-gradient(180deg,rgba(244,114,182,.17),rgba(24,10,21,.96));border-color:rgba(244,114,182,.40);box-shadow:inset 0 0 0 1px rgba(244,114,182,.10)}
-    .goal-item.person-bersama{color:var(--bersama);--goal-font-color:#d8e6ff;--goal-font-muted:#eef4ff;--goal-font-family:var(--font-ui);background:linear-gradient(180deg,rgba(148,163,184,.16),rgba(12,21,39,.96));border-color:rgba(148,163,184,.36);box-shadow:inset 0 0 0 1px rgba(148,163,184,.10)}
+    .goal-item.person-ayah{--goal-font-color:#f8fbff;--goal-font-muted:#dce8ff;--goal-font-family:var(--font-display)}
+    .goal-item.person-bunda{--goal-font-color:#93f7ac;--goal-font-muted:#d9ffe2;--goal-font-family:Georgia,Cambria,'Times New Roman',serif}
+    .goal-item.person-musa{--goal-font-color:#ffd46b;--goal-font-muted:#ffe8aa;--goal-font-family:var(--font-condensed)}
+    .goal-item.person-maryam{--goal-font-color:#7de8d4;--goal-font-muted:#cbfff3;--goal-font-family:'Trebuchet MS',var(--font-ui)}
+    .goal-item.person-maymunah{--goal-font-color:#ff9fd1;--goal-font-muted:#ffd3ea;--goal-font-family:'Avenir Next','Segoe UI',var(--font-ui)}
+    .goal-item.person-bersama{--goal-font-color:#d8e6ff;--goal-font-muted:#eef4ff;--goal-font-family:var(--font-ui)}
     .goal-next{font-size:13px;line-height:1.45;color:#f5f8ff;padding:8px 10px;border-radius:10px;border:1px solid rgba(141,177,240,.18);background:rgba(13,24,48,.54)}
     .goal-next strong{color:#cfe0ff;font-weight:800}
     .goal-support,.goal-blocker{font-size:12px;line-height:1.45;color:#d7e4fb}
@@ -244,7 +243,7 @@
     details.log-item > summary::-webkit-details-marker{display:none}
     .smarter-box{display:grid;gap:8px;padding:12px;border-radius:12px;background:var(--surface-soft);border:1px dashed var(--border)}
     .summary-grid{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
-    .summary-grid .stat-chip{justify-content:flex-start;padding-left:14px;text-align:left}
+    .summary-grid .stat-chip{justify-content:flex-start}
 
     .feed-title{font-family:var(--font-display);font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.025em}
     .feed-item,.qa-item,.question-item,.entry-card,.thread-item{background:linear-gradient(180deg,rgba(15,27,51,.72),rgba(10,19,37,.82))}
@@ -278,6 +277,58 @@
     .gantt-no-deadline{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:10px;line-height:1.2;color:#a8bcdf;font-weight:700;max-width:calc(var(--day-col) - 12px)}
     .gantt-review-pin{position:absolute;top:16px;width:10px;height:10px;border-radius:999px;background:#fbbf24;border:2px solid #fff7d6;box-shadow:0 0 0 3px rgba(251,191,36,.18), 0 0 12px rgba(251,191,36,.35)}
     .gantt-review-pin::after{content:'';position:absolute;left:50%;transform:translateX(-50%);top:9px;width:2px;height:24px;background:linear-gradient(180deg,rgba(251,191,36,.92),rgba(251,191,36,.12))}
+
+    .month-header.month-alt{background:linear-gradient(180deg,#1a467f,#135a84)}
+    .day-header.month-alt{background:#102548}
+    .day-header.month-alt.weekend{background:#153056}
+    .day-header.today{
+      background:linear-gradient(180deg,#2a3f76,#17305c);
+      box-shadow:inset 0 0 0 1px rgba(251,113,133,.28), 0 0 0 1px rgba(251,113,133,.12);
+      position:sticky;
+    }
+    .day-header.today::after{
+      content:'Hari ini';
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:4px;
+      font-size:9px;
+      line-height:1;
+      font-weight:800;
+      color:#ffd1d8;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .gantt-cell.today-col{
+      background:linear-gradient(180deg, rgba(251,113,133,.10), rgba(251,113,133,.04));
+      box-shadow:inset 1px 0 0 rgba(251,113,133,.22), inset -1px 0 0 rgba(251,113,133,.16);
+    }
+    .gantt-cell.month-alt{
+      background:rgba(255,255,255,.015);
+    }
+    .gantt-cell.month-alt.weekend{
+      background:rgba(255,255,255,.045);
+    }
+    .gantt-today{
+      width:4px;
+      background:#fb7185;
+      box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 0 22px rgba(251,113,133,.55);
+    }
+    .gantt-bar.due-soon{
+      box-shadow:0 8px 20px rgba(251,191,36,.18), inset 0 1px 0 rgba(255,255,255,.22), 0 0 0 1px rgba(251,191,36,.14);
+      border-color:rgba(251,191,36,.45);
+    }
+    .gantt-bar.overdue{
+      box-shadow:0 8px 20px rgba(251,113,133,.18), inset 0 1px 0 rgba(255,255,255,.18), 0 0 0 1px rgba(251,113,133,.18);
+      border-color:rgba(251,113,133,.55);
+      animation:ganttPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes ganttPulse{
+      0%,100%{transform:scaleY(1);filter:brightness(1)}
+      50%{transform:scaleY(1.04);filter:brightness(1.08)}
+    }
+
     @media (max-width:700px){
       .feed-filter-bar{display:grid;grid-template-columns:1fr;gap:10px}
       .feed-filter-bar .select{width:100%}
@@ -329,6 +380,7 @@
         </div>
       </details>
       <div class="inline-help" id="syncMetaLabel" style="display:none">Belum tersinkron.</div>
+      <div class="inline-help" id="liveNowLabel" style="margin-top:8px">Hari ini: -</div>
     </header>
 
     <div class="tabs-wrap">
@@ -1025,14 +1077,13 @@
     function toggleGlobalPerson(person){
       if(person === 'Bersama'){
         state.selectedPeople = ['Bersama'];
+      } else if(isGlobalAllSelected()){
+        state.selectedPeople = [person];
+      } else if(state.selectedPeople.includes(person)){
+        state.selectedPeople = state.selectedPeople.filter(p=>p!==person);
+        if(!state.selectedPeople.length) state.selectedPeople = ['Bersama'];
       } else {
-        let selected = state.selectedPeople.filter(p=>p !== 'Bersama' && p !== '__ALL__');
-        if(selected.includes(person)){
-          selected = selected.filter(p=>p !== person);
-        } else {
-          selected.push(person);
-        }
-        state.selectedPeople = selected.length ? selected : ['Bersama'];
+        state.selectedPeople = [...state.selectedPeople, person];
       }
       if(state.selectedPeople.length === 1 && state.selectedPeople[0] !== 'Bersama' && JOURNAL_PEOPLE.includes(state.selectedPeople[0])){
         state.currentJournalPerson = state.selectedPeople[0];
@@ -1545,6 +1596,16 @@
     function clearDeleted(bucket, id){
       if(!state.cache?.__deleted?.[bucket]) return;
       state.cache.__deleted[bucket] = state.cache.__deleted[bucket].filter(item => item.id !== id);
+    }
+
+
+    function renderLiveNow(){
+      const el = document.getElementById('liveNowLabel');
+      if(!el) return;
+      const now = new Date();
+      const datePart = now.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+      const timePart = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+      el.textContent = `Hari ini: ${datePart} • ${timePart}`;
     }
 
     function showToast(msg){
@@ -2342,7 +2403,9 @@
         const iso = date.toISOString().slice(0,10);
         const weekend = date.getDay()===0 || date.getDay()===6;
         const todayFlag = iso === getTodayISO();
-        return {date, iso, weekend, todayFlag};
+        const monthAlt = date.getMonth() % 2 === 1;
+        const monthStart = date.getDate() === 1;
+        return {date, iso, weekend, todayFlag, monthAlt, monthStart};
       });
       const monthSegments = [];
       days.forEach((d, idx)=>{
@@ -2363,8 +2426,8 @@
         return;
       }
 
-      const monthHeader = monthSegments.map(seg=>`<th class="month-header" colspan="${seg.span}">${seg.label}</th>`).join('');
-      const dayHeader = days.map((d, idx)=>`<th class="day-header ${d.weekend?'weekend':''} ${d.todayFlag?'today':''}"><span class="day-number">${d.date.getDate()}</span><span class="day-dow">${weekdayShort(d.date)}</span></th>`).join('');
+      const monthHeader = monthSegments.map((seg, segIdx)=>`<th class="month-header ${segIdx % 2 === 1 ? 'month-alt' : ''} ${seg.start > 0 ? 'month-boundary' : ''}" colspan="${seg.span}">${seg.label}</th>`).join('');
+      const dayHeader = days.map((d, idx)=>`<th class="day-header ${d.monthAlt?'month-alt':''} ${d.weekend?'weekend':''} ${d.todayFlag?'today':''} ${d.monthStart?'month-start':''}"><span class="day-number">${d.date.getDate()}</span><span class="day-dow">${weekdayShort(d.date)}</span></th>`).join('');
 
       const rows = activeGoals.map(goal=>{
         const rowId = `gantt_${goal.id}`;
@@ -2383,7 +2446,7 @@
               <span class="goal-row-chip">${health.label}</span>
             </div>
           </td>
-          ${days.map((d, idx)=>`<td><div class="gantt-cell ${d.weekend?'weekend':''}" id="${rowId}_${idx}"></div></td>`).join('')}
+          ${days.map((d, idx)=>`<td><div class="gantt-cell ${d.monthAlt?'month-alt':''} ${d.weekend?'weekend':''} ${d.todayFlag?'today-col':''} ${d.monthStart?'month-start':''}" id="${rowId}_${idx}"></div></td>`).join('')}
         </tr>`;
       }).join('');
 
@@ -2432,11 +2495,14 @@
             const startCell = document.getElementById(`${rowId}_${start}`);
             if(startCell){
               const bar = document.createElement('div');
-              bar.className = 'gantt-bar';
+              const dueDiff = Math.ceil((new Date(goal.deadline + 'T00:00:00') - new Date(getTodayISO() + 'T00:00:00')) / 86400000);
+              bar.className = `gantt-bar ${dueDiff < 0 ? 'overdue' : dueDiff <= 3 ? 'due-soon' : ''}`.trim();
               bar.style.left = '3px';
               bar.style.width = `${((end-start)+1)*dayColPx - 6}px`;
-              bar.style.background = `linear-gradient(90deg, ${getPersonColor(goal.person)}, color-mix(in srgb, ${getPersonColor(goal.person)} 60%, white 40%))`;
-              bar.title = `${goal.text} | ${goal.person}`;
+              const baseColor = getPersonColor(goal.person);
+              const urgencyColor = dueDiff < 0 ? '#fb7185' : dueDiff <= 3 ? '#fbbf24' : baseColor;
+              bar.style.background = `linear-gradient(90deg, ${urgencyColor}, color-mix(in srgb, ${urgencyColor} 60%, white 40%))`;
+              bar.title = `${goal.text} | ${goal.person}${dueDiff < 0 ? ' | OVERDUE' : dueDiff <= 3 ? ' | Due segera' : ''}`;
               startCell.appendChild(bar);
             }
           }
@@ -2622,6 +2688,7 @@
       renderTabs();
       renderFamilyChips();
       renderSyncMeta();
+      renderLiveNow();
       renderGoals();
       renderJournalMemberSwitcher();
       renderJournalForm();
@@ -2728,6 +2795,8 @@
       attachEvents();
       state.cache = migrateCache({});
       setSyncStatus('loading', 'Memuat...');
+      renderLiveNow();
+      setInterval(renderLiveNow, 30000);
       renderAll();
       try{
         await loadRemote(true);
