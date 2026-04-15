@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- Family Growth System v6.1.0 — 2026-04-15 -->
+<!-- Family Growth System v7.2.0 — 2026-04-15 -->
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Family Growth System v6.1.0</title>
+  <title>Family Growth System v7.2.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
@@ -87,6 +87,10 @@
       display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:7px 12px;
       border-radius:999px;background:var(--surface-soft);border:1px solid var(--border);font-weight:700;white-space:nowrap;
     }
+    .chip.scope-chip{cursor:pointer;user-select:none;transition:all .18s ease;box-shadow:var(--shadow)}
+    .chip.scope-chip:hover{transform:translateY(-1px);border-color:#5B84D6}
+    .chip.scope-chip.active{background:linear-gradient(135deg,#4A8DFF,#6FA8FF);border-color:#6FA8FF;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 8px 24px rgba(74,141,255,.28)}
+    .chip.scope-chip.active .chip-dot{box-shadow:0 0 0 3px rgba(255,255,255,.18)}
     .chip-dot{width:10px;height:10px;border-radius:999px;display:inline-block;flex:0 0 auto}
     .tabs-wrap{position:sticky;top:0;z-index:20;padding:10px 0 12px;background:linear-gradient(180deg,rgba(7,11,23,.98) 78%,rgba(7,11,23,0));margin-bottom:10px}
     .tabs{overflow:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px}
@@ -190,6 +194,10 @@
     .progress-bar{height:8px;border-radius:999px;background:#17253f;overflow:hidden;border:1px solid rgba(255,255,255,.05)}
     .progress-fill{height:100%;background:var(--primary)}
     .goal-actions,.product-actions{display:grid;gap:8px}
+    .goal-details{margin-top:2px}
+    .goal-details > summary{list-style:none;cursor:pointer;font-size:12px;font-weight:800;color:#bfd0ec}
+    .goal-details > summary::-webkit-details-marker{display:none}
+    .goal-details-body{display:grid;gap:6px;padding-top:8px}
     .add-goal-box,.form-box{border-top:1px dashed var(--border);padding:12px;background:var(--surface)}
     .form-grid{display:grid;gap:10px}
     .question-list,.qa-list,.timeline-feed,.product-log,.tracker-grid{display:grid;gap:10px}
@@ -233,18 +241,6 @@
     details.log-item{border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);overflow:hidden}
     details.log-item > summary{list-style:none;cursor:pointer;padding:13px 14px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px}
     details.log-item > summary::-webkit-details-marker{display:none}
-    .gantt-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:14px}
-    .gantt-table{border-collapse:collapse;width:100%;min-width:820px;font-size:13px;background:#fff}
-    .gantt-table th,.gantt-table td{border:1px solid var(--border);padding:0;vertical-align:middle}
-    .gantt-table th{background:var(--surface-soft);padding:8px 10px;font-weight:800;position:sticky;top:0;z-index:2}
-    .gantt-table th.label-col,.gantt-table td.label-col{position:sticky;left:0;background:#fff;z-index:3}
-    .gantt-table td.label-col{padding:10px;min-width:220px;max-width:260px}
-    .gantt-table .week-header.current{background:var(--info-soft)}
-    .gantt-cell{position:relative;height:46px}
-    .gantt-bar{position:absolute;top:10px;bottom:10px;border-radius:999px;opacity:.92}
-    .gantt-bar.done{opacity:.52}
-    .gantt-today{position:absolute;top:0;bottom:0;width:2px;background:#EF4444;opacity:.7;z-index:2}
-    .gantt-overdue-note{font-size:11px;color:var(--danger);font-weight:800;padding:0 8px}
     .smarter-box{display:grid;gap:8px;padding:12px;border-radius:12px;background:var(--surface-soft);border:1px dashed var(--border)}
     .summary-grid{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
     .summary-grid .stat-chip{justify-content:center}
@@ -313,15 +309,15 @@
     <header class="card title-card">
       <div class="section-head" style="margin-bottom:10px">
         <div>
-          <h1>Family Growth System v6.1.0</h1>
-          <p>Cloud-synced dashboard keluarga dengan timeline kalender harian, dark theme yang lebih kontras, dan workflow 1W1Product.</p>
-        </div>
+          <h1>Family Growth System v7.2.0</h1>
+                  </div>
         <div class="toolbar">
           <span class="sync-pill loading" id="syncStatus">Memuat...</span>
           <button class="btn secondary small" id="syncNowBtn">Sync now</button>
           <button class="btn secondary small" id="forceSaveBtn" style="display:none">Force save local</button>
         </div>
       </div>
+      <div class="inline-help" style="margin:10px 0 8px">Context keluarga — klik untuk fokus per orang, atau pilih beberapa orang sekaligus untuk project couple / kolaborasi.</div>
       <div class="chip-row" id="familyChips"></div>
       <details style="margin-top:10px">
         <summary class="inline-help" style="cursor:pointer;user-select:none">Backup & restore (advanced)</summary>
@@ -331,7 +327,7 @@
           <input type="file" id="importDataInput" accept="application/json" style="display:none" />
         </div>
       </details>
-      <div class="inline-help" id="syncMetaLabel">Belum tersinkron.</div>
+      <div class="inline-help" id="syncMetaLabel" style="display:none">Belum tersinkron.</div>
     </header>
 
     <div class="tabs-wrap">
@@ -350,8 +346,7 @@
           <div class="section-head">
             <div>
               <h2>Goals</h2>
-              <p class="helper">Dipisah jadi goal aktif dan goal selesai. Deadline, status, progress, dan prioritas terlihat langsung.</p>
-            </div>
+                          </div>
             <div class="toolbar" id="goalSummaryChips"></div>
           </div>
           <div class="toolbar" style="margin-bottom:12px" id="goalFilterBar"></div>
@@ -366,8 +361,7 @@
               <div class="section-head">
                 <div>
                   <h2>Goal Calendar Gantt</h2>
-                  <p class="helper">Timeline dimulai dari hari ini, kecuali ada start date aktif yang lebih awal. Goal selesai otomatis hilang dari timeline. Header kalender dibaca: bulan → tanggal → hari.</p>
-                </div>
+                                  </div>
                 <div class="toolbar">
                   <button class="btn secondary small" id="timelinePrevBtn">&larr; Sebelumnya</button>
                   <button class="btn secondary small" id="timelineTodayBtn">Hari ini</button>
@@ -477,8 +471,7 @@
               <div class="section-head">
                 <div>
                   <h2>1W1Product</h2>
-                  <p class="helper">Form awal diringankan. Progress dan penyelesaian dicatat sebagai workflow terpisah.</p>
-                </div>
+                                  </div>
               </div>
               <div class="note-box" style="margin-bottom:12px">
                 <strong>Alur kerja:</strong>
@@ -950,8 +943,7 @@
     let state = {
       currentTab: 'goals',
       currentJournalPerson: 'Ayah',
-      currentGoalFilter: 'all',
-      currentProductFilter: 'all',
+      selectedPeople: ['Bersama'],
       currentFeedType: 'all',
       currentFeedPerson: 'all',
       timelineWindowOffset: 0,
@@ -966,6 +958,9 @@
 
     function uid(prefix='id'){
       return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+    }
+    function nowIso(){
+      return new Date().toISOString();
     }
     function getTodayISO(){
       const now = new Date();
@@ -1007,6 +1002,40 @@
     }
     function getPersonColor(person){
       return PEOPLE.find(p=>p.key===person)?.color || 'var(--bersama)';
+    }
+    function isGlobalAllSelected(){
+      return !Array.isArray(state.selectedPeople) || !state.selectedPeople.length || state.selectedPeople.includes('Bersama');
+    }
+    function getSelectedPeopleKeys(){
+      return isGlobalAllSelected() ? PEOPLE.map(p=>p.key) : state.selectedPeople.slice();
+    }
+    function matchesGlobalPerson(person){
+      return isGlobalAllSelected() ? true : state.selectedPeople.includes(person);
+    }
+    function filterItemsByGlobalPerson(items, key='person'){
+      return isGlobalAllSelected() ? items : items.filter(item => matchesGlobalPerson(item[key]));
+    }
+    function getGlobalScopeLabel(){
+      return isGlobalAllSelected() ? 'Bersama' : state.selectedPeople.join(' + ');
+    }
+    function toggleGlobalPerson(person){
+      if(person === 'Bersama'){
+        state.selectedPeople = ['Bersama'];
+      } else if(isGlobalAllSelected()){
+        state.selectedPeople = [person];
+      } else if(state.selectedPeople.includes(person)){
+        state.selectedPeople = state.selectedPeople.filter(p=>p!==person);
+        if(!state.selectedPeople.length) state.selectedPeople = ['Bersama'];
+      } else {
+        state.selectedPeople = [...state.selectedPeople, person];
+      }
+      if(state.selectedPeople.length === 1 && state.selectedPeople[0] !== 'Bersama' && JOURNAL_PEOPLE.includes(state.selectedPeople[0])){
+        state.currentJournalPerson = state.selectedPeople[0];
+      }
+      state.currentFeedPerson = 'all';
+      renderAll();
+      const activePanel = document.querySelector('.panel.active');
+      activePanel?.scrollIntoView({behavior:'smooth', block:'start'});
     }
     function getPersonClass(person){
       const map = { Bersama:'bersama', Ayah:'ayah', Bunda:'bunda', Musa:'musa', Maryam:'maryam', Maymunah:'maymunah' };
@@ -1080,6 +1109,116 @@
       return JSON.parse(JSON.stringify(obj));
     }
 
+    function getStamp(value, fallback='1970-01-01T00:00:00.000Z'){
+      return value || fallback;
+    }
+    function maxStamp(...values){
+      return values.map(v=>getStamp(v)).sort().slice(-1)[0];
+    }
+    function buildMap(list){
+      return Object.fromEntries((list || []).map(item => [item.id, item]));
+    }
+    function buildDeleteMap(list){
+      return Object.fromEntries((list || []).map(item => [item.id, item]));
+    }
+    function mergeByIdWithLatest(localList, serverList, getUpdatedAt){
+      const localMap = buildMap(localList || []);
+      const serverMap = buildMap(serverList || []);
+      const ids = new Set([...Object.keys(localMap), ...Object.keys(serverMap)]);
+      return Array.from(ids).map(id=>{
+        const localItem = localMap[id];
+        const serverItem = serverMap[id];
+        if(localItem && serverItem){
+          return getStamp(getUpdatedAt(localItem)) >= getStamp(getUpdatedAt(serverItem)) ? localItem : serverItem;
+        }
+        return localItem || serverItem;
+      });
+    }
+    function mergeGoalNotes(localNotes, serverNotes){
+      return mergeByIdWithLatest(localNotes || [], serverNotes || [], note => note.updatedAt || `${note.date || getTodayISO()}T00:00:00.000Z`)
+        .sort((a,b)=>compareDateStrings(a.date,b.date));
+    }
+    function mergeProductUpdates(localUpdates, serverUpdates){
+      return mergeByIdWithLatest(localUpdates || [], serverUpdates || [], upd => upd.updatedAt || `${upd.date || getTodayISO()}T00:00:00.000Z`)
+        .sort((a,b)=>compareDateStrings(a.date,b.date));
+    }
+    function mergeGoalEntity(localItem, serverItem){
+      const preferred = getStamp(localItem?.updatedAt) >= getStamp(serverItem?.updatedAt) ? localItem : serverItem;
+      return {
+        ...clone(preferred),
+        notes: mergeGoalNotes(localItem?.notes || [], serverItem?.notes || []),
+        updatedAt: maxStamp(localItem?.updatedAt, serverItem?.updatedAt)
+      };
+    }
+    function mergeProductEntity(localItem, serverItem){
+      const preferred = getStamp(localItem?.updatedAt) >= getStamp(serverItem?.updatedAt) ? localItem : serverItem;
+      return {
+        ...clone(preferred),
+        updates: mergeProductUpdates(localItem?.updates || [], serverItem?.updates || []),
+        updatedAt: maxStamp(localItem?.updatedAt, serverItem?.updatedAt)
+      };
+    }
+    function mergeEntityCollection(localItems, serverItems, localDeleted, serverDeleted, resolver){
+      const localMap = buildMap(localItems || []);
+      const serverMap = buildMap(serverItems || []);
+      const localDeleteMap = buildDeleteMap(localDeleted || []);
+      const serverDeleteMap = buildDeleteMap(serverDeleted || []);
+      const ids = new Set([...Object.keys(localMap), ...Object.keys(serverMap), ...Object.keys(localDeleteMap), ...Object.keys(serverDeleteMap)]);
+      const merged = [];
+      const mergedDeleted = [];
+      ids.forEach(id=>{
+        const localItem = localMap[id];
+        const serverItem = serverMap[id];
+        const localDelete = localDeleteMap[id];
+        const serverDelete = serverDeleteMap[id];
+        const itemStamp = maxStamp(localItem?.updatedAt, serverItem?.updatedAt);
+        const deleteStamp = maxStamp(localDelete?.deletedAt, serverDelete?.deletedAt, '');
+        if(deleteStamp && deleteStamp > itemStamp){
+          mergedDeleted.push({ id, deletedAt: deleteStamp });
+          return;
+        }
+        if(localItem && serverItem) merged.push(resolver(localItem, serverItem));
+        else if(localItem || serverItem) merged.push(clone(localItem || serverItem));
+      });
+      return { merged, deleted: mergedDeleted.sort((a,b)=>getStamp(a.deletedAt).localeCompare(getStamp(b.deletedAt))) };
+    }
+    function mergeEnglishState(localDays, serverDays, localMeta, serverMeta){
+      const mergedDays = {};
+      const mergedMeta = {};
+      const allDays = new Set([...Object.keys(localDays || {}), ...Object.keys(serverDays || {}), ...Object.keys(localMeta || {}), ...Object.keys(serverMeta || {})]);
+      allDays.forEach(day=>{
+        const localStamp = getStamp((localMeta || {})[day], '');
+        const serverStamp = getStamp((serverMeta || {})[day], '');
+        const useLocal = localStamp >= serverStamp;
+        const chosenStamp = useLocal ? localStamp : serverStamp;
+        const chosenValue = useLocal ? !!(localDays || {})[day] : !!(serverDays || {})[day];
+        if(chosenStamp) mergedMeta[day] = chosenStamp;
+        if(chosenValue) mergedDays[day] = true;
+      });
+      return { days: mergedDays, meta: mergedMeta };
+    }
+    function mergeCaches(localCache, serverCache){
+      const local = migrateCache(localCache || {});
+      const server = migrateCache(serverCache || {});
+      const goals = mergeEntityCollection(local[STORAGE_KEYS.goals], server[STORAGE_KEYS.goals], local.__deleted?.goals, server.__deleted?.goals, mergeGoalEntity);
+      const products = mergeEntityCollection(local[STORAGE_KEYS.products], server[STORAGE_KEYS.products], local.__deleted?.products, server.__deleted?.products, mergeProductEntity);
+      const english = mergeEnglishState(local[STORAGE_KEYS.englishDays], server[STORAGE_KEYS.englishDays], local.__englishMeta, server.__englishMeta);
+      const merged = migrateCache({
+        ...server,
+        [STORAGE_KEYS.goals]: goals.merged,
+        [STORAGE_KEYS.journal]: mergeByIdWithLatest(local[STORAGE_KEYS.journal], server[STORAGE_KEYS.journal], item => item.updatedAt || item.timestamp || nowIso()),
+        [STORAGE_KEYS.weeklyReviews]: mergeByIdWithLatest(local[STORAGE_KEYS.weeklyReviews], server[STORAGE_KEYS.weeklyReviews], item => item.updatedAt || nowIso()),
+        [STORAGE_KEYS.englishDays]: english.days,
+        [STORAGE_KEYS.products]: products.merged,
+        __englishMeta: english.meta,
+        __deleted: {
+          goals: goals.deleted,
+          products: products.deleted
+        }
+      });
+      return merged;
+    }
+
     function defaultGoalFields(goal={}, index=0){
       const createdAt = goal.createdAt || goal.date || getTodayISO();
       const done = goal.done === true || goal.status === 'Selesai';
@@ -1107,11 +1246,13 @@
         deadlineTime: goal.deadlineTime || '',
         reviewTime: goal.reviewTime || '',
         createdAt,
+        updatedAt: goal.updatedAt || goal.modifiedAt || nowIso(),
         order: Number.isFinite(goal.order) ? goal.order : index,
         notes: Array.isArray(goal.notes) ? goal.notes.map((n, i)=>({
           id: n.id || uid('note'),
           date: n.date || createdAt,
-          text: n.text || n.note || ''
+          text: n.text || n.note || '',
+          updatedAt: n.updatedAt || `${(n.date || createdAt)}T00:00:00.000Z`
         })).filter(n=>n.text) : [],
         completedAt: goal.completedAt || (done ? createdAt : '')
       };
@@ -1141,20 +1282,38 @@
         actualDate: item.actualDate || '',
         use: item.use || '',
         createdAt,
+        updatedAt: item.updatedAt || item.modifiedAt || nowIso(),
         learning: item.learning || '',
         updates: [...legacySeed, ...updates].map((u, idx)=>({
           id: u.id || uid('upd'),
           date: u.date || createdAt,
           text: u.text || '',
-          next: u.next || (idx===0 ? item.next || '' : '')
+          next: u.next || (idx===0 ? item.next || '' : ''),
+          updatedAt: u.updatedAt || `${(u.date || createdAt)}T00:00:00.000Z`
         })).filter(u=>u.text || u.next)
       };
+    }
+
+    function ensureDeletedBuckets(cache){
+      cache.__deleted = cache.__deleted || {};
+      cache.__deleted.goals = Array.isArray(cache.__deleted.goals) ? cache.__deleted.goals : [];
+      cache.__deleted.products = Array.isArray(cache.__deleted.products) ? cache.__deleted.products : [];
+    }
+
+    function ensureEnglishMeta(cache){
+      cache.__englishMeta = cache.__englishMeta && typeof cache.__englishMeta === 'object' ? cache.__englishMeta : {};
+      const englishDays = cache[STORAGE_KEYS.englishDays] || {};
+      const fallbackStamp = cache.__meta?.updatedAt || nowIso();
+      Object.keys(englishDays).forEach(day=>{
+        if(!cache.__englishMeta[day]) cache.__englishMeta[day] = fallbackStamp;
+      });
     }
 
     function migrateCache(raw){
       const cache = raw && typeof raw === 'object' ? clone(raw) : {};
       cache.__schemaVersion = Number(cache.__schemaVersion || 0);
       cache.__meta = cache.__meta || { revision: 0, updatedAt: '' };
+      ensureDeletedBuckets(cache);
 
       if(!Array.isArray(cache[STORAGE_KEYS.goals]) || !cache[STORAGE_KEYS.goals].length){
         cache[STORAGE_KEYS.goals] = GOAL_SEED.map((g, index)=>defaultGoalFields(g, index));
@@ -1170,7 +1329,8 @@
         date: entry.date || getTodayISO(),
         answers: Array.isArray(entry.answers) ? entry.answers : [],
         freeNote: entry.freeNote || '',
-        timestamp: entry.timestamp || new Date().toISOString()
+        timestamp: entry.timestamp || nowIso(),
+        updatedAt: entry.updatedAt || entry.timestamp || nowIso()
       }));
 
       if(!Array.isArray(cache[STORAGE_KEYS.weeklyReviews])) cache[STORAGE_KEYS.weeklyReviews] = [];
@@ -1179,10 +1339,12 @@
         date: item.date || getTodayISO(),
         wentWell: item.wentWell || '',
         toImprove: item.toImprove || '',
-        commitment: item.commitment || ''
+        commitment: item.commitment || '',
+        updatedAt: item.updatedAt || nowIso()
       }));
 
       if(!cache[STORAGE_KEYS.englishDays] || typeof cache[STORAGE_KEYS.englishDays] !== 'object') cache[STORAGE_KEYS.englishDays] = {};
+      ensureEnglishMeta(cache);
 
       if(!Array.isArray(cache[STORAGE_KEYS.products])) cache[STORAGE_KEYS.products] = [];
       cache[STORAGE_KEYS.products] = cache[STORAGE_KEYS.products].map(defaultProductFields);
@@ -1198,11 +1360,25 @@
       });
       const json = await res.json();
       const record = json.record && typeof json.record === 'object' ? json.record : {};
-      state.cache = migrateCache(record);
-      state.lastSyncedRevision = Number(state.cache.__meta?.revision || 0);
-      state.lastSyncedAt = state.cache.__meta?.updatedAt || '';
+      const remoteCache = migrateCache(record);
+
+      if(state.localDirty && state.cache){
+        state.cache = mergeCaches(state.cache, remoteCache);
+        state.lastSyncedRevision = Number(remoteCache.__meta?.revision || 0);
+        state.lastSyncedAt = remoteCache.__meta?.updatedAt || '';
+        state.conflict = false;
+        document.getElementById('forceSaveBtn').style.display = 'none';
+        renderAll();
+        await saveRemote();
+        return;
+      }
+
+      state.cache = remoteCache;
+      state.lastSyncedRevision = Number(remoteCache.__meta?.revision || 0);
+      state.lastSyncedAt = remoteCache.__meta?.updatedAt || '';
       state.localDirty = false;
       state.conflict = false;
+      document.getElementById('forceSaveBtn').style.display = 'none';
       setSyncStatus('saved', 'Tersinkron');
       renderAll();
     }
@@ -1235,11 +1411,8 @@
         const serverRevision = Number(serverRecord.__meta?.revision || 0);
 
         if(serverRevision !== state.lastSyncedRevision){
-          state.conflict = true;
-          setSyncStatus('conflict', 'Server lebih baru');
-          document.getElementById('forceSaveBtn').style.display = 'inline-flex';
-          showToast('Ada versi server yang lebih baru. Sync now untuk ambil versi terbaru, atau Force save local untuk menimpa.');
-          return;
+          state.cache = mergeCaches(state.cache, serverRecord);
+          showToast('Perubahan dari device lain digabung otomatis.');
         }
 
         bumpMeta();
@@ -1261,6 +1434,7 @@
       } finally {
         state.saveInFlight = false;
         renderSyncMeta();
+        if(state.currentTab === 'timeline') renderTimeline();
       }
     }
 
@@ -1269,7 +1443,7 @@
       document.getElementById('forceSaveBtn').style.display = state.conflict ? 'inline-flex' : 'none';
       setSyncStatus('loading', 'Perubahan lokal');
       clearTimeout(state.saveTimer);
-      state.saveTimer = setTimeout(saveRemote, 900);
+      state.saveTimer = setTimeout(saveRemote, 1200);
       renderSyncMeta();
     }
 
@@ -1281,10 +1455,10 @@
     }
     function renderSyncMeta(){
       const label = document.getElementById('syncMetaLabel');
-      const dirtyText = state.localDirty ? 'Ada perubahan lokal belum tersimpan.' : 'Tidak ada perubahan lokal tertunda.';
-      const synced = state.lastSyncedAt ? `Terakhir sinkron: ${formatDateTime(state.lastSyncedAt)}.` : 'Belum ada waktu sinkron.';
-      const revision = `Revision lokal/server terakhir: ${state.lastSyncedRevision}.`;
-      label.textContent = `${synced} ${revision} ${dirtyText}`;
+      if(!label) return;
+      const synced = state.lastSyncedAt ? `Sinkron terakhir: ${formatDateTime(state.lastSyncedAt)}` : 'Belum ada waktu sinkron';
+      const dirtyText = state.localDirty ? ' · ada perubahan lokal' : '';
+      label.textContent = `${synced}${dirtyText}`;
     }
 
     function readData(key, fallback){
@@ -1292,10 +1466,35 @@
       const value = state.cache[key];
       return value === undefined ? fallback : value;
     }
+    function renderAfterDataChange(key){
+      renderSyncMeta();
+      if(key === STORAGE_KEYS.goals){
+        renderGoals();
+        if(state.currentTab === 'timeline') renderTimeline();
+        return;
+      }
+      if(key === STORAGE_KEYS.journal){
+        if(state.currentTab === 'timeline') renderTimeline();
+        return;
+      }
+      if(key === STORAGE_KEYS.weeklyReviews){
+        if(state.currentTab === 'timeline') renderTimeline();
+        return;
+      }
+      if(key === STORAGE_KEYS.englishDays){
+        if(state.currentTab === 'weekly') renderEnglishTracker();
+        return;
+      }
+      if(key === STORAGE_KEYS.products){
+        if(state.currentTab === 'products') renderProducts();
+        if(state.currentTab === 'timeline') renderTimeline();
+      }
+    }
+
     function writeData(key, value){
       state.cache[key] = value;
       queueSave();
-      renderAll();
+      renderAfterDataChange(key);
     }
 
     function getGoals(){
@@ -1319,7 +1518,11 @@
     function getEnglishDays(){
       return readData(STORAGE_KEYS.englishDays, {});
     }
-    function setEnglishDays(obj){
+    function getEnglishMeta(){
+      return state.cache?.__englishMeta || {};
+    }
+    function setEnglishDays(obj, meta){
+      state.cache.__englishMeta = meta || state.cache.__englishMeta || {};
       writeData(STORAGE_KEYS.englishDays, obj);
     }
     function getProducts(){
@@ -1327,6 +1530,16 @@
     }
     function setProducts(list){
       writeData(STORAGE_KEYS.products, list);
+    }
+
+    function markDeleted(bucket, id, deletedAt=nowIso()){
+      state.cache.__deleted = state.cache.__deleted || { goals: [], products: [] };
+      const existing = (state.cache.__deleted[bucket] || []).filter(item => item.id !== id);
+      state.cache.__deleted[bucket] = [...existing, { id, deletedAt }];
+    }
+    function clearDeleted(bucket, id){
+      if(!state.cache?.__deleted?.[bucket]) return;
+      state.cache.__deleted[bucket] = state.cache.__deleted[bucket].filter(item => item.id !== id);
     }
 
     function showToast(msg){
@@ -1338,7 +1551,15 @@
     }
 
     function renderFamilyChips(){
-      document.getElementById('familyChips').innerHTML = PEOPLE.map(p=>`<span class="chip"><span class="chip-dot" style="background:${p.color}"></span>${escapeHtml(p.key)}</span>`).join('');
+      const selected = getSelectedPeopleKeys();
+      const allActive = isGlobalAllSelected();
+      document.getElementById('familyChips').innerHTML = PEOPLE.map(p=>{
+        const active = allActive ? p.key==='Bersama' : selected.includes(p.key);
+        return `<button type="button" class="chip scope-chip ${active?'active':''}" data-scope-person="${escapeHtml(p.key)}" aria-pressed="${active?'true':'false'}"><span class="chip-dot" style="background:${p.color}"></span>${escapeHtml(p.key)}</button>`;
+      }).join('');
+      document.querySelectorAll('[data-scope-person]').forEach(btn=>{
+        btn.addEventListener('click', ()=>toggleGlobalPerson(btn.dataset.scopePerson));
+      });
     }
 
     function renderTabs(){
@@ -1369,6 +1590,7 @@
     }
 
     function toggleGoalDone(id){
+      const stamp = nowIso();
       const goals = getGoals().map(g => {
         if(g.id !== id) return g;
         const done = !g.done;
@@ -1377,15 +1599,18 @@
           done,
           status: done ? 'Selesai' : 'Aktif',
           progress: done ? 100 : (g.progress === 100 ? 0 : g.progress),
-          completedAt: done ? getTodayISO() : ''
+          completedAt: done ? getTodayISO() : '',
+          updatedAt: stamp
         };
       });
+      clearDeleted('goals', id);
       setGoals(goals);
       showToast('Status goal diperbarui');
     }
 
     function deleteGoal(id){
       if(!confirm('Hapus goal ini?')) return;
+      markDeleted('goals', id);
       const goals = getGoals().filter(g=>g.id!==id);
       setGoals(goals);
       showToast('Goal dihapus');
@@ -1406,6 +1631,7 @@
         status:'Aktif',
         progress:0,
         createdAt:getTodayISO(),
+        updatedAt: nowIso(),
         order
       }, order)];
       if(placement.value === 'top'){
@@ -1472,7 +1698,8 @@
       const id = document.getElementById('goalModalId').value;
       const text = document.getElementById('goalModalNewNote').value.trim();
       if(!text) return;
-      const goals = getGoals().map(g => g.id===id ? { ...g, notes:[...(g.notes||[]), { id: uid('note'), date:getTodayISO(), text }] } : g);
+      const stamp = nowIso();
+      const goals = getGoals().map(g => g.id===id ? { ...g, updatedAt: stamp, notes:[...(g.notes||[]), { id: uid('note'), date:getTodayISO(), text, updatedAt: stamp }] } : g);
       setGoals(goals);
       const goal = goals.find(g=>g.id===id);
       renderGoalModalNotes(goal.notes || []);
@@ -1491,6 +1718,7 @@
         const newPerson = document.getElementById('goalModalPerson').value;
         const updated = {
           ...g,
+          updatedAt: nowIso(),
           text: document.getElementById('goalModalText').value.trim(),
           person: newPerson,
           status,
@@ -1525,32 +1753,22 @@
     }
 
     function getFilteredPeople(){
-      return state.currentGoalFilter === 'all'
-        ? PEOPLE
-        : PEOPLE.filter(p=>p.key===state.currentGoalFilter);
+      return PEOPLE.filter(p=>matchesGlobalPerson(p.key));
     }
 
     function renderGoalFilterBar(){
       const target = document.getElementById('goalFilterBar');
-      const summary = getGoals().reduce((acc,g)=>{
-        acc[g.person] = acc[g.person] || { active:0, done:0 };
-        if(g.done) acc[g.person].done += 1;
-        else acc[g.person].active += 1;
-        return acc;
-      }, {});
-      const buttons = [`<button class="segment-btn ${state.currentGoalFilter==='all'?'active':''}" data-goal-filter="all">Semua</button>`]
-        .concat(PEOPLE.map(p => {
-          const data = summary[p.key] || { active:0, done:0 };
-          return `<button class="segment-btn ${state.currentGoalFilter===p.key?'active':''}" data-goal-filter="${p.key}">${p.key} (${data.active}/${data.done})</button>`;
-        }));
-      target.innerHTML = buttons.join('');
-      target.querySelectorAll('[data-goal-filter]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{ state.currentGoalFilter = btn.dataset.goalFilter; renderGoals(); });
-      });
+      const label = getGlobalScopeLabel();
+      target.innerHTML = `
+        <span class="badge info">Scope aktif: ${escapeHtml(label)}</span>
+        <span class="mini-muted">Gunakan chip keluarga di header untuk ganti fokus. Bisa pilih beberapa orang sekaligus untuk project couple / kolaborasi.</span>
+        ${isGlobalAllSelected() ? '' : '<button class="btn secondary small" id="resetGlobalScopeBtn">Kembali ke Bersama</button>'}
+      `;
+      document.getElementById('resetGlobalScopeBtn')?.addEventListener('click', ()=>toggleGlobalPerson('Bersama'));
     }
 
     function renderGoalSummary(){
-      const goals = getGoals();
+      const goals = filterItemsByGlobalPerson(getGoals(), 'person');
       const active = goals.filter(g=>!g.done);
       const done = goals.filter(g=>g.done);
       const overdue = active.filter(g=>g.deadline && getDeadlineInfo(g.deadline, false)?.cls === 'danger');
@@ -1571,7 +1789,7 @@
       const target = document.getElementById('goalsGrid');
       const peopleToRender = getFilteredPeople();
       target.innerHTML = peopleToRender.map(person => {
-        const goals = getGoals().filter(g=>g.person===person.key).sort((a,b)=>a.order-b.order);
+        const goals = filterItemsByGlobalPerson(getGoals(), 'person').filter(g=>g.person===person.key).sort((a,b)=>a.order-b.order);
         const activeGoals = goals.filter(g=>!g.done);
         const doneGoals = goals.filter(g=>g.done).sort((a,b)=>compareDateStrings(b.completedAt,a.completedAt));
         const tooMany = activeGoals.length > 5;
@@ -1622,29 +1840,34 @@
       const warnings = getGoalWarnings(goal);
       const badges = [
         statusLabel(goal.done ? 'Selesai' : goal.status, goal.done ? 'success' : (goal.status === 'Pause' ? 'warning' : 'info')),
-        goal.progress ? statusLabel(`Progress ${goal.progress}%`, 'info') : '',
-        `<span class="health-badge ${health.cls}">${health.label}</span>`
-      ];
+        due ? statusLabel(due.text, due.cls) : '',
+        statusLabel(`${goal.progress || 0}%`, 'info')
+      ].filter(Boolean);
       if(goal.category) badges.push(statusLabel(goal.category, 'info'));
-      if(due) badges.push(statusLabel(due.text, due.cls));
-      if(goal.reviewDate) badges.push(statusLabel(`Review ${formatDateTimeParts(goal.reviewDate, goal.reviewTime)}`, 'warning'));
-      if(goal.deadline && goal.deadlineTime) badges.push(statusLabel(`Jam ${formatTime(goal.deadlineTime)}`, 'danger'));
-      const latestNote = goal.notes && goal.notes.length ? goal.notes[goal.notes.length-1].text : '';
+      const latestNote = goal.notes && goal.notes.length ? goal.notes[goal.notes.length-1] : null;
       return `
         <div class="goal-item person-${getPersonClass(goal.person)} ${goal.done ? 'done' : ''}">
           <input class="goal-check" type="checkbox" ${goal.done?'checked':''} onchange="toggleGoalDone('${goal.id}')" />
           <div class="goal-main">
             <div class="goal-title">${escapeHtml(goal.text)}</div>
-            <div class="chip-wrap">${badges.join('')}</div>
+            <div class="chip-wrap">${badges.join('')}<span class="health-badge ${health.cls}">${health.label}</span></div>
             <div class="progress-wrap">
               <div class="progress-bar"><div class="progress-fill" style="width:${goal.progress || 0}%"></div></div>
-              <div class="mini-muted">${goal.measure ? escapeHtml(goal.measure) : 'Belum ada ukuran keberhasilan.'}</div>
+              ${goal.nextAction ? `<div class="goal-next"><strong>Next:</strong> ${escapeHtml(goal.nextAction)}</div>` : ''}
             </div>
-            ${goal.nextAction ? `<div class="goal-next"><strong>Next action:</strong> ${escapeHtml(goal.nextAction)}</div>` : ''}
-            ${goal.blocker ? `<div class="goal-blocker"><strong>Blocker:</strong> ${escapeHtml(goal.blocker)}</div>` : ''}
-            ${goal.supportNeeded ? `<div class="goal-support"><strong>Support:</strong> ${escapeHtml(goal.supportNeeded)}</div>` : ''}
-            ${warnings.length && !goal.done ? `<div class="goal-alert">${warnings.map(escapeHtml).join(' ')}</div>` : ''}
-            ${latestNote ? `<div class="mini-muted">Update terakhir: ${escapeHtml(latestNote)}</div>` : ''}
+            ${(goal.measure || goal.blocker || goal.supportNeeded || latestNote || warnings.length || goal.reviewDate) ? `
+              <details class="goal-details">
+                <summary>Lihat detail</summary>
+                <div class="goal-details-body">
+                  ${goal.measure ? `<div class="mini-muted"><strong>Ukuran berhasil:</strong> ${escapeHtml(goal.measure)}</div>` : ''}
+                  ${goal.reviewDate ? `<div class="mini-muted"><strong>Review:</strong> ${escapeHtml(formatDateTimeParts(goal.reviewDate, goal.reviewTime))}</div>` : ''}
+                  ${goal.blocker ? `<div class="goal-blocker"><strong>Blocker:</strong> ${escapeHtml(goal.blocker)}</div>` : ''}
+                  ${goal.supportNeeded ? `<div class="goal-support"><strong>Support:</strong> ${escapeHtml(goal.supportNeeded)}</div>` : ''}
+                  ${warnings.length && !goal.done ? `<div class="goal-alert">${warnings.map(escapeHtml).join(' ')}</div>` : ''}
+                  ${latestNote ? `<div class="mini-muted"><strong>Update terakhir:</strong> ${escapeHtml(latestNote.text)}</div>` : ''}
+                </div>
+              </details>
+            ` : ''}
           </div>
           <div class="goal-actions">
             ${!doneSection ? `<button class="icon-btn small" ${idx===0?'disabled':''} onclick="moveGoal('${goal.id}',-1)">↑</button>
@@ -1657,6 +1880,7 @@
     }
 
     function renderJournalMemberSwitcher(){
+
       const wrap = document.getElementById('journalMemberSwitcher');
       wrap.innerHTML = JOURNAL_PEOPLE.map(person => {
         const color = getPersonColor(person);
@@ -1686,7 +1910,7 @@
       const freeNote = document.getElementById('journal-free-note').value.trim();
       if(!answers.some(a=>a.answer) && !freeNote) return;
       const journal = getJournal();
-      journal.unshift({ id: uid('journal'), person: state.currentJournalPerson, date: getTodayISO(), answers, freeNote, timestamp: new Date().toISOString() });
+      journal.unshift({ id: uid('journal'), person: state.currentJournalPerson, date: getTodayISO(), answers, freeNote, timestamp: nowIso(), updatedAt: nowIso() });
       setJournal(journal);
       renderJournalForm();
       showToast(`Jurnal ${state.currentJournalPerson} tersimpan`);
@@ -1721,7 +1945,7 @@
       const commitment = document.getElementById('commitment').value.trim();
       if(!wentWell && !toImprove && !commitment) return;
       const reviews = getReviews();
-      reviews.unshift({ id: uid('review'), date: getTodayISO(), wentWell, toImprove, commitment });
+      reviews.unshift({ id: uid('review'), date: getTodayISO(), wentWell, toImprove, commitment, updatedAt: nowIso() });
       setReviews(reviews);
       document.getElementById('wentWell').value='';
       document.getElementById('toImprove').value='';
@@ -1756,13 +1980,18 @@
     }
     function toggleEnglishDay(day){
       const days = { ...getEnglishDays() };
+      const meta = { ...getEnglishMeta() };
       days[day] = !days[day];
       if(!days[day]) delete days[day];
-      setEnglishDays(days);
+      meta[day] = nowIso();
+      setEnglishDays(days, meta);
     }
     function resetEnglishTracker(){
       if(!confirm('Reset semua tracker English?')) return;
-      setEnglishDays({});
+      const meta = { ...getEnglishMeta() };
+      const stamp = nowIso();
+      Array.from({length:30}, (_,i)=>String(i+1)).forEach(day=>{ meta[day] = stamp; });
+      setEnglishDays({}, meta);
       showToast('Tracker English direset');
     }
 
@@ -1795,6 +2024,7 @@
       if(!name) return;
       const item = defaultProductFields({
         id: uid('product'),
+        updatedAt: nowIso(),
         weekOf,
         owner,
         type: document.getElementById('productType').value || 'Lainnya',
@@ -1868,6 +2098,7 @@
         const status = document.getElementById('productEditStatus').value;
         return {
           ...item,
+          updatedAt: nowIso(),
           name: document.getElementById('productEditName').value.trim(),
           type: document.getElementById('productEditType').value,
           typeOther: document.getElementById('productEditTypeOther').value.trim(),
@@ -1903,7 +2134,9 @@
         text,
         next: document.getElementById('productProgressNext').value.trim()
       };
-      const products = getProducts().map(item => item.id===id ? { ...item, updates:[...(item.updates||[]), update] } : item);
+      const stamp = nowIso();
+      update.updatedAt = stamp;
+      const products = getProducts().map(item => item.id===id ? { ...item, updatedAt: stamp, updates:[...(item.updates||[]), update] } : item);
       setProducts(products);
       closeModal('productProgressModal');
       showToast('Progress produk ditambahkan');
@@ -1920,7 +2153,7 @@
       const id = document.getElementById('productCompleteId').value;
       const date = document.getElementById('productCompleteDate').value || getTodayISO();
       const learning = document.getElementById('productCompleteLearning').value.trim();
-      const products = getProducts().map(item => item.id===id ? { ...item, status:'Selesai', actualDate:date, learning } : item);
+      const products = getProducts().map(item => item.id===id ? { ...item, status:'Selesai', actualDate:date, learning, updatedAt: nowIso() } : item);
       setProducts(products);
       closeModal('productCompleteModal');
       showToast('Produk ditandai selesai');
@@ -1928,28 +2161,20 @@
 
     function deleteProduct(id){
       if(!confirm('Hapus entry produk ini?')) return;
+      markDeleted('products', id);
       setProducts(getProducts().filter(p=>p.id!==id));
       showToast('Produk dihapus');
     }
 
     function renderProductFilters(){
       const target = document.getElementById('productFilterBar');
-      const products = getProducts();
-      const countMap = products.reduce((acc,p)=>{
-        acc[p.owner] = (acc[p.owner] || 0) + 1;
-        return acc;
-      }, {});
-      const buttons = [`<button class="segment-btn ${state.currentProductFilter==='all'?'active':''}" data-product-filter="all">Semua (${products.length})</button>`]
-        .concat(PEOPLE.map(p=>`<button class="segment-btn ${state.currentProductFilter===p.key?'active':''}" data-product-filter="${p.key}">${p.key} (${countMap[p.key] || 0})</button>`));
-      target.innerHTML = buttons.join('');
-      target.querySelectorAll('[data-product-filter]').forEach(btn=>{
-        btn.addEventListener('click', ()=>{ state.currentProductFilter = btn.dataset.productFilter; renderProducts(); });
-      });
+      target.innerHTML = `<span class="badge info">Scope aktif: ${escapeHtml(getGlobalScopeLabel())}</span>`;
     }
 
     function renderProducts(){
       renderProductFilters();
-      const products = state.currentProductFilter==='all' ? getProducts() : getProducts().filter(p=>p.owner===state.currentProductFilter);
+      const scopedProducts = filterItemsByGlobalPerson(getProducts().map(p=>({...p, person:p.owner})), 'person').map(({person,...rest})=>rest);
+      const products = scopedProducts;
       const active = products.filter(p=>p.status !== 'Selesai');
       const completed = products.filter(p=>p.status === 'Selesai').sort((a,b)=>compareDateStrings(b.actualDate,a.actualDate));
       document.getElementById('productStats').innerHTML = [
@@ -2063,7 +2288,7 @@
     }
 
     function renderTimelineStats(){
-      const activeGoals = getGoals().filter(g=>!g.done);
+      const activeGoals = filterItemsByGlobalPerson(getGoals(), 'person').filter(g=>!g.done);
       const activeWithDeadline = activeGoals.filter(g=>g.deadline);
       const withoutDeadline = activeGoals.filter(g=>!g.deadline);
       const overdue = activeWithDeadline.filter(g=>getDeadlineInfo(g.deadline, false)?.cls === 'danger');
@@ -2092,7 +2317,7 @@
 
     function renderGantt(){
       renderTimelineStats();
-      const activeGoals = getGoals().filter(g=>!g.done).sort((a,b)=>{
+      const activeGoals = filterItemsByGlobalPerson(getGoals(), 'person').filter(g=>!g.done).sort((a,b)=>{
         const aHas = !!a.deadline;
         const bHas = !!b.deadline;
         if(aHas && bHas) return compareDateStrings(a.deadline,b.deadline) || a.person.localeCompare(b.person) || a.order-b.order;
@@ -2126,7 +2351,7 @@
         acc[g.person] = (acc[g.person] || 0) + 1;
         return acc;
       }, {});
-      document.getElementById('ganttLegend').innerHTML = PEOPLE.map(p=>`<span class="legend-chip"><span class="chip-dot" style="background:${p.color}"></span>${p.key} (${countMap[p.key] || 0})</span>`).join('');
+      document.getElementById('ganttLegend').innerHTML = getFilteredPeople().map(p=>`<span class="legend-chip"><span class="chip-dot" style="background:${p.color}"></span>${p.key} (${countMap[p.key] || 0})</span>`).join('');
 
       if(!activeGoals.length){
         document.getElementById('ganttWrap').innerHTML = '<div class="info-box" style="margin:12px">Belum ada goal aktif.</div>';
@@ -2226,7 +2451,7 @@
     }
 
     function renderTimelineFeed(){
-      const feed = buildTimelineItems().filter(item => (state.currentFeedType === 'all' || item.kind === state.currentFeedType) && (state.currentFeedPerson === 'all' || item.person === state.currentFeedPerson));
+      const feed = buildTimelineItems().filter(item => matchesGlobalPerson(item.person)).filter(item => (state.currentFeedType === 'all' || item.kind === state.currentFeedType) && (state.currentFeedPerson === 'all' || item.person === state.currentFeedPerson));
       const target = document.getElementById('timelineFeed');
       if(!feed.length){
         target.innerHTML = '<div class="mini-muted">Belum ada aktivitas pada filter ini.</div>';
@@ -2262,6 +2487,9 @@
     }
 
     function renderTimeline(){
+      const feedPersonOptions = ['all', ...getSelectedPeopleKeys().filter(p=>p!=='Bersama')];
+      document.getElementById('feedPersonFilter').innerHTML = (isGlobalAllSelected() ? ['all', ...PEOPLE.map(p=>p.key)] : ['all', ...feedPersonOptions]).map(value=>`<option value="${value}">${value==='all'?'Semua dalam scope':value}</option>`).join('');
+      if(state.currentFeedPerson !== 'all' && !isGlobalAllSelected() && !getSelectedPeopleKeys().includes(state.currentFeedPerson)) state.currentFeedPerson = 'all';
       renderGantt();
       renderTimelineFeed();
       document.getElementById('feedTypeFilter').value = state.currentFeedType;
@@ -2269,11 +2497,11 @@
     }
 
     function buildSummaryText(){
-      const goals = getGoals();
-      const journal = getJournal();
+      const goals = filterItemsByGlobalPerson(getGoals(), 'person');
+      const journal = filterItemsByGlobalPerson(getJournal(), 'person');
       const reviews = getReviews();
       const englishDays = getEnglishDays();
-      const products = getProducts();
+      const products = filterItemsByGlobalPerson(getProducts().map(p=>({...p, person:p.owner})), 'person').map(({person,...rest})=>rest);
       const extraNotes = document.getElementById('extraNotes').value.trim();
       const today = getTodayISO();
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-6); const cutoffISO = cutoff.toISOString().slice(0,10);
@@ -2292,6 +2520,7 @@
       return [
         '=== FAMILY GROWTH SYSTEM — SUMMARY ===',
         `Tanggal: ${formatDate(today)}`,
+        `Scope aktif: ${getGlobalScopeLabel()}`,
         '',
         '--- GOALS STATUS ---',
         goalsSection,
@@ -2401,6 +2630,9 @@
         btn.addEventListener('click', ()=>{
           state.currentTab = btn.dataset.tab;
           renderTabs();
+          if(state.currentTab === 'goals') renderGoals();
+          if(state.currentTab === 'journal'){ renderJournalMemberSwitcher(); renderJournalForm(); }
+          if(state.currentTab === 'weekly') renderEnglishTracker();
           if(state.currentTab === 'timeline') renderTimeline();
           if(state.currentTab === 'products') renderProducts();
         });
@@ -2469,11 +2701,6 @@
         }
       });
 
-      setInterval(()=>{
-        if(document.visibilityState === 'visible' && !state.localDirty && !state.saveInFlight){
-          loadRemote(false).catch(()=>{});
-        }
-      }, 30000);
     }
 
     window.addGoal = addGoal;
@@ -2487,6 +2714,7 @@
     window.openProductProgressModal = openProductProgressModal;
     window.openProductCompleteModal = openProductCompleteModal;
     window.deleteProduct = deleteProduct;
+    window.toggleGlobalPerson = toggleGlobalPerson;
 
     async function init(){
       fillSelectOptions();
