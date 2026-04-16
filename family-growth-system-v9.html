@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- Family Growth System v7.2.1 — 2026-04-15 -->
+<!-- Family Growth System v7.2.7 — 2026-04-16 -->
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Family Growth System v7.2.1</title>
+  <title>Family Growth System v7.2.7</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
@@ -79,26 +79,32 @@
       box-shadow:var(--shadow);
       margin-bottom:14px;
     }
-    .title-card h1{margin:0 0 8px;font-size:clamp(28px,4.2vw,38px);line-height:1.02;font-family:var(--font-display);font-weight:800;letter-spacing:-.035em}
-    .title-card p{margin:0;color:#bfd0ec;font-size:14px;line-height:1.55;max-width:72ch}
+    .title-card h1{margin:0 0 10px;line-height:.98;font-family:var(--font-display);letter-spacing:-.045em;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}.title-main{font-size:clamp(34px,7vw,52px);font-weight:800;background:linear-gradient(92deg,#fff8d9 0%,#f6e27a 18%,#d4af37 48%,#f8e8a6 78%,#fff8d9 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 18px rgba(212,175,55,.22),0 0 34px rgba(246,226,122,.12)}.title-version{font-size:clamp(14px,2.8vw,18px);font-weight:700;color:#f6e27a;letter-spacing:.08em;text-transform:uppercase;opacity:.96;padding-bottom:5px;text-shadow:0 0 10px rgba(212,175,55,.14)}
+    .title-card p{margin:0;color:#bfd0ec;font-size:14px;line-height:1.55;max-width:72ch}.title-card .inline-help{max-width:56ch}
     .chip-row,.tabs,.member-switcher,.subtabs,.toolbar,.segment,.legend-row{display:flex;gap:8px;flex-wrap:wrap}
+    .ui-group-label{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7f96c0;opacity:.72;margin:0 0 8px;padding-left:2px;font-family:var(--font-ui)}
     .chip,.stat-chip,.legend-chip{
       color:var(--text);
       display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:7px 12px;
-      border-radius:999px;background:var(--surface-soft);border:1px solid var(--border);font-weight:700;white-space:nowrap;
+      border-radius:999px;background:var(--surface-soft);border:1px solid var(--border);font-weight:700;white-space:nowrap;font-family:var(--font-ui);
     }
-    .chip.scope-chip{cursor:pointer;user-select:none;transition:all .18s ease;box-shadow:var(--shadow)}
+    .chip.scope-chip{cursor:pointer;user-select:none;transition:all .18s ease;box-shadow:var(--shadow);font-size:15px;font-weight:700}
     .chip.scope-chip:hover{transform:translateY(-1px);border-color:#5B84D6}
-    .chip.scope-chip.active{background:linear-gradient(135deg,#4A8DFF,#6FA8FF);border-color:#6FA8FF;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 8px 24px rgba(74,141,255,.28)}
+    .chip.scope-chip.active{background:linear-gradient(135deg,#4A8DFF,#6FA8FF);border-color:#6FA8FF;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 8px 24px rgba(74,141,255,.28),0 0 18px rgba(111,168,255,.18)}
     .chip.scope-chip.active .chip-dot{box-shadow:0 0 0 3px rgba(255,255,255,.18)}
     .chip-dot{width:10px;height:10px;border-radius:999px;display:inline-block;flex:0 0 auto}
-    .tabs-wrap{position:sticky;top:0;z-index:20;padding:10px 0 12px;background:linear-gradient(180deg,rgba(7,11,23,.98) 78%,rgba(7,11,23,0));margin-bottom:10px}
-    .tabs{overflow:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+    .tabs-wrap{position:sticky;top:0;z-index:20;padding:12px 0 14px;background:linear-gradient(180deg,rgba(7,11,23,.985) 82%,rgba(7,11,23,0));margin-bottom:12px;border-top:1px solid rgba(78,104,156,.12)}
+    .tabs-wrap .ui-group-label{margin-bottom:10px;color:#89a2d0}
+    .tabs{overflow:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding:4px 0 4px}
     .tab-btn,.member-btn,.subtab-btn,.segment-btn{
-      min-height:42px;border-radius:999px;border:1px solid var(--border);background:var(--surface);
-      padding:9px 14px;white-space:nowrap;font-weight:800;color:var(--text);box-shadow:var(--shadow);cursor:pointer;
+      min-height:42px;border:1px solid var(--border);background:var(--surface);
+      padding:9px 14px;white-space:nowrap;font-weight:700;color:var(--text);box-shadow:var(--shadow);cursor:pointer;font-family:var(--font-ui);
     }
-    .tab-btn.active,.subtab-btn.active,.segment-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .tab-btn{border-radius:14px;background:linear-gradient(180deg,#101b34,#0b1428);border-color:#28385a;box-shadow:0 10px 22px rgba(2,6,23,.28), inset 0 1px 0 rgba(255,255,255,.04);font-size:16px;font-weight:800;letter-spacing:-.02em}
+    .tab-btn:hover{transform:translateY(-1px);border-color:#47679e}
+    .tab-btn.active{background:linear-gradient(135deg,#4A8DFF,#6FB8FF);color:#fff;border-color:#6FB8FF;box-shadow:0 0 0 1px rgba(255,255,255,.05) inset,0 10px 26px rgba(74,141,255,.34);font-weight:800}
+    .member-btn,.subtab-btn,.segment-btn{border-radius:999px}
+    .subtab-btn.active,.segment-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
     .member-btn.active{color:#fff}
     .panel{display:none;animation:fadeIn .18s ease}
     .panel.active{display:block}
@@ -242,8 +248,8 @@
     details.log-item > summary{list-style:none;cursor:pointer;padding:13px 14px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px}
     details.log-item > summary::-webkit-details-marker{display:none}
     .smarter-box{display:grid;gap:8px;padding:12px;border-radius:12px;background:var(--surface-soft);border:1px dashed var(--border)}
-    .summary-grid{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
-    .summary-grid .stat-chip{justify-content:flex-start}
+    .summary-grid{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .summary-grid .stat-chip{justify-content:flex-start;min-height:38px;padding:6px 14px;background:linear-gradient(180deg,#101d38,#0c1730);border-color:#2a426d;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
 
     .feed-title{font-family:var(--font-display);font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.025em}
     .feed-item,.qa-item,.question-item,.entry-card,.thread-item{background:linear-gradient(180deg,rgba(15,27,51,.72),rgba(10,19,37,.82))}
@@ -281,6 +287,10 @@
     .month-header.month-alt{background:linear-gradient(180deg,#1a467f,#135a84)}
     .day-header.month-alt{background:#102548}
     .day-header.month-alt.weekend{background:#153056}
+    .day-header.month-start,.gantt-cell.month-start{box-shadow:inset 2px 0 0 rgba(125,211,252,.55), inset 10px 0 18px rgba(56,189,248,.10)}
+    .day-header.month-start{background-image:linear-gradient(180deg,rgba(56,189,248,.18),rgba(56,189,248,.04))}
+    .day-header.month-start .day-number{color:#ecfeff}
+    .gantt-cell.month-start{background-image:linear-gradient(180deg,rgba(56,189,248,.06),rgba(56,189,248,.02))}
     .day-header.today{
       background:linear-gradient(180deg,#2a3f76,#17305c);
       box-shadow:inset 0 0 0 1px rgba(251,113,133,.28), 0 0 0 1px rgba(251,113,133,.12);
@@ -329,6 +339,52 @@
       50%{transform:scaleY(1.04);filter:brightness(1.08)}
     }
 
+
+
+    .owner-card{border-width:1px}
+    .owner-bersama{border-color:rgba(148,163,184,.34);background:linear-gradient(180deg,rgba(15,27,51,.76),rgba(10,19,37,.86))}
+    .owner-ayah{border-color:rgba(96,165,250,.38);background:linear-gradient(180deg,rgba(18,40,78,.78),rgba(10,19,37,.88))}
+    .owner-bunda{border-color:rgba(167,139,250,.38);background:linear-gradient(180deg,rgba(39,24,71,.78),rgba(10,19,37,.88))}
+    .owner-musa{border-color:rgba(245,158,11,.40);background:linear-gradient(180deg,rgba(60,34,7,.78),rgba(10,19,37,.88))}
+    .owner-maryam{border-color:rgba(52,211,153,.38);background:linear-gradient(180deg,rgba(12,54,48,.78),rgba(10,19,37,.88))}
+    .owner-maymunah{border-color:rgba(244,114,182,.40);background:linear-gradient(180deg,rgba(62,18,48,.78),rgba(10,19,37,.88))}
+
+    .person-card.owner-card{box-shadow:var(--shadow)}
+    .person-card.owner-card .person-card-head{backdrop-filter:blur(6px)}
+    .gantt-table td.label-col.owner-bersama{background:linear-gradient(180deg,rgba(36,48,72,.94),rgba(13,22,39,.98))}
+    .gantt-table td.label-col.owner-ayah{background:linear-gradient(180deg,rgba(17,48,94,.94),rgba(9,20,37,.98))}
+    .gantt-table td.label-col.owner-bunda{background:linear-gradient(180deg,rgba(52,28,92,.94),rgba(11,20,37,.98))}
+    .gantt-table td.label-col.owner-musa{background:linear-gradient(180deg,rgba(76,42,8,.94),rgba(11,20,37,.98))}
+    .gantt-table td.label-col.owner-maryam{background:linear-gradient(180deg,rgba(11,64,54,.94),rgba(11,20,37,.98))}
+    .gantt-table td.label-col.owner-maymunah{background:linear-gradient(180deg,rgba(79,21,57,.94),rgba(11,20,37,.98))}
+    .item-kind-chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;border:1px solid transparent}
+    .item-kind-goal{background:rgba(59,130,246,.16);border-color:rgba(96,165,250,.35);color:#dbeafe}
+    .item-kind-product{background:rgba(245,158,11,.16);border-color:rgba(251,191,36,.35);color:#fde68a}
+    .feed-kind-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;border:1px solid transparent}
+    .feed-kind-chip.goal{background:rgba(59,130,246,.15);border-color:rgba(96,165,250,.35);color:#dbeafe}
+    .feed-kind-chip.product{background:rgba(245,158,11,.15);border-color:rgba(251,191,36,.35);color:#fde68a}
+    .feed-kind-chip.journal{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.35);color:#d1fae5}
+    .feed-kind-chip.review{background:rgba(167,139,250,.15);border-color:rgba(167,139,250,.35);color:#ede9fe}
+    .gantt-bar.goal-bar{height:34px;top:22px}
+    .gantt-bar.product-bar{height:22px;top:28px;border-style:dashed;border-width:2px;border-radius:12px;box-shadow:0 8px 18px rgba(245,158,11,.16), inset 0 1px 0 rgba(255,255,255,.18)}
+    .gantt-no-target{position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:10px;line-height:1.2;color:#fcd34d;font-weight:800;max-width:calc(var(--day-col) - 12px)}
+
+    #productFormCard{transition:border-color .18s ease, box-shadow .18s ease, background .18s ease}
+    #productFormCard.owner-bersama{border-color:rgba(148,163,184,.34);box-shadow:0 18px 40px rgba(2,6,23,.42), inset 0 1px 0 rgba(255,255,255,.03)}
+    #productFormCard.owner-ayah{border-color:rgba(96,165,250,.42);box-shadow:0 18px 40px rgba(2,6,23,.42), 0 0 0 1px rgba(96,165,250,.08) inset}
+    #productFormCard.owner-bunda{border-color:rgba(167,139,250,.42);box-shadow:0 18px 40px rgba(2,6,23,.42), 0 0 0 1px rgba(167,139,250,.08) inset}
+    #productFormCard.owner-musa{border-color:rgba(245,158,11,.44);box-shadow:0 18px 40px rgba(2,6,23,.42), 0 0 0 1px rgba(245,158,11,.08) inset}
+    #productFormCard.owner-maryam{border-color:rgba(52,211,153,.42);box-shadow:0 18px 40px rgba(2,6,23,.42), 0 0 0 1px rgba(52,211,153,.08) inset}
+    #productFormCard.owner-maymunah{border-color:rgba(244,114,182,.44);box-shadow:0 18px 40px rgba(2,6,23,.42), 0 0 0 1px rgba(244,114,182,.08) inset}
+    #productFormCard[class*="owner-"] .question-item,
+    #productFormCard[class*="owner-"] .note-box{transition:border-color .18s ease, background .18s ease}
+    #productFormCard.owner-bersama .question-item,#productFormCard.owner-bersama .note-box{border-color:rgba(148,163,184,.26)}
+    #productFormCard.owner-ayah .question-item,#productFormCard.owner-ayah .note-box{border-color:rgba(96,165,250,.30);background:linear-gradient(180deg,rgba(15,27,51,.78),rgba(10,19,37,.86))}
+    #productFormCard.owner-bunda .question-item,#productFormCard.owner-bunda .note-box{border-color:rgba(167,139,250,.30);background:linear-gradient(180deg,rgba(34,21,61,.78),rgba(10,19,37,.86))}
+    #productFormCard.owner-musa .question-item,#productFormCard.owner-musa .note-box{border-color:rgba(245,158,11,.32);background:linear-gradient(180deg,rgba(51,32,9,.78),rgba(10,19,37,.86))}
+    #productFormCard.owner-maryam .question-item,#productFormCard.owner-maryam .note-box{border-color:rgba(52,211,153,.30);background:linear-gradient(180deg,rgba(12,50,44,.78),rgba(10,19,37,.86))}
+    #productFormCard.owner-maymunah .question-item,#productFormCard.owner-maymunah .note-box{border-color:rgba(244,114,182,.32);background:linear-gradient(180deg,rgba(55,18,44,.78),rgba(10,19,37,.86))}
+
     @media (max-width:700px){
       .feed-filter-bar{display:grid;grid-template-columns:1fr;gap:10px}
       .feed-filter-bar .select{width:100%}
@@ -361,15 +417,15 @@
     <header class="card title-card">
       <div class="section-head" style="margin-bottom:10px">
         <div>
-          <h1>Family Growth System v7.2.1</h1>
+          <h1><span class="title-main">Family Growth System</span><span class="title-version">v7.2.7</span></h1>
                   </div>
         <div class="toolbar">
           <span class="sync-pill loading" id="syncStatus">Memuat...</span>
           <button class="btn secondary small" id="syncNowBtn">Sync now</button>
-          <button class="btn secondary small" id="forceSaveBtn" style="display:none">Force save local</button>
+          <button class="btn secondary small" id="forceSaveBtn" style="display:none">Force save cloud</button>
         </div>
       </div>
-      <div class="inline-help" style="margin:10px 0 8px">Context keluarga — klik untuk fokus per orang, atau pilih beberapa orang sekaligus untuk project couple / kolaborasi.</div>
+      <div class="ui-group-label" style="margin-top:10px">Fokus keluarga</div>
       <div class="chip-row" id="familyChips"></div>
       <details style="margin-top:10px">
         <summary class="inline-help" style="cursor:pointer;user-select:none">Backup & restore (advanced)</summary>
@@ -384,12 +440,13 @@
     </header>
 
     <div class="tabs-wrap">
+      <div class="ui-group-label">Navigasi</div>
       <nav class="tabs" aria-label="Tab navigasi">
         <button class="tab-btn active" data-tab="goals">Goals</button>
+        <button class="tab-btn" data-tab="products">1W1Product</button>
         <button class="tab-btn" data-tab="timeline">Timeline</button>
         <button class="tab-btn" data-tab="journal">Journal</button>
         <button class="tab-btn" data-tab="weekly">Weekly Review</button>
-        <button class="tab-btn" data-tab="products">1W1Product</button>
       </nav>
     </div>
 
@@ -410,10 +467,10 @@
       <section class="panel" id="panel-timeline">
         <div class="grid two-col">
           <div>
-            <div class="card">
+            <div class="card owner-bersama" id="timelineCard">
               <div class="section-head">
                 <div>
-                  <h2>Goal Calendar Gantt</h2>
+                  <h2>Goals &amp; Product</h2>
                                   </div>
                 <div class="toolbar">
                   <button class="btn secondary small" id="timelinePrevBtn">&larr; Sebelumnya</button>
@@ -431,7 +488,7 @@
               <div class="section-head">
                 <div>
                   <h2>Activity Feed</h2>
-                  <p class="helper">Journal, weekly review, progress produk, dan goal selesai dalam urutan kronologis terbalik.</p>
+                  <p class="helper">Journal, weekly review, aktivitas product, dan goal selesai dalam urutan kronologis terbalik.</p>
                 </div>
               </div>
               <div class="toolbar feed-filter-bar" style="margin-bottom:12px">
@@ -439,8 +496,8 @@
                   <option value="all">Semua jenis</option>
                   <option value="Journal">Journal</option>
                   <option value="Weekly Review">Weekly Review</option>
-                  <option value="1W1Product">1W1Product</option>
-                  <option value="Goal Selesai">Goal Selesai</option>
+                  <option value="Product">Product</option>
+                  <option value="Goal">Goal</option>
                 </select>
                 <select id="feedPersonFilter" class="select"></select>
               </div>
@@ -520,7 +577,7 @@
       <section class="panel" id="panel-products">
         <div class="grid two-col">
           <div>
-            <div class="card">
+            <div class="card" id="productFormCard">
               <div class="section-head">
                 <div>
                   <h2>1W1Product</h2>
@@ -909,6 +966,7 @@
       products: 'fgs_products'
     };
     const SCHEMA_VERSION = 5;
+    const LOCAL_CACHE_KEY = 'family_growth_system_cache_v727';
 
     const PEOPLE = [
       { key: 'Bersama', color: 'var(--bersama)' },
@@ -1015,11 +1073,16 @@
     function nowIso(){
       return new Date().toISOString();
     }
+    function toLocalISO(dateObj){
+      const d = new Date(dateObj);
+      if(Number.isNaN(d.getTime())) return '';
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      return `${y}-${m}-${day}`;
+    }
     function getTodayISO(){
-      const now = new Date();
-      const offset = now.getTimezoneOffset();
-      const local = new Date(now.getTime()-offset*60000);
-      return local.toISOString().slice(0,10);
+      return toLocalISO(new Date());
     }
     function formatDate(dateStr){
       if(!dateStr) return '-';
@@ -1075,15 +1138,14 @@
       return isGlobalAllSelected() ? 'Bersama' : state.selectedPeople.join(' + ');
     }
     function toggleGlobalPerson(person){
+      const current = state.selectedPeople.filter(p=>p!=='Bersama');
       if(person === 'Bersama'){
         state.selectedPeople = ['Bersama'];
-      } else if(isGlobalAllSelected()){
-        state.selectedPeople = [person];
-      } else if(state.selectedPeople.includes(person)){
-        state.selectedPeople = state.selectedPeople.filter(p=>p!==person);
-        if(!state.selectedPeople.length) state.selectedPeople = ['Bersama'];
+      } else if(current.includes(person)){
+        const next = current.filter(p=>p!==person);
+        state.selectedPeople = next.length ? next : ['Bersama'];
       } else {
-        state.selectedPeople = [...state.selectedPeople, person];
+        state.selectedPeople = [...current, person];
       }
       if(state.selectedPeople.length === 1 && state.selectedPeople[0] !== 'Bersama' && JOURNAL_PEOPLE.includes(state.selectedPeople[0])){
         state.currentJournalPerson = state.selectedPeople[0];
@@ -1103,7 +1165,7 @@
     function isoTodayPlus(days){
       const d = new Date(getTodayISO() + 'T00:00:00');
       d.setDate(d.getDate() + days);
-      return d.toISOString().slice(0,10);
+      return toLocalISO(d);
     }
     function compareDateStrings(a,b){
       return String(a || '').localeCompare(String(b || ''));
@@ -1163,6 +1225,22 @@
     }
     function clone(obj){
       return JSON.parse(JSON.stringify(obj));
+    }
+    function saveCacheToLocal(){
+      try{
+        if(state.cache) localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(state.cache));
+      } catch(err){
+        console.warn('Local cache save failed', err);
+      }
+    }
+    function loadLocalCache(){
+      try{
+        const raw = localStorage.getItem(LOCAL_CACHE_KEY);
+        return raw ? migrateCache(JSON.parse(raw)) : null;
+      } catch(err){
+        console.warn('Local cache load failed', err);
+        return null;
+      }
     }
 
     function getStamp(value, fallback='1970-01-01T00:00:00.000Z'){
@@ -1420,6 +1498,7 @@
 
       if(state.localDirty && state.cache){
         state.cache = mergeCaches(state.cache, remoteCache);
+        saveCacheToLocal();
         state.lastSyncedRevision = Number(remoteCache.__meta?.revision || 0);
         state.lastSyncedAt = remoteCache.__meta?.updatedAt || '';
         state.conflict = false;
@@ -1430,6 +1509,7 @@
       }
 
       state.cache = remoteCache;
+      saveCacheToLocal();
       state.lastSyncedRevision = Number(remoteCache.__meta?.revision || 0);
       state.lastSyncedAt = remoteCache.__meta?.updatedAt || '';
       state.localDirty = false;
@@ -1448,6 +1528,7 @@
         headers: { 'Content-Type': 'application/json', 'X-Access-Key': API_KEY },
         body: JSON.stringify(payload)
       });
+      saveCacheToLocal();
       state.lastSyncedRevision = Number(payload.__meta?.revision || 0);
       state.lastSyncedAt = payload.__meta?.updatedAt || '';
       state.localDirty = false;
@@ -1478,6 +1559,7 @@
           headers: { 'Content-Type': 'application/json', 'X-Access-Key': API_KEY },
           body: JSON.stringify(payload)
         });
+        saveCacheToLocal();
         state.lastSyncedRevision = Number(payload.__meta?.revision || 0);
         state.lastSyncedAt = payload.__meta?.updatedAt || '';
         state.localDirty = false;
@@ -1549,6 +1631,7 @@
 
     function writeData(key, value){
       state.cache[key] = value;
+      saveCacheToLocal();
       queueSave();
       renderAfterDataChange(key);
     }
@@ -1827,7 +1910,6 @@
       const label = getGlobalScopeLabel();
       target.innerHTML = `
         <span class="badge info">Scope aktif: ${escapeHtml(label)}</span>
-        <span class="mini-muted">Gunakan chip keluarga di header untuk ganti fokus. Bisa pilih beberapa orang sekaligus untuk project couple / kolaborasi.</span>
         ${isDefaultBersamaScope() ? '' : '<button class="btn secondary small" id="resetGlobalScopeBtn">Kembali ke Bersama</button>'}
       `;
       document.getElementById('resetGlobalScopeBtn')?.addEventListener('click', ()=>toggleGlobalPerson('Bersama'));
@@ -1862,7 +1944,7 @@
         const activeHtml = activeGoals.length ? activeGoals.map((goal, idx)=>renderGoalCard(goal, idx, activeGoals.length)).join('') : '<div class="mini-muted">Belum ada goal aktif.</div>';
         const doneHtml = doneGoals.length ? doneGoals.map(goal=>renderGoalCard(goal, 0, 0, true)).join('') : '<div class="mini-muted">Belum ada goal selesai.</div>';
         return `
-          <section class="person-card">
+          <section class="person-card owner-card owner-${getPersonClass(person.key)}">
             <div class="person-card-head">
               <div class="person-title"><span class="chip-dot" style="background:${person.color}"></span>${escapeHtml(person.key)}</div>
               <div class="person-counter">${activeGoals.length} aktif · ${doneGoals.length} selesai</div>
@@ -2072,6 +2154,7 @@
       document.getElementById('feedPersonFilter').innerHTML = feedPerson.map(value=>`<option value="${value}">${value==='all'?'Semua orang':value}</option>`).join('');
       document.getElementById('productWeek').value = getTodayISO();
       document.getElementById('productOwner').value = 'Bersama';
+      updateProductOwnerAccent();
     }
 
     function toggleProductTypeWrap(){
@@ -2079,6 +2162,14 @@
     }
     function toggleProductEditTypeWrap(){
       document.getElementById('productEditTypeOtherWrap').style.display = document.getElementById('productEditType').value === 'Lainnya' ? 'block' : 'none';
+    }
+
+    function updateProductOwnerAccent(){
+      const card = document.getElementById('productFormCard');
+      const owner = document.getElementById('productOwner')?.value || 'Bersama';
+      if(!card) return;
+      card.classList.remove('owner-bersama','owner-ayah','owner-bunda','owner-musa','owner-maryam','owner-maymunah');
+      card.classList.add(`owner-${getPersonClass(owner)}`);
     }
 
     function addProduct(){
@@ -2117,6 +2208,7 @@
     function clearProductForm(){
       document.getElementById('productWeek').value = getTodayISO();
       document.getElementById('productOwner').value = 'Bersama';
+      updateProductOwnerAccent();
       document.getElementById('productType').value = 'Tulisan';
       document.getElementById('productTypeOther').value = '';
       document.getElementById('productName').value = '';
@@ -2254,11 +2346,70 @@
       document.getElementById('completedProductLog').innerHTML = completed.length ? completed.map(renderProductCard).join('') : '<div class="mini-muted">Belum ada produk selesai.</div>';
     }
 
+    function getProductTypeLabel(item){
+      return item.type === 'Lainnya' && item.typeOther ? item.typeOther : item.type;
+    }
+    function getProductStageValue(item){
+      if(item.status === 'Butuh review') return 90;
+      if(item.status === 'Pause') return 45;
+      return Math.min(85, 20 + ((item.updates || []).length * 15));
+    }
+    function getActiveTimelineRows(){
+      const goalRows = filterItemsByGlobalPerson(getGoals(), 'person').filter(g=>!g.done).map(goal => ({
+        id: goal.id,
+        rowType: 'Goal',
+        person: goal.person,
+        title: goal.text,
+        startDate: goal.startDate || goal.createdAt || getTodayISO(),
+        startTime: goal.startTime || '',
+        deadline: goal.deadline || '',
+        deadlineTime: goal.deadlineTime || '',
+        reviewDate: goal.reviewDate || '',
+        reviewTime: goal.reviewTime || '',
+        category: goal.category || '',
+        statusText: `${goal.progress || 0}%`,
+        progress: goal.progress || 0,
+        health: getGoalHealth(goal),
+        notes: goal.notes || [],
+        detailText: goal.nextAction || goal.measure || '',
+        barMode: 'goal'
+      }));
+      const productRows = filterItemsByGlobalPerson(getProducts().map(p=>({...p, person:p.owner})), 'person')
+        .map(({person,...rest})=>rest)
+        .filter(item => item.status !== 'Selesai')
+        .map(item => ({
+          id: item.id,
+          rowType: 'Product',
+          person: item.owner,
+          title: item.name,
+          startDate: item.weekOf || item.createdAt || getTodayISO(),
+          startTime: '',
+          deadline: item.targetDate || '',
+          deadlineTime: '',
+          reviewDate: '',
+          reviewTime: '',
+          category: getProductTypeLabel(item) || '',
+          statusText: item.status || 'Sedang dibangun',
+          progress: getProductStageValue(item),
+          health: null,
+          notes: item.updates || [],
+          detailText: item.use || '',
+          barMode: 'product'
+        }));
+      return [...goalRows, ...productRows].sort((a,b)=>{
+        const aHas = !!a.deadline;
+        const bHas = !!b.deadline;
+        if(aHas && bHas) return compareDateStrings(a.deadline,b.deadline) || a.person.localeCompare(b.person) || a.title.localeCompare(b.title);
+        if(aHas !== bHas) return aHas ? -1 : 1;
+        return a.person.localeCompare(b.person) || a.title.localeCompare(b.title);
+      });
+    }
+
     function renderProductCard(item){
       const typeLabel = item.type === 'Lainnya' && item.typeOther ? item.typeOther : item.type;
       const updates = (item.updates || []).slice().sort((a,b)=>compareDateStrings(b.date,a.date));
       return `
-        <div class="product-card">
+        <div class="product-card owner-card owner-${getPersonClass(item.owner)}">
           <div class="feed-top">
             <div>
               <div class="feed-title">${escapeHtml(item.name)}</div>
@@ -2298,10 +2449,10 @@
 
     function buildTimelineItems(){
       const goalDone = getGoals().filter(g=>g.done && g.completedAt).map(g=>({
-        kind:'Goal Selesai',
+        kind:'Goal',
         date:g.completedAt,
         person:g.person,
-        title:g.text,
+        title:`Goal selesai: ${g.text}`,
         body:g.measure || g.why || '',
         color:getPersonColor(g.person)
       }));
@@ -2323,27 +2474,27 @@
       }));
       const products = getProducts().flatMap(p => {
         const items = [{
-          kind:'1W1Product',
+          kind:'Product',
           date:p.weekOf || p.createdAt,
           person:p.owner,
-          title:`Mulai: ${p.name}`,
+          title:`Mulai product: ${p.name}`,
           body:p.use || '',
           color:getPersonColor(p.owner)
         }];
         (p.updates || []).forEach(upd => items.push({
-          kind:'1W1Product',
+          kind:'Product',
           date:upd.date,
           person:p.owner,
-          title:`Progress: ${p.name}`,
+          title:`Progress product: ${p.name}`,
           body:upd.text || upd.next || '-',
           color:getPersonColor(p.owner)
         }));
         if(p.actualDate){
           items.push({
-            kind:'1W1Product',
+            kind:'Product',
             date:p.actualDate,
             person:p.owner,
-            title:`Selesai: ${p.name}`,
+            title:`Product selesai: ${p.name}`,
             body:p.learning || '',
             color:getPersonColor(p.owner)
           });
@@ -2354,25 +2505,26 @@
     }
 
     function renderTimelineStats(){
-      const activeGoals = filterItemsByGlobalPerson(getGoals(), 'person').filter(g=>!g.done);
-      const activeWithDeadline = activeGoals.filter(g=>g.deadline);
-      const withoutDeadline = activeGoals.filter(g=>!g.deadline);
-      const overdue = activeWithDeadline.filter(g=>getDeadlineInfo(g.deadline, false)?.cls === 'danger');
-      const dueSoon = activeWithDeadline.filter(g=>getDeadlineInfo(g.deadline, false)?.cls === 'warning');
-      const completed = getGoals().filter(g=>g.done);
+      const timelineRows = getActiveTimelineRows();
+      const activeGoals = timelineRows.filter(item=>item.rowType==='Goal');
+      const activeProducts = timelineRows.filter(item=>item.rowType==='Product');
+      const withTarget = timelineRows.filter(item=>item.deadline);
+      const withoutTarget = timelineRows.filter(item=>!item.deadline);
+      const overdue = withTarget.filter(item=>getDeadlineInfo(item.deadline, false)?.cls === 'danger');
+      const dueSoon = withTarget.filter(item=>getDeadlineInfo(item.deadline, false)?.cls === 'warning');
       document.getElementById('timelineStats').innerHTML = `
         <span class="stat-chip">Goal aktif ${activeGoals.length}</span>
-        <span class="stat-chip">Deadline minggu ini ${dueSoon.length}</span>
+        <span class="stat-chip">Product aktif ${activeProducts.length}</span>
+        <span class="stat-chip">Target minggu ini ${dueSoon.length}</span>
         <span class="stat-chip">Molor ${overdue.length}</span>
-        <span class="stat-chip">Tanpa deadline ${withoutDeadline.length}</span>
-        <span class="stat-chip">Goal selesai ${completed.length}</span>
+        <span class="stat-chip">Tanpa target ${withoutTarget.length}</span>
       `;
     }
 
-    function getTimelineAnchorDate(activeGoals){
+    function getTimelineAnchorDate(timelineRows){
       const todayIso = getTodayISO();
-      const explicitStartDates = activeGoals
-        .map(goal => goal.startDate || '')
+      const explicitStartDates = timelineRows
+        .map(item => item.startDate || '')
         .filter(Boolean)
         .sort(compareDateStrings);
       const anchorIso = explicitStartDates.length ? explicitStartDates[0] : todayIso;
@@ -2383,24 +2535,17 @@
 
     function renderGantt(){
       renderTimelineStats();
-      const activeGoals = filterItemsByGlobalPerson(getGoals(), 'person').filter(g=>!g.done).sort((a,b)=>{
-        const aHas = !!a.deadline;
-        const bHas = !!b.deadline;
-        if(aHas && bHas) return compareDateStrings(a.deadline,b.deadline) || a.person.localeCompare(b.person) || a.order-b.order;
-        if(aHas !== bHas) return aHas ? -1 : 1;
-        return a.person.localeCompare(b.person) || a.order-b.order;
-      });
-      const today = new Date(getTodayISO() + 'T00:00:00');
+      const timelineRows = getActiveTimelineRows();
       const windowDays = 90;
       const shiftDays = 21;
-      const anchorDate = getTimelineAnchorDate(activeGoals);
+      const anchorDate = getTimelineAnchorDate(timelineRows);
       const chartStart = new Date(anchorDate);
       chartStart.setDate(chartStart.getDate() + state.timelineWindowOffset * shiftDays);
       chartStart.setHours(0,0,0,0);
       const days = Array.from({length:windowDays}, (_,i)=>{
         const date = new Date(chartStart);
         date.setDate(chartStart.getDate()+i);
-        const iso = date.toISOString().slice(0,10);
+        const iso = toLocalISO(date);
         const weekend = date.getDay()===0 || date.getDay()===6;
         const todayFlag = iso === getTodayISO();
         const monthAlt = date.getMonth() % 2 === 1;
@@ -2415,35 +2560,37 @@
         else monthSegments.push({label, span:1, start:idx});
       });
 
-      const countMap = activeGoals.reduce((acc,g)=>{
-        acc[g.person] = (acc[g.person] || 0) + 1;
+      const countMap = timelineRows.reduce((acc,item)=>{
+        acc[item.person] = (acc[item.person] || 0) + 1;
         return acc;
       }, {});
       document.getElementById('ganttLegend').innerHTML = getFilteredPeople().map(p=>`<span class="legend-chip"><span class="chip-dot" style="background:${p.color}"></span>${p.key} (${countMap[p.key] || 0})</span>`).join('');
 
-      if(!activeGoals.length){
-        document.getElementById('ganttWrap').innerHTML = '<div class="info-box" style="margin:12px">Belum ada goal aktif.</div>';
+      if(!timelineRows.length){
+        document.getElementById('ganttWrap').innerHTML = '<div class="info-box" style="margin:12px">Belum ada goal/product aktif.</div>';
         return;
       }
 
       const monthHeader = monthSegments.map((seg, segIdx)=>`<th class="month-header ${segIdx % 2 === 1 ? 'month-alt' : ''} ${seg.start > 0 ? 'month-boundary' : ''}" colspan="${seg.span}">${seg.label}</th>`).join('');
-      const dayHeader = days.map((d, idx)=>`<th class="day-header ${d.monthAlt?'month-alt':''} ${d.weekend?'weekend':''} ${d.todayFlag?'today':''} ${d.monthStart?'month-start':''}"><span class="day-number">${d.date.getDate()}</span><span class="day-dow">${weekdayShort(d.date)}</span></th>`).join('');
+      const dayHeader = days.map((d)=>`<th class="day-header ${d.monthAlt?'month-alt':''} ${d.weekend?'weekend':''} ${d.todayFlag?'today':''} ${d.monthStart?'month-start':''}"><span class="day-number">${d.date.getDate()}</span><span class="day-dow">${weekdayShort(d.date)}</span></th>`).join('');
 
-      const rows = activeGoals.map(goal=>{
-        const rowId = `gantt_${goal.id}`;
-        const dueLabel = goal.deadline ? formatDateTimeParts(goal.deadline, goal.deadlineTime) : 'Tanpa deadline';
-        const startLabel = formatDateTimeParts(goal.startDate || goal.createdAt, goal.startTime);
-        const health = getGoalHealth(goal);
+      const rows = timelineRows.map(item=>{
+        const rowId = `gantt_${item.rowType.toLowerCase()}_${item.id}`;
+        const dueLabel = item.deadline ? formatDateTimeParts(item.deadline, item.deadlineTime) : 'Tanpa target';
+        const startLabel = formatDateTimeParts(item.startDate, item.startTime);
+        const ownerClass = `owner-${getPersonClass(item.person)}`;
+        const typeChip = `<span class="item-kind-chip ${item.rowType === 'Goal' ? 'item-kind-goal' : 'item-kind-product'}">${item.rowType}</span>`;
         return `<tr>
-          <td class="label-col">
-            <div class="goal-row-title">${escapeHtml(goal.text)}</div>
+          <td class="label-col ${ownerClass}">
+            <div class="goal-row-title">${escapeHtml(item.title)}</div>
             <div class="goal-row-meta">
-              <span class="goal-row-chip" style="border-color:${getPersonColor(goal.person)};color:${getPersonColor(goal.person)}">${escapeHtml(goal.person)}</span>
-              ${goal.category ? `<span class="goal-row-chip">${escapeHtml(goal.category)}</span>` : ''}
+              <span class="goal-row-chip" style="border-color:${getPersonColor(item.person)};color:${getPersonColor(item.person)}">${escapeHtml(item.person)}</span>
+              ${typeChip}
+              ${item.category ? `<span class="goal-row-chip">${escapeHtml(item.category)}</span>` : ''}
               <span class="goal-row-chip">Start ${escapeHtml(startLabel)}</span>
               <span class="goal-row-chip">Due ${escapeHtml(dueLabel)}</span>
-              <span class="goal-row-chip">${goal.progress || 0}%</span>
-              <span class="goal-row-chip">${health.label}</span>
+              <span class="goal-row-chip">${escapeHtml(item.statusText)}</span>
+              ${item.health ? `<span class="goal-row-chip">${escapeHtml(item.health.label)}</span>` : ''}
             </div>
           </td>
           ${days.map((d, idx)=>`<td><div class="gantt-cell ${d.monthAlt?'month-alt':''} ${d.weekend?'weekend':''} ${d.todayFlag?'today-col':''} ${d.monthStart?'month-start':''}" id="${rowId}_${idx}"></div></td>`).join('')}
@@ -2453,7 +2600,7 @@
       document.getElementById('ganttWrap').innerHTML = `
         <table class="gantt-table">
           <thead>
-            <tr><th class="label-col month-header" rowspan="2">Goal<br><span class="mini-muted" style="display:block;font-size:11px;color:#9fb4da;margin-top:4px">Start · Due · Progress</span></th>${monthHeader}</tr>
+            <tr><th class="label-col month-header" rowspan="2">Goals &amp; Product<br><span class="mini-muted" style="display:block;font-size:11px;color:#9fb4da;margin-top:4px">Start · Due · Status</span></th>${monthHeader}</tr>
             <tr>${dayHeader}</tr>
           </thead>
           <tbody>${rows}</tbody>
@@ -2462,12 +2609,12 @@
 
       const todayIndex = days.findIndex(d=>d.todayFlag);
       const dayColPx = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--day-col')) || 42;
-      activeGoals.forEach(goal=>{
-        const rowId = `gantt_${goal.id}`;
-        const startIso = goal.startDate || goal.createdAt || getTodayISO();
+      timelineRows.forEach(item=>{
+        const rowId = `gantt_${item.rowType.toLowerCase()}_${item.id}`;
+        const startIso = item.startDate || getTodayISO();
         const startIndex = days.findIndex(d=>d.iso===startIso);
-        const endIndex = goal.deadline ? days.findIndex(d=>d.iso===goal.deadline) : -1;
-        const reviewIndex = goal.reviewDate ? days.findIndex(d=>d.iso===goal.reviewDate) : -1;
+        const endIndex = item.deadline ? days.findIndex(d=>d.iso===item.deadline) : -1;
+        const reviewIndex = item.rowType === 'Goal' && item.reviewDate ? days.findIndex(d=>d.iso===item.reviewDate) : -1;
 
         days.forEach((d, idx)=>{
           const cell = document.getElementById(`${rowId}_${idx}`);
@@ -2478,15 +2625,15 @@
             todayLine.style.left = '50%';
             cell.appendChild(todayLine);
           }
-          if(!goal.deadline && idx===0){
+          if(!item.deadline && idx===0){
             const note = document.createElement('div');
-            note.className = 'gantt-no-deadline';
-            note.textContent = 'Tanpa deadline';
+            note.className = item.rowType === 'Product' ? 'gantt-no-target' : 'gantt-no-deadline';
+            note.textContent = item.rowType === 'Product' ? 'Tanpa target' : 'Tanpa deadline';
             cell.appendChild(note);
           }
         });
 
-        if(goal.deadline){
+        if(item.deadline){
           const effectiveStart = startIndex >= 0 ? startIndex : 0;
           const effectiveEnd = endIndex >= 0 ? endIndex : days.length-1;
           if(effectiveEnd >= 0){
@@ -2495,14 +2642,18 @@
             const startCell = document.getElementById(`${rowId}_${start}`);
             if(startCell){
               const bar = document.createElement('div');
-              const dueDiff = Math.ceil((new Date(goal.deadline + 'T00:00:00') - new Date(getTodayISO() + 'T00:00:00')) / 86400000);
-              bar.className = `gantt-bar ${dueDiff < 0 ? 'overdue' : dueDiff <= 3 ? 'due-soon' : ''}`.trim();
-              bar.style.left = '3px';
-              bar.style.width = `${((end-start)+1)*dayColPx - 6}px`;
-              const baseColor = getPersonColor(goal.person);
+              const dueDiff = Math.ceil((new Date(item.deadline + 'T00:00:00') - new Date(getTodayISO() + 'T00:00:00')) / 86400000);
+              bar.className = `gantt-bar ${item.rowType === 'Goal' ? 'goal-bar' : 'product-bar'} ${dueDiff < 0 ? 'overdue' : dueDiff <= 3 ? 'due-soon' : ''}`.trim();
+              bar.style.left = item.rowType === 'Goal' ? '3px' : '5px';
+              bar.style.width = `${((end-start)+1)*dayColPx - (item.rowType === 'Goal' ? 6 : 10)}px`;
+              const baseColor = getPersonColor(item.person);
               const urgencyColor = dueDiff < 0 ? '#fb7185' : dueDiff <= 3 ? '#fbbf24' : baseColor;
-              bar.style.background = `linear-gradient(90deg, ${urgencyColor}, color-mix(in srgb, ${urgencyColor} 60%, white 40%))`;
-              bar.title = `${goal.text} | ${goal.person}${dueDiff < 0 ? ' | OVERDUE' : dueDiff <= 3 ? ' | Due segera' : ''}`;
+              if(item.rowType === 'Goal'){
+                bar.style.background = `linear-gradient(90deg, ${urgencyColor}, color-mix(in srgb, ${urgencyColor} 60%, white 40%))`;
+              } else {
+                bar.style.background = `repeating-linear-gradient(135deg, ${urgencyColor} 0 12px, color-mix(in srgb, ${urgencyColor} 72%, white 28%) 12px 24px)`;
+              }
+              bar.title = `${item.rowType} | ${item.title} | ${item.person}${dueDiff < 0 ? ' | OVERDUE' : dueDiff <= 3 ? ' | Due segera' : ''}`;
               startCell.appendChild(bar);
             }
           }
@@ -2514,7 +2665,7 @@
             pin.className = 'gantt-review-pin';
             pin.style.left = '50%';
             pin.style.transform = 'translateX(-50%)';
-            pin.title = `Review ${formatDateTimeParts(goal.reviewDate, goal.reviewTime)}`;
+            pin.title = `Review ${formatDateTimeParts(item.reviewDate, item.reviewTime)}`;
             cell.appendChild(pin);
           }
         }
@@ -2539,16 +2690,18 @@
         const bDate = grouped[b][0]?.date || '';
         return String(bDate).localeCompare(String(aDate));
       });
+      const kindClassMap = { Goal:'goal', Product:'product', Journal:'journal', 'Weekly Review':'review' };
       target.innerHTML = order.map(key => `
         <div class="week-group">
           <div class="week-title">${escapeHtml(key)}</div>
           ${grouped[key].map(item => `
-            <div class="feed-item">
+            <div class="feed-item owner-card owner-${getPersonClass(item.person)}">
               <div class="feed-top">
                 <div>
                   <div class="feed-title"><span class="chip-dot" style="background:${item.color};margin-right:8px"></span>${escapeHtml(item.title)}</div>
-                  <div class="feed-meta">${escapeHtml(item.kind)} · ${escapeHtml(item.person)} · ${formatDate(item.date)}</div>
+                  <div class="feed-meta">${escapeHtml(item.person)} · ${formatDate(item.date)}</div>
                 </div>
+                <span class="feed-kind-chip ${kindClassMap[item.kind] || 'journal'}">${escapeHtml(item.kind)}</span>
               </div>
               <div style="margin-top:8px">${escapeHtml(item.body || '-')}</div>
             </div>
@@ -2558,9 +2711,10 @@
     }
 
     function renderTimeline(){
-      const feedPersonOptions = ['all', ...getSelectedPeopleKeys().filter(p=>p!=='Bersama')];
-      document.getElementById('feedPersonFilter').innerHTML = ['all', ...feedPersonOptions].map(value=>`<option value="${value}">${value==='all'?'Semua dalam scope':value}</option>`).join('');
-      if(state.currentFeedPerson !== 'all' && !getSelectedPeopleKeys().includes(state.currentFeedPerson)) state.currentFeedPerson = 'all';
+      const selectedPeople = getSelectedPeopleKeys();
+      const uniquePeople = Array.from(new Set(selectedPeople));
+      document.getElementById('feedPersonFilter').innerHTML = ['all', ...uniquePeople].map(value=>`<option value="${value}">${value==='all'?'Semua dalam scope':value}</option>`).join('');
+      if(state.currentFeedPerson !== 'all' && !uniquePeople.includes(state.currentFeedPerson)) state.currentFeedPerson = 'all';
       renderGantt();
       renderTimelineFeed();
       document.getElementById('feedTypeFilter').value = state.currentFeedType;
@@ -2676,9 +2830,10 @@
       const parsed = JSON.parse(text);
       if(!confirm('Import akan mengganti data lokal yang sedang tampil. Lanjut?')) return;
       state.cache = migrateCache(parsed);
+      saveCacheToLocal();
       state.localDirty = true;
       renderAll();
-      showToast('Data JSON diimpor ke lokal. Klik Force save local bila ingin kirim ke cloud.');
+      showToast('Data JSON diimpor ke lokal. Klik Force save cloud bila ingin kirim ke cloud.');
       state.conflict = true;
       setSyncStatus('conflict', 'Import lokal siap');
       document.getElementById('forceSaveBtn').style.display = 'inline-flex';
@@ -2735,6 +2890,7 @@
       document.getElementById('resetEnglishBtn').addEventListener('click', resetEnglishTracker);
       document.getElementById('productType').addEventListener('change', toggleProductTypeWrap);
       document.getElementById('productEditType').addEventListener('change', toggleProductEditTypeWrap);
+      document.getElementById('productOwner').addEventListener('change', updateProductOwnerAccent);
       document.getElementById('addProductBtn').addEventListener('click', addProduct);
       document.getElementById('saveGoalModalBtn').addEventListener('click', saveGoalFromModal);
       document.getElementById('addGoalNoteBtn').addEventListener('click', addGoalNoteFromModal);
@@ -2792,8 +2948,9 @@
       fillSelectOptions();
       toggleProductTypeWrap();
       toggleProductEditTypeWrap();
+      updateProductOwnerAccent();
       attachEvents();
-      state.cache = migrateCache({});
+      state.cache = loadLocalCache() || migrateCache({});
       setSyncStatus('loading', 'Memuat...');
       renderLiveNow();
       setInterval(renderLiveNow, 30000);
@@ -2802,8 +2959,9 @@
         await loadRemote(true);
       } catch(err){
         console.error(err);
-        state.cache = migrateCache({});
-        setSyncStatus('error', 'Cloud gagal, mode lokal');
+        state.cache = loadLocalCache() || state.cache || migrateCache({});
+        saveCacheToLocal();
+        setSyncStatus('error', 'Cloud gagal, lokal aktif');
         renderAll();
       }
     }
